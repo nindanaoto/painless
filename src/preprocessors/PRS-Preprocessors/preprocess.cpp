@@ -9,15 +9,15 @@ preprocess::preprocess(int id_)
 	, maxlen(0)
 {
 	/* Painless */
-	this->maxVarCircuit = __globalParameters__.prsCircuitVar;
-	this->maxVarGauss = __globalParameters__.prsGaussVar;
-	this->maxVarCard = __globalParameters__.prsCardVar;
+	this->maxVarCircuit = Painless::__globalParameters__.prsCircuitVar;
+	this->maxVarGauss = Painless::__globalParameters__.prsGaussVar;
+	this->maxVarCard = Painless::__globalParameters__.prsCardVar;
 
-	this->maxClauseCircuit = __globalParameters__.prsCircuitCls;
-	this->maxClauseSizeXor = __globalParameters__.prsGaussClsSize;
-	this->maxClauseGauss = 	 __globalParameters__.prsGaussCls;
-	this->maxClauseBinary =  __globalParameters__.prsBinCls;
-	this->maxClauseCard =    __globalParameters__.prsCardCls;
+	this->maxClauseCircuit = Painless::__globalParameters__.prsCircuitCls;
+	this->maxClauseSizeXor = Painless::__globalParameters__.prsGaussClsSize;
+	this->maxClauseGauss = 	 Painless::__globalParameters__.prsGaussCls;
+	this->maxClauseBinary =  Painless::__globalParameters__.prsBinCls;
+	this->maxClauseCard =    Painless::__globalParameters__.prsCardCls;
 
 	initializeTypeId<preprocess>();
 

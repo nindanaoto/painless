@@ -65,7 +65,7 @@ class SharingStrategy : public SharingEntity
 	 * @brief Determines the sleeping time for the sharer.
 	 * @return Number of microseconds to sleep.
 	 */
-	virtual std::chrono::microseconds getSleepingTime() { return std::chrono::microseconds(__globalParameters__.sharingSleep); };
+	virtual std::chrono::microseconds getSleepingTime() { return std::chrono::microseconds(Painless::__globalParameters__.sharingSleep); };
 
 	/**
 	 * @brief Prints the statistics of the strategy.

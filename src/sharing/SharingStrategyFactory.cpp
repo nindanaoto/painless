@@ -36,7 +36,7 @@ SharingStrategyFactory::instantiateLocalStrategies(int strategyNumber,
 		strategyNumber = distShr(rng);
 	}
 
-	uint maxClauseSize = __globalParameters__.maxClauseSize;
+	uint maxClauseSize = Painless::__globalParameters__.maxClauseSize;
 
 	// TODO: decide weither or not to make a unique_ptr inside Sharer
 	switch (strategyNumber) {
@@ -44,9 +44,9 @@ SharingStrategyFactory::instantiateLocalStrategies(int strategyNumber,
 			LOG0("LSTRAT>> HordeSatSharing(1Grp, per entity buffer)");
 			localStrategies.emplace_back(
 				new HordeSatSharing(std::make_shared<ClauseDatabaseBufferPerEntity>(maxClauseSize),
-									__globalParameters__.sharedLiteralsPerProducer,
-									__globalParameters__.hordeInitialLbdLimit,
-									__globalParameters__.hordeInitRound,
+									Painless::__globalParameters__.sharedLiteralsPerProducer,
+									Painless::__globalParameters__.hordeInitialLbdLimit,
+									Painless::__globalParameters__.hordeInitRound,
 									allEntities,
 									allEntities));
 			localStrategies.back()->connectConstructorProducers();
@@ -54,9 +54,9 @@ SharingStrategyFactory::instantiateLocalStrategies(int strategyNumber,
 		case 2:
 			LOG0("LSTRAT>> HordeSatSharing(1Grp, common database)");
 			localStrategies.emplace_back(new HordeSatSharing(std::make_shared<ClauseDatabasePerSize>(maxClauseSize),
-															 __globalParameters__.sharedLiteralsPerProducer,
-															 __globalParameters__.hordeInitialLbdLimit,
-															 __globalParameters__.hordeInitRound,
+															 Painless::__globalParameters__.sharedLiteralsPerProducer,
+															 Painless::__globalParameters__.hordeInitialLbdLimit,
+															 Painless::__globalParameters__.hordeInitRound,
 															 allEntities,
 															 allEntities));
 			localStrategies.back()->connectConstructorProducers();
@@ -74,17 +74,17 @@ SharingStrategyFactory::instantiateLocalStrategies(int strategyNumber,
 
 			localStrategies.emplace_back(
 				new HordeSatSharing(std::make_shared<ClauseDatabasePerSize>(maxClauseSize),
-									__globalParameters__.sharedLiteralsPerProducer,
-									__globalParameters__.hordeInitialLbdLimit,
-									__globalParameters__.hordeInitRound,
+									Painless::__globalParameters__.sharedLiteralsPerProducer,
+									Painless::__globalParameters__.hordeInitialLbdLimit,
+									Painless::__globalParameters__.hordeInitRound,
 									{ allEntities.begin(), allEntities.begin() + allEntities.size() / 2 },
 									{ allEntities.begin(), allEntities.end() }));
 			localStrategies.back()->connectConstructorProducers();
 			localStrategies.emplace_back(
 				new HordeSatSharing(std::make_shared<ClauseDatabasePerSize>(maxClauseSize),
-									__globalParameters__.sharedLiteralsPerProducer,
-									__globalParameters__.hordeInitialLbdLimit,
-									__globalParameters__.hordeInitRound,
+									Painless::__globalParameters__.sharedLiteralsPerProducer,
+									Painless::__globalParameters__.hordeInitialLbdLimit,
+									Painless::__globalParameters__.hordeInitRound,
 									{ allEntities.begin() + allEntities.size() / 2, allEntities.end() },
 									{ allEntities.begin(), allEntities.end() }));
 			localStrategies.back()->connectConstructorProducers();
@@ -93,8 +93,8 @@ SharingStrategyFactory::instantiateLocalStrategies(int strategyNumber,
 			LOG0("LSTRAT>> SimpleSharing");
 
 			localStrategies.emplace_back(new SimpleSharing(std::make_shared<ClauseDatabasePerSize>(maxClauseSize),
-														   __globalParameters__.simpleShareLimit,
-														   __globalParameters__.sharedLiteralsPerProducer,
+														   Painless::__globalParameters__.simpleShareLimit,
+														   Painless::__globalParameters__.sharedLiteralsPerProducer,
 														   allEntities,
 														   allEntities));
 			localStrategies.back()->connectConstructorProducers();
@@ -103,9 +103,9 @@ SharingStrategyFactory::instantiateLocalStrategies(int strategyNumber,
 			LOG0("LSTRAT>> HordeSatSharing(1Grp, MallobDB)");
 			localStrategies.emplace_back(
 				new HordeSatSharing(std::make_shared<ClauseDatabaseMallob>(maxClauseSize, 2, 100'000, 1),
-									__globalParameters__.sharedLiteralsPerProducer,
-									__globalParameters__.hordeInitialLbdLimit,
-									__globalParameters__.hordeInitRound,
+									Painless::__globalParameters__.sharedLiteralsPerProducer,
+									Painless::__globalParameters__.hordeInitialLbdLimit,
+									Painless::__globalParameters__.hordeInitRound,
 									allEntities,
 									allEntities));
 			localStrategies.back()->connectConstructorProducers();
@@ -136,32 +136,32 @@ SharingStrategyFactory::instantiateGlobalStrategies(
 			LOGWARN("For now, gshr-strat at 0 is AllGatherSharing, a future default one is in dev");
 		case 1:
 			LOG0("GSTRAT>> AllGatherSharing");
-			simpleDB = std::make_shared<ClauseDatabasePerSize>(__globalParameters__.maxClauseSize);
-			globalStrategies.emplace_back(new AllGatherSharing(simpleDB, __globalParameters__.globalSharedLiterals));
+			simpleDB = std::make_shared<ClauseDatabasePerSize>(Painless::__globalParameters__.maxClauseSize);
+			globalStrategies.emplace_back(new AllGatherSharing(simpleDB, Painless::__globalParameters__.globalSharedLiterals));
 			break;
 		case 2:
 			LOG0("GSTRAT>> MallobSharing");
 			simpleDB = std::make_shared<ClauseDatabaseMallob>(
-				__globalParameters__.maxClauseSize, 2, __globalParameters__.globalSharedLiterals * 10, 1);
+				Painless::__globalParameters__.maxClauseSize, 2, Painless::__globalParameters__.globalSharedLiterals * 10, 1);
 			globalStrategies.emplace_back(new MallobSharing(simpleDB,
-															__globalParameters__.globalSharedLiterals,
-															__globalParameters__.mallobMaxBufferSize,
-															__globalParameters__.mallobLBDLimit,
-															__globalParameters__.mallobSizeLimit,
-															__globalParameters__.mallobSharingsPerSecond,
-															__globalParameters__.mallobMaxCompensation,
-															__globalParameters__.mallobResharePeriod));
+															Painless::__globalParameters__.globalSharedLiterals,
+															Painless::__globalParameters__.mallobMaxBufferSize,
+															Painless::__globalParameters__.mallobLBDLimit,
+															Painless::__globalParameters__.mallobSizeLimit,
+															Painless::__globalParameters__.mallobSharingsPerSecond,
+															Painless::__globalParameters__.mallobMaxCompensation,
+															Painless::__globalParameters__.mallobResharePeriod));
 			break;
 		case 3:
 			LOG0("GSTRAT>> GenericGlobalSharing As RingSharing");
-			simpleDB = std::make_shared<ClauseDatabasePerSize>(__globalParameters__.maxClauseSize);
+			simpleDB = std::make_shared<ClauseDatabasePerSize>(Painless::__globalParameters__.maxClauseSize);
 			subscriptions.push_back(right_neighbor);
 			subscriptions.push_back(left_neighbor);
 			subscribers.push_back(right_neighbor);
 			subscribers.push_back(left_neighbor);
 
 			globalStrategies.emplace_back(new GenericGlobalSharing(
-				simpleDB, subscriptions, subscribers, __globalParameters__.globalSharedLiterals));
+				simpleDB, subscriptions, subscribers, Painless::__globalParameters__.globalSharedLiterals));
 			break;
 		default:
 			LOGERROR("Option gshr-lit=%d is not defined",strategyNumber);
@@ -186,7 +186,7 @@ void
 SharingStrategyFactory::launchSharers(std::vector<std::shared_ptr<SharingStrategy>>& sharingStrategies,
 									  std::vector<std::unique_ptr<Sharer>>& sharers)
 {
-	if (__globalParameters__.oneSharer) {
+	if (Painless::__globalParameters__.oneSharer) {
 		sharers.emplace_back(new Sharer(0, sharingStrategies));
 	} else {
 		for (unsigned int i = 0; i < sharingStrategies.size(); i++) {

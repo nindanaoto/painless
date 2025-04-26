@@ -140,7 +140,7 @@ YalSat::loadFormula(const char* filename)
 {
 	unsigned int parsedVarCount;
 	std::vector<std::vector<int>> clauses;
-	Parsers::parseCNF(filename, clauses, &parsedVarCount);
+	Painless::Parsers::parseCNF(filename, clauses, &parsedVarCount);
 	this->addInitialClauses(clauses, parsedVarCount);
 }
 

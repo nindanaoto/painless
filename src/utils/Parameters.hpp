@@ -9,6 +9,7 @@
  * @brief Different Utilities
  * @{
 */
+namespace Painless {
 
 // Define the macro for parameters
 // name, type, parsed_name, default, description
@@ -25,8 +26,8 @@
     \
     CATEGORY("Portfolio options") \
     PARAM(solver, std::string, "solver", "kkkcl", "Portfolio of solvers") \
-	PARAM(simple, bool, "simple", false, "Use PortfolioSimple") \
-	PARAM(enableMallob, bool, "mallob", false, "Emulate Mallob's Sharing Strategy In PortfolioSimple") \
+        PARAM(simple, bool, "simple", false, "Use PortfolioSimple") \
+        PARAM(enableMallob, bool, "mallob", false, "Emulate Mallob's Sharing Strategy In PortfolioSimple") \
     \
     CATEGORY("Solving options") \
     PARAM(maxDivNoise, int, "max-div-noise", 1000, "Maximum noise for random engine in diversification") \
@@ -93,6 +94,7 @@ struct Parameters {
 };
 
 extern Parameters __globalParameters__;
+} // namespace Painless
 /**
  * @} // end of utils group
  */

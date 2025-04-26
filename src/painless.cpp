@@ -79,16 +79,16 @@ main(int argc, char** argv)
 {
         // setupExitHandlers();
 
-        Parameters::init(argc, argv);
+        Painless::Parameters::init(argc, argv);
 
-        Painless::setVerbosityLevel(__globalParameters__.verbosity);
+        Painless::setVerbosityLevel(Painless::__globalParameters__.verbosity);
 
-        if(__globalParameters__.help)
+        if(Painless::__globalParameters__.help)
         {
-                Parameters::printHelp();
+                Painless::Parameters::printHelp();
         }
 
-        dist = __globalParameters__.enableDistributed;
+        dist = Painless::__globalParameters__.enableDistributed;
 
         // Ram Monitoring
 
@@ -115,14 +115,14 @@ main(int argc, char** argv)
         }
 
         if (!Painless::mpi_rank)
-                Parameters::printParams();
+                Painless::Parameters::printParams();
 
         // Init timeout detection before starting the solvers and sharers
         std::unique_lock<std::mutex> lock(mutexGlobalEnd);
         // to make sure that the broadcast is done when main has done its wait
 
         // TODO: better choice options, think about description file using yaml or json with semantic checking
-        if (__globalParameters__.simple)
+        if (Painless::__globalParameters__.simple)
                 working = new PortfolioSimple();
         else
                 working = new PortfolioPRS();
@@ -134,15 +134,15 @@ main(int argc, char** argv)
 
         int wakeupRet = 0;
 
-        if (__globalParameters__.timeout > 0) {
+        if (Painless::__globalParameters__.timeout > 0) {
                 auto startTime = SystemResourceMonitor::getRelativeTimeSeconds();
 
-                // Wait until end or __globalParameters__.timeout
-                while ((unsigned int)SystemResourceMonitor::getRelativeTimeSeconds() < __globalParameters__.timeout &&
+                // Wait until end or Painless::__globalParameters__.timeout
+                while ((unsigned int)SystemResourceMonitor::getRelativeTimeSeconds() < Painless::__globalParameters__.timeout &&
                            globalEnding == false) // to manage the spurious wake ups
                 {
                         auto remainingTime = std::chrono::duration<double>(
-                                __globalParameters__.timeout - (SystemResourceMonitor::getRelativeTimeSeconds() - startTime));
+                                Painless::__globalParameters__.timeout - (SystemResourceMonitor::getRelativeTimeSeconds() - startTime));
                         auto wakeupStatus = condGlobalEnd.wait_for(lock, remainingTime);
 
                         LOGDEBUG2("main wakeupRet = %s , globalEnding = %d ",
@@ -153,15 +153,15 @@ main(int argc, char** argv)
                 condGlobalEnd.notify_all();
                 lock.unlock();
 
-                if ((unsigned int)SystemResourceMonitor::getRelativeTimeSeconds() >= __globalParameters__.timeout &&
+                if ((unsigned int)SystemResourceMonitor::getRelativeTimeSeconds() >= Painless::__globalParameters__.timeout &&
                         finalResult ==
-                                SatResult::UNKNOWN) // if __globalParameters__.timeout set globalEnding otherwise a solver woke me up
+                                SatResult::UNKNOWN) // if Painless::__globalParameters__.timeout set globalEnding otherwise a solver woke me up
                 {
                         globalEnding = true;
                         finalResult = SatResult::TIMEOUT;
                 }
         } else {
-                // no __globalParameters__.timeout waiting
+                // no Painless::__globalParameters__.timeout waiting
                 while (globalEnding == false) // to manage the spurious wake ups
                 {
                         condGlobalEnd.wait(lock);
@@ -183,12 +183,12 @@ main(int argc, char** argv)
                 if (finalResult == SatResult::SAT) {
                         Painless::logSolution("SATISFIABLE");
 
-                        if (__globalParameters__.noModel == false) {
+                        if (Painless::__globalParameters__.noModel == false) {
                                 Painless::logModel(finalModel);
                         }
                 } else if (finalResult == SatResult::UNSAT) {
                         Painless::logSolution("UNSATISFIABLE");
-                } else // if __globalParameters__.timeout or unknown
+                } else // if Painless::__globalParameters__.timeout or unknown
                 {
                         Painless::logSolution("UNKNOWN");
                         finalResult = SatResult::UNKNOWN;

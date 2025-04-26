@@ -80,9 +80,9 @@ minisatImportClause(void* issuer, vec<Lit>& mcls)
 
 MiniSat::MiniSat(int id, const std::shared_ptr<ClauseDatabase>& clauseDB)
 	: SolverCdclInterface(id, clauseDB, SolverCdclType::MINISAT)
-	, clausesToAdd(__globalParameters__.defaultClauseBufferSize)
+	, clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 {
-	this->unitsToImport = std::make_unique<ClauseDatabaseSingleBuffer>(__globalParameters__.defaultClauseBufferSize);
+	this->unitsToImport = std::make_unique<ClauseDatabaseSingleBuffer>(Painless::__globalParameters__.defaultClauseBufferSize);
 
 	solver = new SimpSolver();
 	solver->remove_satisfied = false;

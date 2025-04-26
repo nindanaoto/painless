@@ -146,7 +146,7 @@ Lingeling::initialize()
 
 Lingeling::Lingeling(int id, const std::shared_ptr<ClauseDatabase>& clauseDB)
 	: unitsToImport(256)
-	, clausesToAdd(__globalParameters__.defaultClauseBufferSize)
+	, clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 	, SolverCdclInterface(id, clauseDB, SolverCdclType::LINGELING)
 {
 	solver = lglinit();
@@ -155,7 +155,7 @@ Lingeling::Lingeling(int id, const std::shared_ptr<ClauseDatabase>& clauseDB)
 
 Lingeling::Lingeling(const Lingeling& other, int id, const std::shared_ptr<ClauseDatabase>& clauseDB)
 	: unitsToImport(256)
-	, clausesToAdd(__globalParameters__.defaultClauseBufferSize)
+	, clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 	, SolverCdclInterface(id, clauseDB, SolverCdclType::LINGELING)
 {
 	solver = lglclone(other.solver);
@@ -175,7 +175,7 @@ Lingeling::loadFormula(const char* filename)
 {
 	std::vector<simpleClause> initClauses;
 	unsigned int varCount = 0;
-	Parsers::parseCNF(filename, initClauses, &varCount);
+	Painless::Parsers::parseCNF(filename, initClauses, &varCount);
 
 	this->addInitialClauses(initClauses, varCount);
 

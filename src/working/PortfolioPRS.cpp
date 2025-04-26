@@ -74,7 +74,7 @@ PortfolioPRS::solve(const std::vector<int>& cube)
 	if (0 == Painless::mpi_rank) {
 		/* PRS */
 		this->preprocessors.push_back(std::make_shared<preprocess>(0));
-		this->preprocessors.at(0)->loadFormula(__globalParameters__.filename.c_str());
+		this->preprocessors.at(0)->loadFormula(Painless::__globalParameters__.filename.c_str());
 		for (auto& preproc : preprocessors) {
 			res = preproc->solve({});
 			LOGDEBUG1("PRS returned %d", res);
@@ -132,14 +132,14 @@ prs_sync:
 
 	this->computeNodeGroup(Painless::mpi_world_size, Painless::mpi_rank);
 
-	std::string portfolio = __globalParameters__.solver;
+	std::string portfolio = Painless::__globalParameters__.solver;
 	if (portfolio[0] != 'k' && portfolio[0] != 'K' && portfolio[0] != 'I') {
 		LOGERROR("%c solver cannot be used as default solver in PortfolioPRS!", portfolio[0]);
 		std::abort();
 	}
 
 	// Create Solvers & Set Diversfication
-	uint threadsPerProc = __globalParameters__.cpus;
+	uint threadsPerProc = Painless::__globalParameters__.cpus;
 	switch (this->nodeGroup) {
 		case PRSGroups::SAT:
 			this->solversPortfolio = portfolio[0];
@@ -196,11 +196,11 @@ prs_sync:
 	// auto generalIDScaler = [rank = Painless::mpi_rank, size = Painless::mpi_world_size](unsigned id) { return rank * size + id; };
 	// auto typeIDScaler = [rank = rankInMyGroup, size = sizePerGroup.at(nodeGroup)](unsigned id) {
 	auto generalIDScaler = [rank = Painless::mpi_rank,
-							size = __globalParameters__.cpus](const std::shared_ptr<SolverInterface>& solver) {
+							size = Painless::__globalParameters__.cpus](const std::shared_ptr<SolverInterface>& solver) {
 		return rank * size + solver->getSolverId();
 	};
 	auto typeIDScaler = [rank = rankInMyGroup,
-						 size = __globalParameters__.cpus](const std::shared_ptr<SolverInterface>& solver) {
+						 size = Painless::__globalParameters__.cpus](const std::shared_ptr<SolverInterface>& solver) {
 		return rank * size + solver->getSolverTypeId();
 	};
 
@@ -249,9 +249,9 @@ prs_sync:
 	/* Local HordeSat with a database limited to clause of size 80 */
 	std::shared_ptr<SharingStrategy> localStrategy =
 		std::make_shared<HordeSatSharing>(std::make_shared<ClauseDatabaseBufferPerEntity>(maxClauseSizeLocal),
-										  __globalParameters__.sharedLiteralsPerProducer,
-										  __globalParameters__.hordeInitialLbdLimit,
-										  __globalParameters__.hordeInitRound);
+										  Painless::__globalParameters__.sharedLiteralsPerProducer,
+										  Painless::__globalParameters__.hordeInitialLbdLimit,
+										  Painless::__globalParameters__.hordeInitRound);
 
 	sharingStrategies.push_back(localStrategy);
 
@@ -261,7 +261,7 @@ prs_sync:
 		std::make_shared<GenericGlobalSharing>(std::make_shared<ClauseDatabasePerSize>(maxClauseSizeGlobal),
 											   std::vector<int>{ left_neighbor },
 											   std::vector<int>{ right_neighbor },
-											   __globalParameters__.globalSharedLiterals);
+											   Painless::__globalParameters__.globalSharedLiterals);
 
 	sharingStrategies.push_back(globalStrategy);
 

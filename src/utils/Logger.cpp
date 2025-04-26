@@ -56,7 +56,7 @@ logDebug(int verbosityLevel, const char* color, const char* issuer, const char* 
 
                 printf("[%.2f] ", SystemResourceMonitor::getRelativeTimeSeconds());
 
-                if (__globalParameters__.enableDistributed)
+                if (Painless::__globalParameters__.enableDistributed)
                         printf("[mpi:%d] ", mpi_rank);
 
                 printf("%s(%s) %s%s%s", FUNC_STYLE, issuer, RESET, color, ERROR_STYLE);
@@ -85,7 +85,7 @@ log(int verbosityLevel, const char* color, const char* fmt...)
 
                 printf("[%.2f] ", SystemResourceMonitor::getRelativeTimeSeconds());
 
-                if (__globalParameters__.enableDistributed)
+                if (Painless::__globalParameters__.enableDistributed)
                         printf("[mpi:%d] ", mpi_rank);
 
                 vprintf(fmt, args);
@@ -109,7 +109,7 @@ logClause(int verbosityLevel, const char* color, const int* lits, unsigned int s
 
                 printf("cc%s", color);
 
-                if (__globalParameters__.enableDistributed)
+                if (Painless::__globalParameters__.enableDistributed)
                         printf("[mpi:%d] ", mpi_rank);
 
                 vprintf(fmt, args);

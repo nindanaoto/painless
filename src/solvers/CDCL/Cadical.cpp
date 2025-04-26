@@ -82,7 +82,7 @@ Cadical::getClauseToImport(std::vector<int>& clause, int& glue)
 
 Cadical::Cadical(int id, const std::shared_ptr<ClauseDatabase>& clauseDB)
 	: SolverCdclInterface(id, clauseDB, SolverCdclType::CADICAL)
-	, clausesToAdd(__globalParameters__.defaultClauseBufferSize)
+	, clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 {
 	solver = std::make_unique<CaDiCaL::Solver>();
 	solver->connect_learner(this);

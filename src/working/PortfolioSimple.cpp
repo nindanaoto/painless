@@ -44,16 +44,16 @@ PortfolioSimple::solve(const std::vector<int>& cube)
 	unsigned int varCount;
 
 	if (Painless::mpi_rank <= 0)
-		Parsers::parseCNF(__globalParameters__.filename.c_str(), initClauses, &varCount);
+		Painless::Parsers::parseCNF(Painless::__globalParameters__.filename.c_str(), initClauses, &varCount);
 
 	// Send instance via MPI from leader 0 to workers.
 	if (dist) {
 		Painless::mpiutils::sendFormula(initClauses, &varCount, 0);
 	}
 
-	SolverFactory::createSolvers(__globalParameters__.cpus,
-								 __globalParameters__.importDB.c_str()[0],
-								 __globalParameters__.solver,
+	SolverFactory::createSolvers(Painless::__globalParameters__.cpus,
+								 Painless::__globalParameters__.importDB.c_str()[0],
+								 Painless::__globalParameters__.solver,
 								 cdclSolvers,
 								 localSolvers);
 
@@ -61,11 +61,11 @@ PortfolioSimple::solve(const std::vector<int>& cube)
 	IDScaler typeIDScaler;
 	if (dist) {
 		globalIDScaler = [rank = Painless::mpi_rank,
-						  size = __globalParameters__.cpus](const std::shared_ptr<SolverInterface>& solver) {
+						  size = Painless::__globalParameters__.cpus](const std::shared_ptr<SolverInterface>& solver) {
 			return rank * size + solver->getSolverId();
 		};
 		typeIDScaler = [rank = Painless::mpi_rank,
-						size = __globalParameters__.cpus](const std::shared_ptr<SolverInterface>& solver) {
+						size = Painless::__globalParameters__.cpus](const std::shared_ptr<SolverInterface>& solver) {
 			return rank * solver->getSolverTypeCount() + solver->getSolverTypeId();
 		};
 	} else {
@@ -86,7 +86,7 @@ PortfolioSimple::solve(const std::vector<int>& cube)
 
 	/* Sharing */
 	/* ------- */
-	if (__globalParameters__.enableMallob && dist) {
+	if (Painless::__globalParameters__.enableMallob && dist) {
 		// only global strategy
 		SharingStrategyFactory::instantiateGlobalStrategies(2, globalStrategies);
 		for (auto& cdcl : cdclSolvers) {
@@ -96,10 +96,10 @@ PortfolioSimple::solve(const std::vector<int>& cube)
 		}
 	} else {
 		SharingStrategyFactory::instantiateLocalStrategies(
-			__globalParameters__.sharingStrategy, this->localStrategies, cdclSolvers);
+			Painless::__globalParameters__.sharingStrategy, this->localStrategies, cdclSolvers);
 
 		if (dist) {
-			SharingStrategyFactory::instantiateGlobalStrategies(__globalParameters__.globalSharingStrategy,
+			SharingStrategyFactory::instantiateGlobalStrategies(Painless::__globalParameters__.globalSharingStrategy,
 																globalStrategies);
 		}
 

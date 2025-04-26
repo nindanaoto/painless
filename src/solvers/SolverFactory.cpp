@@ -61,23 +61,23 @@ SolverFactory::createSolver(char type, char importDBType, std::shared_ptr<Solver
         int id = currentIdSolver.fetch_add(1);
         LOGDEBUG1("Creating Solver %d, type %c, importDB %c", id, type, importDBType);
 
-        if (id >= __globalParameters__.cpus) {
+        if (id >= Painless::__globalParameters__.cpus) {
                 LOGWARN("Solver of type '%c' will not be instantiated, the number of solvers %d reached the maximum %d.",
                                 type,
                                 id,
-                                __globalParameters__.cpus);
+                                Painless::__globalParameters__.cpus);
                 return SolverAlgorithmType::UNKNOWN;
         }
 
         std::shared_ptr<ClauseDatabase> importDB;
-        uint maxClauseSize = __globalParameters__.maxClauseSize;
+        uint maxClauseSize = Painless::__globalParameters__.maxClauseSize;
         uint maxPartitioningLbd = 2;
-        uint maxLiteralCapacity = __globalParameters__.importDBCap;
+        uint maxLiteralCapacity = Painless::__globalParameters__.importDBCap;
         uint maxFreeSize = 1;
 
         switch (importDBType) {
                 case 's':
-                        importDB = std::make_shared<ClauseDatabaseSingleBuffer>(__globalParameters__.defaultClauseBufferSize);
+                        importDB = std::make_shared<ClauseDatabaseSingleBuffer>(Painless::__globalParameters__.defaultClauseBufferSize);
                         break;
                 case 'm':
                         importDB = std::make_shared<ClauseDatabaseMallob>(
@@ -148,7 +148,7 @@ SolverFactory::createSolver(char type, char importDBType, std::shared_ptr<Solver
 
 #ifdef YALSAT_
                 case 'y':
-                        createdSolver = std::make_shared<YalSat>(id, __globalParameters__.localSearchFlips, __globalParameters__.maxDivNoise);
+                        createdSolver = std::make_shared<YalSat>(id, Painless::__globalParameters__.localSearchFlips, Painless::__globalParameters__.maxDivNoise);
                         return SolverAlgorithmType::LOCAL_SEARCH;
                         // break;
 #endif

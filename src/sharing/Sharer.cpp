@@ -27,7 +27,7 @@ mainThrSharing(void* arg)
 	double sharingTime = 0;
 
 	// Initial sleep to desynchronize multiple sharers
-	std::this_thread::sleep_for(std::chrono::microseconds(__globalParameters__.initSleep));
+	std::this_thread::sleep_for(std::chrono::microseconds(Painless::__globalParameters__.initSleep));
 	LOG1("Sharer %d will start now", shr->getId());
 
 	bool can_break = false;

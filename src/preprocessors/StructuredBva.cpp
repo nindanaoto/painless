@@ -230,12 +230,12 @@ StructuredBVA::addInitialClauses(const std::vector<simpleClause>& initClauses, u
 void
 StructuredBVA::loadFormula(const char* filename)
 {
-	std::vector<std::unique_ptr<Parsers::ClauseProcessor>> processors;
-	processors.push_back(std::make_unique<Parsers::RedundancyFilter>());
-	processors.push_back(std::make_unique<Parsers::TautologyFilter>());
-	processors.push_back(std::make_unique<Parsers::SBVAInit>(this->litToClause, this->isClauseDeleted));
+	std::vector<std::unique_ptr<Painless::Parsers::ClauseProcessor>> processors;
+	processors.push_back(std::make_unique<Painless::Parsers::RedundancyFilter>());
+	processors.push_back(std::make_unique<Painless::Parsers::TautologyFilter>());
+	processors.push_back(std::make_unique<Painless::Parsers::SBVAInit>(this->litToClause, this->isClauseDeleted));
 
-	if (!Parsers::parseCNF(filename, this->clauses, &this->varCount, processors)) {
+	if (!Painless::Parsers::parseCNF(filename, this->clauses, &this->varCount, processors)) {
 		this->releaseMemory();
 		LOGERROR("Error at parsing!");
 		this->m_initialized = false;
@@ -368,7 +368,7 @@ StructuredBVA::diversify(const SeedGenerator& getSeed)
 }
 
 bool
-Parsers::SBVAInit::initMembers(unsigned int varCount, unsigned int clauseCount)
+Painless::Parsers::SBVAInit::initMembers(unsigned int varCount, unsigned int clauseCount)
 {
 	this->m_isClauseDeleted.reserve(clauseCount);
 	this->m_litToClause.resize(varCount * 2);
@@ -376,7 +376,7 @@ Parsers::SBVAInit::initMembers(unsigned int varCount, unsigned int clauseCount)
 }
 
 bool
-Parsers::SBVAInit::operator()(simpleClause& clause)
+Painless::Parsers::SBVAInit::operator()(simpleClause& clause)
 {
 	bool shouldKeep = true;
 

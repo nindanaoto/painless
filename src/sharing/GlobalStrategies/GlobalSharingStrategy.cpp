@@ -32,7 +32,7 @@ GlobalSharingStrategy::printStats()
 std::chrono::microseconds
 GlobalSharingStrategy::getSleepingTime()
 {
-        return std::chrono::microseconds(__globalParameters__.globalSharingSleep);
+        return std::chrono::microseconds(Painless::__globalParameters__.globalSharingSleep);
 }
 
 bool

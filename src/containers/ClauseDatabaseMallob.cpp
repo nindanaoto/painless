@@ -16,7 +16,7 @@ ClauseDatabaseMallob::ClauseDatabaseMallob(int maxClauseSize,
 	, m_totalLiteralCapacity(maxCapacity)
 	, m_currentLiteralSize(0)
 	, m_currentWorstIndex(1)
-	, m_missedAdditionsBfr(__globalParameters__.defaultClauseBufferSize)
+	, m_missedAdditionsBfr(Painless::__globalParameters__.defaultClauseBufferSize)
 {
 	if (maxClauseSize <= 0) {
 		throw std::invalid_argument("maxClauseSize must be positive");

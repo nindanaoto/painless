@@ -94,14 +94,14 @@ glucoseImportClause(void* issuer, int* from, vec<Lit>& gcls)
 
 GlucoseSyrup::GlucoseSyrup(int id, const std::shared_ptr<ClauseDatabase>& clauseDB)
 	: SolverCdclInterface(id, clauseDB, SolverCdclType::GLUCOSE)
-	, clausesToAdd(__globalParameters__.defaultClauseBufferSize)
+	, clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 {
 	/* use sharing id to not have the assert(importedFromThread != thn) fail */
 	solver = new ParallelSolver(this->getSharingId());
 
-	this->unitsToImport = std::make_unique<ClauseDatabaseSingleBuffer>(__globalParameters__.defaultClauseBufferSize);
+	this->unitsToImport = std::make_unique<ClauseDatabaseSingleBuffer>(Painless::__globalParameters__.defaultClauseBufferSize);
 
-	switch (__globalParameters__.glucoseSplitHeuristic) {
+	switch (Painless::__globalParameters__.glucoseSplitHeuristic) {
 		case 2:
 			solver->useFlip = true;
 			break;
@@ -122,13 +122,13 @@ GlucoseSyrup::GlucoseSyrup(int id, const std::shared_ptr<ClauseDatabase>& clause
 
 GlucoseSyrup::GlucoseSyrup(const GlucoseSyrup& other, int id, const std::shared_ptr<ClauseDatabase>& clauseDB)
 	: SolverCdclInterface(id, clauseDB, SolverCdclType::GLUCOSE)
-	, clausesToAdd(__globalParameters__.defaultClauseBufferSize)
+	, clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 {
 	solver = new ParallelSolver(*(other.solver), this->getSharingId());
 
-	this->unitsToImport = std::make_unique<ClauseDatabaseSingleBuffer>(__globalParameters__.defaultClauseBufferSize);
+	this->unitsToImport = std::make_unique<ClauseDatabaseSingleBuffer>(Painless::__globalParameters__.defaultClauseBufferSize);
 
-	switch (__globalParameters__.glucoseSplitHeuristic) {
+	switch (Painless::__globalParameters__.glucoseSplitHeuristic) {
 		case 2:
 			solver->useFlip = true;
 			break;
@@ -185,7 +185,7 @@ GlucoseSyrup::getDivisionVariable()
 {
 	Lit res;
 
-	switch (__globalParameters__.glucoseSplitHeuristic) {
+	switch (Painless::__globalParameters__.glucoseSplitHeuristic) {
 		case 2:
 			res = solver->pickBranchLitUsingFlipActivity();
 			break;

@@ -80,11 +80,11 @@ cbkMapleCOMSPSImportClause(void* issuer, unsigned int* lbd, vec<Lit>& mcls)
 
 MapleCOMSPSSolver::MapleCOMSPSSolver(int id, const std::shared_ptr<ClauseDatabase>& clauseDB)
 	: SolverCdclInterface(id, clauseDB, SolverCdclType::MAPLECOMSPS)
-	, clausesToAdd(__globalParameters__.defaultClauseBufferSize)
+	, clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 {
 	solver = new SimpSolver();
 
-	this->unitsToImport = std::make_unique<ClauseDatabaseSingleBuffer>(__globalParameters__.defaultClauseBufferSize);
+	this->unitsToImport = std::make_unique<ClauseDatabaseSingleBuffer>(Painless::__globalParameters__.defaultClauseBufferSize);
 
 	solver->cbkExportClause = cbkMapleCOMSPSExportClause;
 	solver->cbkImportClause = cbkMapleCOMSPSImportClause;
@@ -98,11 +98,11 @@ MapleCOMSPSSolver::MapleCOMSPSSolver(const MapleCOMSPSSolver& other,
 									 int id,
 									 const std::shared_ptr<ClauseDatabase>& clauseDB)
 	: SolverCdclInterface(id, clauseDB, SolverCdclType::MAPLECOMSPS)
-	, clausesToAdd(__globalParameters__.defaultClauseBufferSize)
+	, clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 {
 	solver = new SimpSolver(*(other.solver));
 
-	this->unitsToImport = std::make_unique<ClauseDatabaseSingleBuffer>(__globalParameters__.defaultClauseBufferSize);
+	this->unitsToImport = std::make_unique<ClauseDatabaseSingleBuffer>(Painless::__globalParameters__.defaultClauseBufferSize);
 
 	solver->cbkExportClause = cbkMapleCOMSPSExportClause;
 	solver->cbkImportClause = cbkMapleCOMSPSImportClause;

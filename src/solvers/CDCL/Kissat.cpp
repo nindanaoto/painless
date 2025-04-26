@@ -70,7 +70,7 @@ kissatExportClause(void* painless_interface, kissat* internal_solver)
 
 Kissat::Kissat(int id, const std::shared_ptr<ClauseDatabase>& clauseDB)
 	: SolverCdclInterface(id, clauseDB, SolverCdclType::KISSAT)
-	, clausesToAdd(__globalParameters__.defaultClauseBufferSize)
+	, clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 {
 	solver = kissat_init();
 
