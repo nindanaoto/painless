@@ -17,35 +17,35 @@ mainWorker(void* arg);
 class SequentialWorker : public WorkingStrategy
 {
   public:
-	SequentialWorker(std::shared_ptr<SolverInterface> solver_);
+        SequentialWorker(std::shared_ptr<SolverInterface> solver_);
 
-	~SequentialWorker();
+        ~SequentialWorker();
 
-	void solve(const std::vector<int>& cube);
+        void solve(const std::vector<int>& cube);
 
-	void join(WorkingStrategy* winner, SatResult res, const std::vector<int>& model);
+        void join(WorkingStrategy* winner, SatResult res, const std::vector<int>& model);
 
-	void setSolverInterrupt();
+        void setSolverInterrupt();
 
-	void unsetSolverInterrupt();
+        void unsetSolverInterrupt();
 
-	void waitInterrupt();
+        void waitInterrupt();
 
-	std::shared_ptr<SolverInterface> solver;
+        std::shared_ptr<SolverInterface> solver;
 
   protected:
-	friend void* mainWorker(void* arg);
+        friend void* mainWorker(void* arg);
 
-	Thread* worker;
+        Painless::Thread* worker;
 
-	std::vector<int> actualCube;
+        std::vector<int> actualCube;
 
-	std::atomic<bool> force;
+        std::atomic<bool> force;
 
-	std::atomic<bool> waitJob;
+        std::atomic<bool> waitJob;
 
-	Mutex waitInterruptLock;
+        Painless::Mutex waitInterruptLock;
 
-	pthread_mutex_t mutexStart;
-	pthread_cond_t mutexCondStart;
+        pthread_mutex_t mutexStart;
+        pthread_cond_t mutexCondStart;
 };
