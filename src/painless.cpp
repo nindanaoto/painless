@@ -25,32 +25,32 @@
 void
 cleanup()
 {
-	SystemResourceMonitor::printProcessResourceUsage();
+        SystemResourceMonitor::printProcessResourceUsage();
 }
 // Signal handler function
 void
 signalHandler(int signum)
 {
-	// Call cleanup directly for immediate signals
-	cleanup();
+        // Call cleanup directly for immediate signals
+        cleanup();
 
-	// Re-raise the signal after cleaning up
-	std::signal(signum, SIG_DFL); /* Use defailt signal handler */
-	std::raise(signum);
+        // Re-raise the signal after cleaning up
+        std::signal(signum, SIG_DFL); /* Use defailt signal handler */
+        std::raise(signum);
 }
 
 // Function to set up exit handlers
 void
 setupExitHandlers()
 {
-	// Register cleanup function to be called at normal program termination
-	std::atexit(cleanup);
+        // Register cleanup function to be called at normal program termination
+        std::atexit(cleanup);
 
-	// Set up signal handlers
-	std::signal(SIGINT, signalHandler);
-	std::signal(SIGTERM, signalHandler);
-	std::signal(SIGABRT, signalHandler);
-	// Add more signals as needed
+        // Set up signal handlers
+        std::signal(SIGINT, signalHandler);
+        std::signal(SIGTERM, signalHandler);
+        std::signal(SIGABRT, signalHandler);
+        // Add more signals as needed
 }
 
 // -------------------------------------------
@@ -77,128 +77,128 @@ std::vector<int> finalModel;
 int
 main(int argc, char** argv)
 {
-	// setupExitHandlers();
+        // setupExitHandlers();
 
-	Parameters::init(argc, argv);
+        Parameters::init(argc, argv);
 
-	setVerbosityLevel(__globalParameters__.verbosity);
+        Painless::setVerbosityLevel(__globalParameters__.verbosity);
 
-	if(__globalParameters__.help)
-	{
-		Parameters::printHelp();
-	}
+        if(__globalParameters__.help)
+        {
+                Parameters::printHelp();
+        }
 
-	dist = __globalParameters__.enableDistributed;
+        dist = __globalParameters__.enableDistributed;
 
-	// Ram Monitoring
+        // Ram Monitoring
 
-	if (dist) {
-		// MPI Initialization
-		int provided;
-		TESTRUNMPI(MPI_Init_thread(NULL, NULL, MPI_THREAD_SERIALIZED, &provided));
-		TESTRUNMPI(MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI_ERRORS_RETURN));
+        if (dist) {
+                // MPI Initialization
+                int provided;
+                TESTRUNMPI(MPI_Init_thread(NULL, NULL, MPI_THREAD_SERIALIZED, &provided));
+                TESTRUNMPI(MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI_ERRORS_RETURN));
 
-		LOGDEBUG1("Thread strategy provided is %d", provided);
+                LOGDEBUG1("Thread strategy provided is %d", provided);
 
-		if (provided < MPI_THREAD_SERIALIZED) {
-			LOGERROR("Wanted MPI initialization is not possible !");
-			dist = false;
-		} else {
-			TESTRUNMPI(MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank));
+                if (provided < MPI_THREAD_SERIALIZED) {
+                        LOGERROR("Wanted MPI initialization is not possible !");
+                        dist = false;
+                } else {
+                        TESTRUNMPI(MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank));
 
-			char hostname[256];
-			gethostname(hostname, sizeof(hostname));
-			LOGDEBUG1("PID %d on %s is of rank %d", getpid(), hostname, mpi_rank);
+                        char hostname[256];
+                        gethostname(hostname, sizeof(hostname));
+                        LOGDEBUG1("PID %d on %s is of rank %d", getpid(), hostname, mpi_rank);
 
-			TESTRUNMPI(MPI_Comm_size(MPI_COMM_WORLD, &mpi_world_size));
-		}
-	}
+                        TESTRUNMPI(MPI_Comm_size(MPI_COMM_WORLD, &mpi_world_size));
+                }
+        }
 
-	if (!mpi_rank)
-		Parameters::printParams();
+        if (!mpi_rank)
+                Parameters::printParams();
 
-	// Init timeout detection before starting the solvers and sharers
-	std::unique_lock<std::mutex> lock(mutexGlobalEnd);
-	// to make sure that the broadcast is done when main has done its wait
+        // Init timeout detection before starting the solvers and sharers
+        std::unique_lock<std::mutex> lock(mutexGlobalEnd);
+        // to make sure that the broadcast is done when main has done its wait
 
-	// TODO: better choice options, think about description file using yaml or json with semantic checking
-	if (__globalParameters__.simple)
-		working = new PortfolioSimple();
-	else
-		working = new PortfolioPRS();
+        // TODO: better choice options, think about description file using yaml or json with semantic checking
+        if (__globalParameters__.simple)
+                working = new PortfolioSimple();
+        else
+                working = new PortfolioPRS();
 
-	// Launch working
-	std::vector<int> cube;
+        // Launch working
+        std::vector<int> cube;
 
-	std::thread mainWorker(&WorkingStrategy::solve, (WorkingStrategy*)working, std::ref(cube));
+        std::thread mainWorker(&WorkingStrategy::solve, (WorkingStrategy*)working, std::ref(cube));
 
-	int wakeupRet = 0;
+        int wakeupRet = 0;
 
-	if (__globalParameters__.timeout > 0) {
-		auto startTime = SystemResourceMonitor::getRelativeTimeSeconds();
+        if (__globalParameters__.timeout > 0) {
+                auto startTime = SystemResourceMonitor::getRelativeTimeSeconds();
 
-		// Wait until end or __globalParameters__.timeout
-		while ((unsigned int)SystemResourceMonitor::getRelativeTimeSeconds() < __globalParameters__.timeout &&
-			   globalEnding == false) // to manage the spurious wake ups
-		{
-			auto remainingTime = std::chrono::duration<double>(
-				__globalParameters__.timeout - (SystemResourceMonitor::getRelativeTimeSeconds() - startTime));
-			auto wakeupStatus = condGlobalEnd.wait_for(lock, remainingTime);
+                // Wait until end or __globalParameters__.timeout
+                while ((unsigned int)SystemResourceMonitor::getRelativeTimeSeconds() < __globalParameters__.timeout &&
+                           globalEnding == false) // to manage the spurious wake ups
+                {
+                        auto remainingTime = std::chrono::duration<double>(
+                                __globalParameters__.timeout - (SystemResourceMonitor::getRelativeTimeSeconds() - startTime));
+                        auto wakeupStatus = condGlobalEnd.wait_for(lock, remainingTime);
 
-			LOGDEBUG2("main wakeupRet = %s , globalEnding = %d ",
-					  (wakeupStatus == std::cv_status::timeout ? "timeout" : "notimeout"),
-					  globalEnding.load());
-		}
+                        LOGDEBUG2("main wakeupRet = %s , globalEnding = %d ",
+                                          (wakeupStatus == std::cv_status::timeout ? "timeout" : "notimeout"),
+                                          globalEnding.load());
+                }
 
-		condGlobalEnd.notify_all();
-		lock.unlock();
+                condGlobalEnd.notify_all();
+                lock.unlock();
 
-		if ((unsigned int)SystemResourceMonitor::getRelativeTimeSeconds() >= __globalParameters__.timeout &&
-			finalResult ==
-				SatResult::UNKNOWN) // if __globalParameters__.timeout set globalEnding otherwise a solver woke me up
-		{
-			globalEnding = true;
-			finalResult = SatResult::TIMEOUT;
-		}
-	} else {
-		// no __globalParameters__.timeout waiting
-		while (globalEnding == false) // to manage the spurious wake ups
-		{
-			condGlobalEnd.wait(lock);
-		}
+                if ((unsigned int)SystemResourceMonitor::getRelativeTimeSeconds() >= __globalParameters__.timeout &&
+                        finalResult ==
+                                SatResult::UNKNOWN) // if __globalParameters__.timeout set globalEnding otherwise a solver woke me up
+                {
+                        globalEnding = true;
+                        finalResult = SatResult::TIMEOUT;
+                }
+        } else {
+                // no __globalParameters__.timeout waiting
+                while (globalEnding == false) // to manage the spurious wake ups
+                {
+                        condGlobalEnd.wait(lock);
+                }
 
-		condGlobalEnd.notify_all();
-		lock.unlock();
-	}
+                condGlobalEnd.notify_all();
+                lock.unlock();
+        }
 
-	mainWorker.join();
+        mainWorker.join();
 
-	delete working;
+        delete working;
 
-	if (dist) {
-		TESTRUNMPI(MPI_Finalize());
-	}
+        if (dist) {
+                TESTRUNMPI(MPI_Finalize());
+        }
 
-	if (mpi_rank == mpi_winner) {
-		if (finalResult == SatResult::SAT) {
-			logSolution("SATISFIABLE");
+        if (mpi_rank == mpi_winner) {
+                if (finalResult == SatResult::SAT) {
+                        Painless::logSolution("SATISFIABLE");
 
-			if (__globalParameters__.noModel == false) {
-				logModel(finalModel);
-			}
-		} else if (finalResult == SatResult::UNSAT) {
-			logSolution("UNSATISFIABLE");
-		} else // if __globalParameters__.timeout or unknown
-		{
-			logSolution("UNKNOWN");
-			finalResult = SatResult::UNKNOWN;
-		}
+                        if (__globalParameters__.noModel == false) {
+                                Painless::logModel(finalModel);
+                        }
+                } else if (finalResult == SatResult::UNSAT) {
+                        Painless::logSolution("UNSATISFIABLE");
+                } else // if __globalParameters__.timeout or unknown
+                {
+                        Painless::logSolution("UNKNOWN");
+                        finalResult = SatResult::UNKNOWN;
+                }
 
-		LOGSTAT("Resolution time: %f s", SystemResourceMonitor::getRelativeTimeSeconds());
-	} else
-		finalResult = SatResult::UNKNOWN; /* mpi will be forced to suspend job only by the winner */
+                LOGSTAT("Resolution time: %f s", SystemResourceMonitor::getRelativeTimeSeconds());
+        } else
+                finalResult = SatResult::UNKNOWN; /* mpi will be forced to suspend job only by the winner */
 
-	LOGDEBUG1("Mpi process %d returns %d", mpi_rank, static_cast<int>(finalResult.load()));
+        LOGDEBUG1("Mpi process %d returns %d", mpi_rank, static_cast<int>(finalResult.load()));
 
-	return static_cast<int>(finalResult.load());
+        return static_cast<int>(finalResult.load());
 }
