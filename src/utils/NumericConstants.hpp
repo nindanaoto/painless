@@ -3,6 +3,8 @@
 
 #include <cstdint>
 
+namespace Painless {
+
 /**
  * @file numeric_constants.h
  * @brief Defines constants for large numbers using constexpr for compile-time evaluation and type safety.
@@ -28,3 +30,4 @@ constexpr std::int64_t BILLION = INT64_C(1000000000);
 constexpr std::int64_t TRILLION = INT64_C(1000000000000);
 
 #endif // NUMERIC_CONSTANTS_H
+} // namespace Painless

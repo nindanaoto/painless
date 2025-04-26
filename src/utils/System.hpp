@@ -12,6 +12,8 @@
 #include <string>
 #include <sys/resource.h>
 
+namespace Painless {
+
 /**
  * @ingroup utils
  * @brief A set of utilities for monitoring and managing system resources.
@@ -107,3 +109,4 @@ isMemoryLimitExceeded();
 void
 printProcessResourceUsage();
 }
+} // namespace Painless

@@ -37,9 +37,9 @@ mainThrSharing(void* arg)
 		lastStrategy = shr->round % nbStrats;
 
 		// Sharing phase
-		sharingTime = SystemResourceMonitor::getAbsoluteTimeSeconds();
+		sharingTime = Painless::SystemResourceMonitor::getAbsoluteTimeSeconds();
 		can_break = shr->sharingStrategies[lastStrategy]->doSharing();
-		sharingTime = SystemResourceMonitor::getAbsoluteTimeSeconds() - sharingTime;
+		sharingTime = Painless::SystemResourceMonitor::getAbsoluteTimeSeconds() - sharingTime;
 
 		sleepTime = shr->sharingStrategies[lastStrategy]->getSleepingTime();
 		LOG2("[Sharer %d] Sharing round %d done in %f s. Will sleep for %llu us",

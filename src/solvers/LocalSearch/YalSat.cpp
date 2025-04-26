@@ -118,7 +118,7 @@ YalSat::addClauses(const std::vector<ClauseExchangePtr>& clauses)
 void
 YalSat::addInitialClauses(const std::vector<simpleClause>& clauses, unsigned int nbVars)
 {
-	if (clauses.size() > 33 * MILLION) {
+	if (clauses.size() > 33 * Painless::MILLION) {
 		LOGERROR("The number of clauses %u is too high for yalsat!", clauses.size());
 		exit(PERR_NOT_SUPPORTED);
 	}

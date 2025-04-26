@@ -25,7 +25,7 @@
 void
 cleanup()
 {
-        SystemResourceMonitor::printProcessResourceUsage();
+        Painless::SystemResourceMonitor::printProcessResourceUsage();
 }
 // Signal handler function
 void
@@ -135,14 +135,14 @@ main(int argc, char** argv)
         int wakeupRet = 0;
 
         if (Painless::__globalParameters__.timeout > 0) {
-                auto startTime = SystemResourceMonitor::getRelativeTimeSeconds();
+                auto startTime = Painless::SystemResourceMonitor::getRelativeTimeSeconds();
 
                 // Wait until end or Painless::__globalParameters__.timeout
-                while ((unsigned int)SystemResourceMonitor::getRelativeTimeSeconds() < Painless::__globalParameters__.timeout &&
+                while ((unsigned int)Painless::SystemResourceMonitor::getRelativeTimeSeconds() < Painless::__globalParameters__.timeout &&
                            globalEnding == false) // to manage the spurious wake ups
                 {
                         auto remainingTime = std::chrono::duration<double>(
-                                Painless::__globalParameters__.timeout - (SystemResourceMonitor::getRelativeTimeSeconds() - startTime));
+                                Painless::__globalParameters__.timeout - (Painless::SystemResourceMonitor::getRelativeTimeSeconds() - startTime));
                         auto wakeupStatus = condGlobalEnd.wait_for(lock, remainingTime);
 
                         LOGDEBUG2("main wakeupRet = %s , globalEnding = %d ",
@@ -153,7 +153,7 @@ main(int argc, char** argv)
                 condGlobalEnd.notify_all();
                 lock.unlock();
 
-                if ((unsigned int)SystemResourceMonitor::getRelativeTimeSeconds() >= Painless::__globalParameters__.timeout &&
+                if ((unsigned int)Painless::SystemResourceMonitor::getRelativeTimeSeconds() >= Painless::__globalParameters__.timeout &&
                         finalResult ==
                                 SatResult::UNKNOWN) // if Painless::__globalParameters__.timeout set globalEnding otherwise a solver woke me up
                 {
@@ -194,7 +194,7 @@ main(int argc, char** argv)
                         finalResult = SatResult::UNKNOWN;
                 }
 
-                LOGSTAT("Resolution time: %f s", SystemResourceMonitor::getRelativeTimeSeconds());
+                LOGSTAT("Resolution time: %f s", Painless::SystemResourceMonitor::getRelativeTimeSeconds());
         } else
                 finalResult = SatResult::UNKNOWN; /* mpi will be forced to suspend job only by the winner */
 
