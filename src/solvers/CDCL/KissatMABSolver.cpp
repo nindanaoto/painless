@@ -525,6 +525,6 @@ KissatMABSolver::printWinningLog()
 void
 KissatMABSolver::computeFamily()
 {
-	/* + mpi_rank enable better distributed fairness */
-	this->family = static_cast<KissatFamily>((this->getSolverTypeId() + mpi_rank) % 3);
+	/* + Painless::mpi_rank enable better distributed fairness */
+	this->family = static_cast<KissatFamily>((this->getSolverTypeId() + Painless::mpi_rank) % 3);
 }

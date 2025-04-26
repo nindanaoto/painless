@@ -104,17 +104,17 @@ main(int argc, char** argv)
                         LOGERROR("Wanted MPI initialization is not possible !");
                         dist = false;
                 } else {
-                        TESTRUNMPI(MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank));
+                        TESTRUNMPI(MPI_Comm_rank(MPI_COMM_WORLD, &Painless::mpi_rank));
 
                         char hostname[256];
                         gethostname(hostname, sizeof(hostname));
-                        LOGDEBUG1("PID %d on %s is of rank %d", getpid(), hostname, mpi_rank);
+                        LOGDEBUG1("PID %d on %s is of rank %d", getpid(), hostname, Painless::mpi_rank);
 
-                        TESTRUNMPI(MPI_Comm_size(MPI_COMM_WORLD, &mpi_world_size));
+                        TESTRUNMPI(MPI_Comm_size(MPI_COMM_WORLD, &Painless::mpi_world_size));
                 }
         }
 
-        if (!mpi_rank)
+        if (!Painless::mpi_rank)
                 Parameters::printParams();
 
         // Init timeout detection before starting the solvers and sharers
@@ -179,7 +179,7 @@ main(int argc, char** argv)
                 TESTRUNMPI(MPI_Finalize());
         }
 
-        if (mpi_rank == mpi_winner) {
+        if (Painless::mpi_rank == Painless::mpi_winner) {
                 if (finalResult == SatResult::SAT) {
                         Painless::logSolution("SATISFIABLE");
 
@@ -198,7 +198,7 @@ main(int argc, char** argv)
         } else
                 finalResult = SatResult::UNKNOWN; /* mpi will be forced to suspend job only by the winner */
 
-        LOGDEBUG1("Mpi process %d returns %d", mpi_rank, static_cast<int>(finalResult.load()));
+        LOGDEBUG1("Mpi process %d returns %d", Painless::mpi_rank, static_cast<int>(finalResult.load()));
 
         return static_cast<int>(finalResult.load());
 }

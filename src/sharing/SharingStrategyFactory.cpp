@@ -124,8 +124,8 @@ SharingStrategyFactory::instantiateGlobalStrategies(
 	int strategyNumber,
 	std::vector<std::shared_ptr<GlobalSharingStrategy>>& globalStrategies)
 {
-	int right_neighbor = (mpi_rank - 1 + mpi_world_size) % mpi_world_size;
-	int left_neighbor = (mpi_rank + 1) % mpi_world_size;
+	int right_neighbor = (Painless::mpi_rank - 1 + Painless::mpi_world_size) % Painless::mpi_world_size;
+	int left_neighbor = (Painless::mpi_rank + 1) % Painless::mpi_world_size;
 	std::vector<int> subscriptions;
 	std::vector<int> subscribers;
 

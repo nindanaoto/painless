@@ -8,19 +8,20 @@
 #define MYMPI_CLAUSES 1
 #define MYMPI_BITSET 1
 #define MYMPI_OK 2
+namespace Painless {
 #define MYMPI_NOTOK 3
 #define MYMPI_MODEL 4
 
 #define COLOR_YES 10
 
 #define TESTRUNMPI(func)                                                                                               \
-	do {                                                                                                               \
-		int result = (func);                                                                                           \
-		if (dist && result != MPI_SUCCESS) {                                                                           \
-			LOGERROR("MPI ERROR: %d in function %s", result, #func);                                                   \
-			exit(PERR_MPI);                                                                                            \
-		}                                                                                                              \
-	} while (0)
+        do {                                                                                                               \
+                int result = (func);                                                                                           \
+                if (dist && result != MPI_SUCCESS) {                                                                           \
+                        LOGERROR("MPI ERROR: %d in function %s", result, #func);                                                   \
+                        exit(PERR_MPI);                                                                                            \
+                }                                                                                                              \
+        } while (0)
 
 /// @brief Mpi rank of this process
 extern int mpi_rank;
@@ -62,4 +63,4 @@ deserializeClauses(const std::vector<int>& serializedClauses, std::vector<simple
 void
 sendModelToRoot();
 
-}
+}} // namespace Painless

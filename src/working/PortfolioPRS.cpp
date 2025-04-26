@@ -28,12 +28,12 @@ PortfolioPRS::PortfolioPRS() {}
 
 PortfolioPRS::~PortfolioPRS()
 {
-	// Wait for global sharer ending to have the mpi_winner value
+	// Wait for global sharer ending to have the Painless::mpi_winner value
 	for (int i = 0; i < sharers.size(); i++) {
 		sharers[i]->join();
 	}
-	mpiutils::sendModelToRoot();
-	if (0 == mpi_rank && finalResult == SatResult::SAT) {
+	Painless::mpiutils::sendModelToRoot();
+	if (0 == Painless::mpi_rank && finalResult == SatResult::SAT) {
 		this->restoreModelDist(finalModel);
 	}
 
@@ -71,7 +71,7 @@ PortfolioPRS::solve(const std::vector<int>& cube)
 	strategyEnding = false;
 
 	// Mpi rank 0 is the leader, sole executor of PRS preprocessing.
-	if (0 == mpi_rank) {
+	if (0 == Painless::mpi_rank) {
 		/* PRS */
 		this->preprocessors.push_back(std::make_shared<preprocess>(0));
 		this->preprocessors.at(0)->loadFormula(__globalParameters__.filename.c_str());
@@ -109,7 +109,7 @@ prs_sync:
 	TESTRUNMPI(MPI_Bcast(&receivedFinalResultBcast, 1, MPI_INT, 0, MPI_COMM_WORLD));
 
 	if (receivedFinalResultBcast != 0) {
-		mpi_winner = 0;
+		Painless::mpi_winner = 0;
 		finalResult = static_cast<SatResult>(receivedFinalResultBcast);
 		globalEnding = true;
 		LOGDEBUG1("[PRS] It is the mpi end: %d", receivedFinalResultBcast);
@@ -120,17 +120,17 @@ prs_sync:
 	}
 
 	// Create Groups
-	uint quarter = mpi_world_size / 4;
-	uint halfquarter = mpi_world_size / 8;
+	uint quarter = Painless::mpi_world_size / 4;
+	uint halfquarter = Painless::mpi_world_size / 8;
 
 	// For better clarity
 	sizePerGroup.insert({ PRSGroups::SAT, halfquarter });
 	sizePerGroup.insert({ PRSGroups::UNSAT, quarter });
 	sizePerGroup.insert({ PRSGroups::MAPLE, halfquarter });
 	sizePerGroup.insert({ PRSGroups::LGL, 1 });
-	sizePerGroup.insert({ PRSGroups::DEFAULT, mpi_world_size - (halfquarter * 2 + quarter + 1) });
+	sizePerGroup.insert({ PRSGroups::DEFAULT, Painless::mpi_world_size - (halfquarter * 2 + quarter + 1) });
 
-	this->computeNodeGroup(mpi_world_size, mpi_rank);
+	this->computeNodeGroup(Painless::mpi_world_size, Painless::mpi_rank);
 
 	std::string portfolio = __globalParameters__.solver;
 	if (portfolio[0] != 'k' && portfolio[0] != 'K' && portfolio[0] != 'I') {
@@ -193,9 +193,9 @@ prs_sync:
 	// Diversify
 
 	LOG0("I am in group %d with portfolio '%s'", static_cast<int>(nodeGroup), solversPortfolio.c_str());
-	// auto generalIDScaler = [rank = mpi_rank, size = mpi_world_size](unsigned id) { return rank * size + id; };
+	// auto generalIDScaler = [rank = Painless::mpi_rank, size = Painless::mpi_world_size](unsigned id) { return rank * size + id; };
 	// auto typeIDScaler = [rank = rankInMyGroup, size = sizePerGroup.at(nodeGroup)](unsigned id) {
-	auto generalIDScaler = [rank = mpi_rank,
+	auto generalIDScaler = [rank = Painless::mpi_rank,
 							size = __globalParameters__.cpus](const std::shared_ptr<SolverInterface>& solver) {
 		return rank * size + solver->getSolverId();
 	};
@@ -208,7 +208,7 @@ prs_sync:
 
 	// Send Formula from leader to workers
 
-	mpiutils::sendFormula(initClauses, &varCount, 0);
+	Painless::mpiutils::sendFormula(initClauses, &varCount, 0);
 
 	// Load Formula in Solvers
 

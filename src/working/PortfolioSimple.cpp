@@ -18,7 +18,7 @@ PortfolioSimple::PortfolioSimple() {}
 
 PortfolioSimple::~PortfolioSimple()
 {
-	// Wait for sharers in order to have stats and mpi_winner if dist
+	// Wait for sharers in order to have stats and Painless::mpi_winner if dist
 	for (int i = 0; i < sharers.size(); i++) {
 		sharers[i]->join();
 	}
@@ -43,12 +43,12 @@ PortfolioSimple::solve(const std::vector<int>& cube)
 	std::vector<simpleClause> initClauses;
 	unsigned int varCount;
 
-	if (mpi_rank <= 0)
+	if (Painless::mpi_rank <= 0)
 		Parsers::parseCNF(__globalParameters__.filename.c_str(), initClauses, &varCount);
 
 	// Send instance via MPI from leader 0 to workers.
 	if (dist) {
-		mpiutils::sendFormula(initClauses, &varCount, 0);
+		Painless::mpiutils::sendFormula(initClauses, &varCount, 0);
 	}
 
 	SolverFactory::createSolvers(__globalParameters__.cpus,
@@ -60,11 +60,11 @@ PortfolioSimple::solve(const std::vector<int>& cube)
 	IDScaler globalIDScaler;
 	IDScaler typeIDScaler;
 	if (dist) {
-		globalIDScaler = [rank = mpi_rank,
+		globalIDScaler = [rank = Painless::mpi_rank,
 						  size = __globalParameters__.cpus](const std::shared_ptr<SolverInterface>& solver) {
 			return rank * size + solver->getSolverId();
 		};
-		typeIDScaler = [rank = mpi_rank,
+		typeIDScaler = [rank = Painless::mpi_rank,
 						size = __globalParameters__.cpus](const std::shared_ptr<SolverInterface>& solver) {
 			return rank * solver->getSolverTypeCount() + solver->getSolverTypeId();
 		};

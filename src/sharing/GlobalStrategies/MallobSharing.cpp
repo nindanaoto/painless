@@ -44,7 +44,7 @@ MallobSharing::MallobSharing(const std::shared_ptr<ClauseDatabase>& clauseDB,
 	initializeFilter(resharePeriodMicroSec, roundsPerSecond);
 
 	// Print parameters
-	if (mpi_rank == MALLOB_MPI_ROOT) {
+	if (Painless::mpi_rank == MALLOB_MPI_ROOT) {
 		LOGSTAT("MallobSharing Parameters:");
 		LOGSTAT("  Base Size: %d", baseSize);
 		LOGSTAT("  Max Size: %d", maxSize);
@@ -69,10 +69,10 @@ MallobSharing::initMpiVariables()
 {
 	// [0]: parent, [1]: right, [2]: left. If it has one child it must be a right
 	// one
-	right_child = (mpi_rank * 2 + 1 < mpi_world_size) ? mpi_rank * 2 + 1 : MPI_UNDEFINED;
-	left_child = (mpi_rank * 2 + 2 < mpi_world_size) ? mpi_rank * 2 + 2 : MPI_UNDEFINED;
+	right_child = (Painless::mpi_rank * 2 + 1 < Painless::mpi_world_size) ? Painless::mpi_rank * 2 + 1 : MPI_UNDEFINED;
+	left_child = (Painless::mpi_rank * 2 + 2 < Painless::mpi_world_size) ? Painless::mpi_rank * 2 + 2 : MPI_UNDEFINED;
 	nb_children = (right_child == MPI_UNDEFINED) ? 0 : (left_child == MPI_UNDEFINED) ? 1 : 2;
-	father = (mpi_rank == MALLOB_MPI_ROOT) ? MPI_UNDEFINED : (mpi_rank - 1) / 2;
+	father = (Painless::mpi_rank == MALLOB_MPI_ROOT) ? MPI_UNDEFINED : (Painless::mpi_rank - 1) / 2;
 	LOG2("[Tree] parent:%d, left: %d, right: %d", father, left_child, right_child);
 
 	buffers.reserve(nb_children);
@@ -162,7 +162,7 @@ MallobSharing::doSharing()
 
 	/* Ending Detection */
 	if (GlobalSharingStrategy::doSharing()) {
-		this->joinProcess(mpi_winner, finalResult, {});
+		this->joinProcess(Painless::mpi_winner, finalResult, {});
 		return true;
 	}
 
@@ -197,7 +197,7 @@ MallobSharing::doSharing()
 		TESTRUNMPI(MPI_Get_count(&status, MPI_INT, &received_buffer_size));
 		receivedClausesRight.resize(received_buffer_size);
 
-		LOGDEBUG2("Parent %d waiting for right child %d on MPI_Recv", mpi_rank, right_child);
+		LOGDEBUG2("Parent %d waiting for right child %d on MPI_Recv", Painless::mpi_rank, right_child);
 		TESTRUNMPI(MPI_Recv(&receivedClausesRight[0],
 							received_buffer_size,
 							MPI_INT,
@@ -219,7 +219,7 @@ MallobSharing::doSharing()
 			TESTRUNMPI(MPI_Probe(left_child, MYMPI_CLAUSES, MPI_COMM_WORLD, &status));
 			TESTRUNMPI(MPI_Get_count(&status, MPI_INT, &received_buffer_size));
 			receivedClausesLeft.resize(received_buffer_size);
-			LOGDEBUG2("Parent %d waiting for left child %d on MPI_Recv", mpi_rank, left_child);
+			LOGDEBUG2("Parent %d waiting for left child %d on MPI_Recv", Painless::mpi_rank, left_child);
 			TESTRUNMPI(MPI_Recv(&receivedClausesLeft[0],
 								received_buffer_size,
 								MPI_INT,
@@ -257,7 +257,7 @@ MallobSharing::doSharing()
 	// If not root wait for parent
 	if (father != MPI_UNDEFINED) {
 		receivedClausesFather.clear();
-		LOGDEBUG1("%d->%d : buff:%d", mpi_rank, father, clausesToSendSerialized.size());
+		LOGDEBUG1("%d->%d : buff:%d", Painless::mpi_rank, father, clausesToSendSerialized.size());
 
 		// Send to my parent my clauses.
 		TESTRUNMPI(MPI_Send(&clausesToSendSerialized[0],
@@ -269,7 +269,7 @@ MallobSharing::doSharing()
 		gstats.messagesSent++;
 
 		// Wait for my parent's response
-		LOGDEBUG2("Me %d waiting for my parent's %d response ", mpi_rank, father);
+		LOGDEBUG2("Me %d waiting for my parent's %d response ", Painless::mpi_rank, father);
 		TESTRUNMPI(MPI_Probe(father, MYMPI_CLAUSES, MPI_COMM_WORLD, &status));
 		TESTRUNMPI(MPI_Get_count(&status, MPI_INT, &received_buffer_size));
 		receivedClausesFather.resize(received_buffer_size);
@@ -284,7 +284,7 @@ MallobSharing::doSharing()
 
 	// Response to my children
 	if (nb_children >= 1) {
-		LOGDEBUG2("Me %d responding to my right child %d", mpi_rank, right_child);
+		LOGDEBUG2("Me %d responding to my right child %d", Painless::mpi_rank, right_child);
 		TESTRUNMPI(MPI_Send(&finalMergedBuffer.get()[0],
 							finalMergedBuffer.get().size(),
 							MPI_INT,
@@ -293,7 +293,7 @@ MallobSharing::doSharing()
 							MPI_COMM_WORLD));
 		gstats.messagesSent++;
 		if (nb_children == 2) {
-			LOGDEBUG2("Me %d responding to my left child %d", mpi_rank, left_child);
+			LOGDEBUG2("Me %d responding to my left child %d", Painless::mpi_rank, left_child);
 			TESTRUNMPI(MPI_Send(&finalMergedBuffer.get()[0],
 								finalMergedBuffer.get().size(),
 								MPI_INT,
