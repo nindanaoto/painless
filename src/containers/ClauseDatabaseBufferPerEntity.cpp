@@ -41,7 +41,7 @@ ClauseDatabaseBufferPerEntity::addClause(ClauseExchangePtr clause)
 size_t
 ClauseDatabaseBufferPerEntity::giveSelection(std::vector<ClauseExchangePtr>& selectedCls, unsigned int literalCountLimit )
 {
-        ClauseDatabasePerSize tempDatabase(maxClauseSize);
+        Painless::ClauseDatabasePerSize tempDatabase(maxClauseSize);
         std::vector<ClauseExchangePtr> tempVector;
 
         {

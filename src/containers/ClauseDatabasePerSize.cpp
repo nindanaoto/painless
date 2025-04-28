@@ -6,7 +6,8 @@
 #include <stdio.h>
 #include <string.h>
 
-ClauseDatabasePerSize::ClauseDatabasePerSize(int maxClauseSize)
+namespace Painless {
+Painless::ClauseDatabasePerSize::ClauseDatabasePerSize(int maxClauseSize)
         : maxClauseSize(maxClauseSize)
 {
         if (maxClauseSize <= 0) {
@@ -18,10 +19,10 @@ ClauseDatabasePerSize::ClauseDatabasePerSize(int maxClauseSize)
         initializeQueues(this->maxClauseSize);
 }
 
-ClauseDatabasePerSize::~ClauseDatabasePerSize() {}
+Painless::ClauseDatabasePerSize::~ClauseDatabasePerSize() {}
 
 bool
-ClauseDatabasePerSize::addClause(ClauseExchangePtr clause)
+Painless::ClauseDatabasePerSize::addClause(ClauseExchangePtr clause)
 {
         int clsSize = clause->size;
         if (clsSize <= 0) {
@@ -37,7 +38,7 @@ ClauseDatabasePerSize::addClause(ClauseExchangePtr clause)
 }
 
 size_t
-ClauseDatabasePerSize::giveSelection(std::vector<ClauseExchangePtr>& selectedCls, unsigned int literalCountLimit)
+Painless::ClauseDatabasePerSize::giveSelection(std::vector<ClauseExchangePtr>& selectedCls, unsigned int literalCountLimit)
 {
         int used = 0;
         ClauseExchangePtr tmp_clause;
@@ -53,7 +54,7 @@ ClauseDatabasePerSize::giveSelection(std::vector<ClauseExchangePtr>& selectedCls
 }
 
 bool
-ClauseDatabasePerSize::getOneClause(ClauseExchangePtr& cls)
+Painless::ClauseDatabasePerSize::getOneClause(ClauseExchangePtr& cls)
 {
         for (size_t i = 0; i < clauses.size(); ++i) {
                 if (clauses[i]->getClause(cls)) {
@@ -64,7 +65,7 @@ ClauseDatabasePerSize::getOneClause(ClauseExchangePtr& cls)
 }
 
 void
-ClauseDatabasePerSize::getClauses(std::vector<ClauseExchangePtr>& v_cls)
+Painless::ClauseDatabasePerSize::getClauses(std::vector<ClauseExchangePtr>& v_cls)
 {
         for (auto& clauseBuffer : clauses) {
                 clauseBuffer->getClauses(v_cls);
@@ -72,7 +73,7 @@ ClauseDatabasePerSize::getClauses(std::vector<ClauseExchangePtr>& v_cls)
 }
 
 size_t
-ClauseDatabasePerSize::getSize() const
+Painless::ClauseDatabasePerSize::getSize() const
 {
         return std::accumulate(
                 clauses.begin(), clauses.end(), 0u, [](unsigned int sum, const std::unique_ptr<Painless::ClauseBuffer>& buffer) {
@@ -81,7 +82,7 @@ ClauseDatabasePerSize::getSize() const
 }
 
 void
-ClauseDatabasePerSize::clearDatabase()
+Painless::ClauseDatabasePerSize::clearDatabase()
 {
         for (size_t i = 0; i < clauses.size(); ++i) {
                 clauses[i]->clear();
@@ -91,7 +92,7 @@ ClauseDatabasePerSize::clearDatabase()
 // Private
 // =======
 void
-ClauseDatabasePerSize::initializeQueues(unsigned int maxClsSize)
+Painless::ClauseDatabasePerSize::initializeQueues(unsigned int maxClsSize)
 {
         this->initLiteralCount = 10000; /* Is it worth it to parametrize this ?*/
         clauses.reserve(maxClauseSize);
@@ -100,4 +101,4 @@ ClauseDatabasePerSize::initializeQueues(unsigned int maxClsSize)
                 size_t queueSize = initLiteralCount / (i + 1);
                 clauses.emplace_back(std::make_unique<Painless::ClauseBuffer>(queueSize));
         }
-}
+}} // namespace Painless

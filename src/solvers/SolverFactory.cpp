@@ -85,7 +85,7 @@ SolverFactory::createSolver(char type, char importDBType, std::shared_ptr<Solver
                         break;
                 case 'd':
                 default:
-                        importDB = std::make_shared<ClauseDatabasePerSize>(maxClauseSize);
+                        importDB = std::make_shared<Painless::ClauseDatabasePerSize>(maxClauseSize);
                         break;
         }
 

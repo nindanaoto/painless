@@ -5,6 +5,7 @@
 #include <atomic>
 #include <vector>
 
+namespace Painless {
 /**
  * @class ClauseDatabasePerSize
  * @brief A clause database that organizes clauses based on their size.
@@ -106,4 +107,4 @@ class ClauseDatabasePerSize : public ClauseDatabase
          * @brief The maximum clause size accepted in this clause database.
          */
         int maxClauseSize;
-};
+};} // namespace Painless
