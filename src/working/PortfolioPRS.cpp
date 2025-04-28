@@ -248,7 +248,7 @@ prs_sync:
 
         /* Local HordeSat with a database limited to clause of size 80 */
         std::shared_ptr<SharingStrategy> localStrategy =
-                std::make_shared<HordeSatSharing>(std::make_shared<ClauseDatabaseBufferPerEntity>(maxClauseSizeLocal),
+                std::make_shared<HordeSatSharing>(std::make_shared<Painless::ClauseDatabaseBufferPerEntity>(maxClauseSizeLocal),
                                                                                   Painless::__globalParameters__.sharedLiteralsPerProducer,
                                                                                   Painless::__globalParameters__.hordeInitialLbdLimit,
                                                                                   Painless::__globalParameters__.hordeInitRound);

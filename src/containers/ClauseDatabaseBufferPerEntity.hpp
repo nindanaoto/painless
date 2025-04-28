@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <vector>
 
+namespace Painless {
 /**
  * @class ClauseDatabaseBufferPerEntity
  * @brief A clause database that maintain separate buffers for each entity, mimicing old painless default behavior
@@ -115,4 +116,4 @@ class ClauseDatabaseBufferPerEntity : public Painless::ClauseDatabase
          * @note If <= 0, there is no limit.
          */
         unsigned int maxClauseSize;
-};
+};} // namespace Painless

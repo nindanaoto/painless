@@ -43,7 +43,7 @@ SharingStrategyFactory::instantiateLocalStrategies(int strategyNumber,
                 case 1:
                         LOG0("LSTRAT>> HordeSatSharing(1Grp, per entity buffer)");
                         localStrategies.emplace_back(
-                                new HordeSatSharing(std::make_shared<ClauseDatabaseBufferPerEntity>(maxClauseSize),
+                                new HordeSatSharing(std::make_shared<Painless::ClauseDatabaseBufferPerEntity>(maxClauseSize),
                                                                         Painless::__globalParameters__.sharedLiteralsPerProducer,
                                                                         Painless::__globalParameters__.hordeInitialLbdLimit,
                                                                         Painless::__globalParameters__.hordeInitRound,

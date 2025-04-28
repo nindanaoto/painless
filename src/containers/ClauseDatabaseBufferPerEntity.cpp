@@ -6,13 +6,14 @@
 #include <mutex>
 #include <numeric>
 
-ClauseDatabaseBufferPerEntity::ClauseDatabaseBufferPerEntity(int maxClauseSize)
+namespace Painless {
+Painless::ClauseDatabaseBufferPerEntity::ClauseDatabaseBufferPerEntity(int maxClauseSize)
         : maxClauseSize(maxClauseSize)
 {
 }
 
 bool
-ClauseDatabaseBufferPerEntity::addClause(Painless::ClauseExchangePtr clause)
+Painless::ClauseDatabaseBufferPerEntity::addClause(Painless::ClauseExchangePtr clause)
 {
         int entityId = clause->from;
 
@@ -39,7 +40,7 @@ ClauseDatabaseBufferPerEntity::addClause(Painless::ClauseExchangePtr clause)
 }
 
 size_t
-ClauseDatabaseBufferPerEntity::giveSelection(std::vector<Painless::ClauseExchangePtr>& selectedCls, unsigned int literalCountLimit )
+Painless::ClauseDatabaseBufferPerEntity::giveSelection(std::vector<Painless::ClauseExchangePtr>& selectedCls, unsigned int literalCountLimit )
 {
         Painless::ClauseDatabasePerSize tempDatabase(maxClauseSize);
         std::vector<Painless::ClauseExchangePtr> tempVector;
@@ -58,7 +59,7 @@ ClauseDatabaseBufferPerEntity::giveSelection(std::vector<Painless::ClauseExchang
 }
 
 void
-ClauseDatabaseBufferPerEntity::getClauses(std::vector<Painless::ClauseExchangePtr>& v_cls)
+Painless::ClauseDatabaseBufferPerEntity::getClauses(std::vector<Painless::ClauseExchangePtr>& v_cls)
 {
         std::shared_lock<std::shared_mutex> readLock(dbmutex);
         for (auto& [entityId, buffer] : entityDatabases) {
@@ -67,7 +68,7 @@ ClauseDatabaseBufferPerEntity::getClauses(std::vector<Painless::ClauseExchangePt
 }
 
 bool
-ClauseDatabaseBufferPerEntity::getOneClause(Painless::ClauseExchangePtr& cls)
+Painless::ClauseDatabaseBufferPerEntity::getOneClause(Painless::ClauseExchangePtr& cls)
 {
         std::shared_lock<std::shared_mutex> readLock(dbmutex);
         for (auto& [entityId, buffer] : entityDatabases) {
@@ -79,7 +80,7 @@ ClauseDatabaseBufferPerEntity::getOneClause(Painless::ClauseExchangePtr& cls)
 }
 
 size_t
-ClauseDatabaseBufferPerEntity::getSize() const
+Painless::ClauseDatabaseBufferPerEntity::getSize() const
 {
         std::shared_lock<std::shared_mutex> readLock(dbmutex);
         return std::accumulate(entityDatabases.begin(), entityDatabases.end(), 0u, [](unsigned int sum, const auto& pair) {
@@ -88,10 +89,10 @@ ClauseDatabaseBufferPerEntity::getSize() const
 }
 
 void
-ClauseDatabaseBufferPerEntity::clearDatabase()
+Painless::ClauseDatabaseBufferPerEntity::clearDatabase()
 {
         std::unique_lock<std::shared_mutex> writeLock(dbmutex);
         for (auto& [entityId, buffer] : entityDatabases) {
                 buffer->clear();
         }
-}
+}} // namespace Painless
