@@ -86,7 +86,7 @@ class Formula
      * @param i The index of the non-unit clause.
      * @return A span of the clause literals, skipping zeros.
      */
-        skipzero_span<const int> getNonUnit(unsigned int i) const { return nonUnits[i]; }
+        Painless::painless::skipzero_span<const int> getNonUnit(unsigned int i) const { return nonUnits[i]; }
 
         /**
      * @brief Gets the number of non-zero literals in a non-unit clause.
@@ -112,9 +112,9 @@ class Formula
      * @param lit The literal.
      * @return A span of clause indices where the literal occurs.
      */
-        skipzero_span<unsigned int> getOccurenceList(int lit)
+        Painless::painless::skipzero_span<unsigned int> getOccurenceList(int lit)
         {
-                return skipzero_span<unsigned int>(this->occurenceLists.at(LIT_IDX(lit)));
+                return Painless::painless::skipzero_span<unsigned int>(this->occurenceLists.at(LIT_IDX(lit)));
         }
 
         /**
@@ -142,7 +142,7 @@ class Formula
 
   private:
         std::unordered_set<int> units;  ///< Set of unit clauses.
-    vector2D<int> nonUnits;  ///< 2D vector storing non-unit clauses.
+    Painless::painless::vector2D<int> nonUnits;  ///< 2D vector storing non-unit clauses.
     std::vector<std::vector<unsigned int>> occurenceLists;  ///< Occurrence lists for each literal.
     unsigned int varCount = 0;  ///< Number of variables in the formula.
     unsigned int deletedClausesCount = 0;  ///< Count of deleted clauses for efficient non-unit clause counting
