@@ -53,21 +53,21 @@ class Kissat : public SolverCdclInterface
         void loadFormula(const char* filename) override;
 
         /// Add a list of initial clauses to the formula.
-        void addInitialClauses(const std::vector<simpleClause>& clauses, unsigned int nbVars) override;
+        void addInitialClauses(const std::vector<Painless::ClauseUtils::simpleClause>& clauses, unsigned int nbVars) override;
 
         /// Add a permanent clause to the formula.
-        void addClause(ClauseExchangePtr clause) override;
+        void addClause(Painless::ClauseExchangePtr clause) override;
 
         /// Add a list of permanent clauses to the formula.
-        void addClauses(const std::vector<ClauseExchangePtr>& clauses) override;
+        void addClauses(const std::vector<Painless::ClauseExchangePtr>& clauses) override;
 
         /* Sharing */
 
         /// Add a learned clause to the formula.
-        bool importClause(const ClauseExchangePtr& clause) override;
+        bool importClause(const Painless::ClauseExchangePtr& clause) override;
 
         /// Add a list of learned clauses to the formula.
-        void importClauses(const std::vector<ClauseExchangePtr>& clauses) override;
+        void importClauses(const std::vector<Painless::ClauseExchangePtr>& clauses) override;
 
         /* Variable Management */
 

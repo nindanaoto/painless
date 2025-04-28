@@ -5,44 +5,46 @@
 
 #include <numeric>
 
+namespace Painless {
 namespace ClauseUtils {
 
 std::size_t
 hashClause(const simpleClause& clause)
 {
-	if (clause.empty())
-		return 0;
+        if (clause.empty())
+                return 0;
 
-	hash_t hash = lookup3_hash(clause[0]);
-	for (size_t i = 1; i < clause.size(); ++i) {
-		hash ^= lookup3_hash(clause[i]);
-	}
-	return hash;
+        hash_t hash = lookup3_hash(clause[0]);
+        for (size_t i = 1; i < clause.size(); ++i) {
+                hash ^= lookup3_hash(clause[i]);
+        }
+        return hash;
 }
 
 bool
 operator==(const simpleClause& lhs, const simpleClause& rhs)
 {
-	if (lhs.size() != rhs.size())
-		return false;
-	if (hashClause(lhs) != hashClause(rhs))
-		return false;
+        if (lhs.size() != rhs.size())
+                return false;
+        if (hashClause(lhs) != hashClause(rhs))
+                return false;
 
-	LOGDEBUG1("Comparing two vectors with same hash: %lu", hashClause(lhs));
+        LOGDEBUG1("Comparing two vectors with same hash: %lu", hashClause(lhs));
 
-	for (const auto& elem : lhs) {
-		if (std::find(rhs.begin(), rhs.end(), elem) == rhs.end()) {
-			return false;
-		}
-	}
-	return true;
+        for (const auto& elem : lhs) {
+                if (std::find(rhs.begin(), rhs.end(), elem) == rhs.end()) {
+                        return false;
+                }
+        }
+        return true;
 }
 
 int
-getLiteralsCount(const std::vector<ClauseExchangePtr>& clauses)
+getLiteralsCount(const std::vector<Painless::ClauseExchangePtr>& clauses)
 {
-	return std::accumulate(
-		clauses.begin(), clauses.end(), 0, [](int sum, const auto& clause) { return sum + clause->size; });
+        return std::accumulate(
+                clauses.begin(), clauses.end(), 0, [](int sum, const auto& clause) { return sum + clause->size; });
 }
 
 } // namespace ClauseUtils
+} // namespace Painless

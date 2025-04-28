@@ -116,7 +116,7 @@ int
 GenericGlobalSharing::serializeClauses(std::vector<int>& serialized_v_cls)
 {
         unsigned int clausesSelected = 0;
-        ClauseExchangePtr tmp_cls;
+        Painless::ClauseExchangePtr tmp_cls;
 
         unsigned int dataCount = serialized_v_cls.size();
 
@@ -156,7 +156,7 @@ GenericGlobalSharing::deserializeClauses(std::vector<int>& serialized_v_cls)
         unsigned int i = 0;
         int size;
         int lbd;
-        ClauseExchangePtr p_cls;
+        Painless::ClauseExchangePtr p_cls;
         int bufferSize = serialized_v_cls.size();
 
         while (i < bufferSize) {
@@ -170,7 +170,7 @@ GenericGlobalSharing::deserializeClauses(std::vector<int>& serialized_v_cls)
 
                 if (!this->b_filter_recv.contains(serialized_v_cls.data() + i, size)) {
                         p_cls =
-                                ClauseExchange::create(&serialized_v_cls[i], &serialized_v_cls[i + size], lbd, this->getSharingId());
+                                Painless::ClauseExchange::create(&serialized_v_cls[i], &serialized_v_cls[i + size], lbd, this->getSharingId());
                         if (this->exportClause(p_cls))
                                 gstats.receivedClauses++;
                         this->b_filter_recv.insert(serialized_v_cls.data() + i,

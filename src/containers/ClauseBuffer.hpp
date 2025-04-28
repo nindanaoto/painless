@@ -16,17 +16,17 @@ namespace Painless {
 
 /**
  * @class ClauseBuffer
- * @brief Wrapper for boost::lockfree::queue to manage ClauseExchange objects.
+ * @brief Wrapper for boost::lockfree::queue to manage Painless::ClauseExchange objects.
  *
  * This class utilizes a non-fixed size boost::lockfree::queue for efficient, lock-free operations between multiple
- * producers and consumers. It uses raw pointers internally and provides a thread-safe interface for ClauseExchangePtr.
+ * producers and consumers. It uses raw pointers internally and provides a thread-safe interface for Painless::ClauseExchangePtr.
  * @warning This class is currently non-copyable.
  * @todo An optimal and safe move/copy mechanism
  */
 class ClauseBuffer
 {
   private:
-        boost::lockfree::queue<ClauseExchange*, boost::lockfree::fixed_sized<false>> queue;
+        boost::lockfree::queue<Painless::ClauseExchange*, boost::lockfree::fixed_sized<false>> queue;
         std::atomic<size_t> m_size; ///< Tracks the number of elements in the queue
 
   public:
@@ -80,15 +80,15 @@ class ClauseBuffer
          * @param clause The clause to add.
          * @return true if the clause was successfully added, false otherwise.
          */
-        bool addClause(ClauseExchangePtr clause)
+        bool addClause(Painless::ClauseExchangePtr clause)
         {
-                ClauseExchange* raw = clause->toRawPtr();
+                Painless::ClauseExchange* raw = clause->toRawPtr();
                 if (queue.push(raw)) {
                         m_size.fetch_add(1, std::memory_order_release);
                         return true;
                 } else {
-                        // Reference count is decremented, since we do not store the returned ClauseExchangePtr, thus it goes out of scope
-                        ClauseExchange::fromRawPtr(raw);
+                        // Reference count is decremented, since we do not store the returned Painless::ClauseExchangePtr, thus it goes out of scope
+                        Painless::ClauseExchange::fromRawPtr(raw);
                         return false;
                 }
         }
@@ -98,7 +98,7 @@ class ClauseBuffer
          * @param clauses A vector of clauses to add.
          * @return The number of clauses successfully added.
          */
-        size_t addClauses(const std::vector<ClauseExchangePtr>& clauses)
+        size_t addClauses(const std::vector<Painless::ClauseExchangePtr>& clauses)
         {
                 size_t old_size = m_size.load(std::memory_order_relaxed);
 
@@ -118,14 +118,14 @@ class ClauseBuffer
          * @param clause The clause to add to the buffer.
          * @return true if the clause was successfully added, false if the buffer is full or push failed.
          */
-        bool tryAddClauseBounded(ClauseExchangePtr clause)
+        bool tryAddClauseBounded(Painless::ClauseExchangePtr clause)
         {
-                ClauseExchange* raw = clause->toRawPtr();
+                Painless::ClauseExchange* raw = clause->toRawPtr();
                 if (queue.bounded_push(raw)) {
                         m_size.fetch_add(1, std::memory_order_release);
                         return true;
                 } else {
-                        ClauseExchange::fromRawPtr(raw);
+                        Painless::ClauseExchange::fromRawPtr(raw);
                         return false;
                 }
         }
@@ -139,7 +139,7 @@ class ClauseBuffer
          * @param clauses A vector of clauses to add to the buffer.
          * @return The number of clauses successfully added to the buffer.
          */
-        size_t tryAddClausesBounded(const std::vector<ClauseExchangePtr>& clauses)
+        size_t tryAddClausesBounded(const std::vector<Painless::ClauseExchangePtr>& clauses)
         {
                 size_t old_size = m_size.load(std::memory_order_relaxed);
                 for (const auto& clause : clauses) {
@@ -156,12 +156,12 @@ class ClauseBuffer
          * @param[out] clause The retrieved clause.
          * @return true if a clause was retrieved, false if the buffer was empty.
          */
-        bool getClause(ClauseExchangePtr& clause)
+        bool getClause(Painless::ClauseExchangePtr& clause)
         {
                 LOGDEBUG3("Size before pop %ld", this->size());
-                ClauseExchange* raw;
+                Painless::ClauseExchange* raw;
                 if (queue.pop(raw)) {
-                        clause = ClauseExchange::fromRawPtr(raw);
+                        clause = Painless::ClauseExchange::fromRawPtr(raw);
                         m_size.fetch_sub(1, std::memory_order_release);
                         return true;
                 }
@@ -172,11 +172,11 @@ class ClauseBuffer
          * @brief Retrieves all available clauses from the buffer.
          * @param[out] clauses A vector to store the retrieved clauses.
          */
-        void getClauses(std::vector<ClauseExchangePtr>& clauses)
+        void getClauses(std::vector<Painless::ClauseExchangePtr>& clauses)
         {
-                ClauseExchange* raw;
+                Painless::ClauseExchange* raw;
                 while (queue.pop(raw)) {
-                        clauses.push_back(ClauseExchange::fromRawPtr(raw));
+                        clauses.push_back(Painless::ClauseExchange::fromRawPtr(raw));
                         m_size.fetch_sub(1, std::memory_order_release);
                 }
         }
@@ -192,9 +192,9 @@ class ClauseBuffer
          */
         void clear()
         {
-                ClauseExchange* raw;
+                Painless::ClauseExchange* raw;
                 while (queue.pop(raw)) {
-                        ClauseExchange::fromRawPtr(raw);
+                        Painless::ClauseExchange::fromRawPtr(raw);
                 }
                 m_size.store(0, std::memory_order_release);
         }

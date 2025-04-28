@@ -54,7 +54,7 @@ class PreprocessorInterface : public SolverInterface
 	 * @brief Get the simplified formula after preprocessing.
 	 * @return A vector of simplified clauses.
 	 */
-	virtual std::vector<simpleClause> getSimplifiedFormula() = 0;
+	virtual std::vector<Painless::ClauseUtils::simpleClause> getSimplifiedFormula() = 0;
 
 	/**
 	 * @brief Restore the original model from the preprocessed one.

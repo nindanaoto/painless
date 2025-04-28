@@ -25,7 +25,7 @@ produceUnit(void* sp, int lit)
 	Lingeling* lp = (Lingeling*)sp;
 
 	// Create new clause
-	ClauseExchangePtr ncls = ClauseExchange::create(1, 0, lp->getSharingId());
+	Painless::ClauseExchangePtr ncls = Painless::ClauseExchange::create(1, 0, lp->getSharingId());
 
 	ncls->lits[0] = lit;
 
@@ -52,7 +52,7 @@ produce(void* sp, int* cls, int glue)
 		size++;
 	}
 
-	ClauseExchangePtr ncls = ClauseExchange::create(size, glue, lp->getSharingId());
+	Painless::ClauseExchangePtr ncls = Painless::ClauseExchange::create(size, glue, lp->getSharingId());
 
 	memcpy(ncls->lits, cls, sizeof(int) * size);
 
@@ -98,7 +98,7 @@ consumeCls(void* sp, int** clause, int* glue)
 {
 	Lingeling* lp = (Lingeling*)sp;
 
-	ClauseExchangePtr cls;
+	Painless::ClauseExchangePtr cls;
 
 	if (lp->m_clausesToImport->getOneClause(cls) == false) {
 		*clause = NULL;
@@ -173,7 +173,7 @@ Lingeling::~Lingeling()
 void
 Lingeling::loadFormula(const char* filename)
 {
-	std::vector<simpleClause> initClauses;
+	std::vector<Painless::ClauseUtils::simpleClause> initClauses;
 	unsigned int varCount = 0;
 	Painless::Parsers::parseCNF(filename, initClauses, &varCount);
 
@@ -240,7 +240,7 @@ SatResult
 Lingeling::solve(const std::vector<int>& cube)
 {
 	// add the clauses
-	std::vector<ClauseExchangePtr> tmp;
+	std::vector<Painless::ClauseExchangePtr> tmp;
 	clausesToAdd.getClauses(tmp);
 
 	for (size_t i = 0; i < tmp.size(); i++) {
@@ -289,19 +289,19 @@ Lingeling::solve(const std::vector<int>& cube)
 
 // Add a permanent clause to the formula
 void
-Lingeling::addClause(ClauseExchangePtr clause)
+Lingeling::addClause(Painless::ClauseExchangePtr clause)
 {
 	clausesToAdd.addClause(clause);
 }
 
 void
-Lingeling::addClauses(const std::vector<ClauseExchangePtr>& clauses)
+Lingeling::addClauses(const std::vector<Painless::ClauseExchangePtr>& clauses)
 {
 	clausesToAdd.addClauses(clauses);
 }
 
 void
-Lingeling::addInitialClauses(const std::vector<simpleClause>& clauses, unsigned int nbVars)
+Lingeling::addInitialClauses(const std::vector<Painless::ClauseUtils::simpleClause>& clauses, unsigned int nbVars)
 {
 	for (size_t i = 0; i < clauses.size(); i++) {
 		for (size_t j = 0; j < clauses[i].size(); j++) {
@@ -318,7 +318,7 @@ Lingeling::addInitialClauses(const std::vector<simpleClause>& clauses, unsigned 
 
 // Add a learned clause to the formula
 bool
-Lingeling::importClause(const ClauseExchangePtr& clause)
+Lingeling::importClause(const Painless::ClauseExchangePtr& clause)
 {
 	assert(clause->size > 0);
 
@@ -332,7 +332,7 @@ Lingeling::importClause(const ClauseExchangePtr& clause)
 }
 
 void
-Lingeling::importClauses(const std::vector<ClauseExchangePtr>& clauses)
+Lingeling::importClauses(const std::vector<Painless::ClauseExchangePtr>& clauses)
 {
 	for (size_t i = 0; i < clauses.size(); i++) {
 		if (clauses[i]->size == 1) {

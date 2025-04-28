@@ -30,7 +30,7 @@ kissatImportClause(void* painless_interface, kissat* internal_solver)
 {
 	Kissat* painless_kissat = (Kissat*)painless_interface;
 
-	ClauseExchangePtr clause;
+	Painless::ClauseExchangePtr clause;
 
 	if (!painless_kissat->m_clausesToImport->getOneClause(clause)) {
 		painless_kissat->m_clausesToImport->shrinkDatabase();
@@ -55,7 +55,7 @@ kissatExportClause(void* painless_interface, kissat* internal_solver)
 
 	assert(size > 0);
 
-	ClauseExchangePtr new_clause = ClauseExchange::create(size, lbd, painless_kissat->getSharingId());
+	Painless::ClauseExchangePtr new_clause = Painless::ClauseExchange::create(size, lbd, painless_kissat->getSharingId());
 
 	for (unsigned int i = 0; i < size; i++) {
 		new_clause->lits[i] = kissat_peek_plit(internal_solver, i);
@@ -192,7 +192,7 @@ Kissat::solve(const std::vector<int>& cube)
 }
 
 void
-Kissat::addClause(ClauseExchangePtr clause)
+Kissat::addClause(Painless::ClauseExchangePtr clause)
 {
 	unsigned int maxVar = kissat_get_var_count(this->solver);
 	for (int lit : clause->lits) {
@@ -208,14 +208,14 @@ Kissat::addClause(ClauseExchangePtr clause)
 }
 
 void
-Kissat::addClauses(const std::vector<ClauseExchangePtr>& clauses)
+Kissat::addClauses(const std::vector<Painless::ClauseExchangePtr>& clauses)
 {
 	for (auto clause : clauses)
 		this->addClause(clause);
 }
 
 void
-Kissat::addInitialClauses(const std::vector<simpleClause>& clauses, unsigned int nbVars)
+Kissat::addInitialClauses(const std::vector<Painless::ClauseUtils::simpleClause>& clauses, unsigned int nbVars)
 {
 	kissat_reserve(this->solver, nbVars);
 
@@ -234,7 +234,7 @@ Kissat::addInitialClauses(const std::vector<simpleClause>& clauses, unsigned int
 }
 
 bool
-Kissat::importClause(const ClauseExchangePtr& clause)
+Kissat::importClause(const Painless::ClauseExchangePtr& clause)
 {
 	assert(clause->size > 0);
 	m_clausesToImport->addClause(clause);
@@ -242,7 +242,7 @@ Kissat::importClause(const ClauseExchangePtr& clause)
 }
 
 void
-Kissat::importClauses(const std::vector<ClauseExchangePtr>& clauses)
+Kissat::importClauses(const std::vector<Painless::ClauseExchangePtr>& clauses)
 {
 	for (auto cls : clauses) {
 		importClause(cls);

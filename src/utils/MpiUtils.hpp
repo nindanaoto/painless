@@ -42,7 +42,7 @@ namespace mpiutils {
 /// @param rootRank The mpi process rank broadcasting the formula.
 /// @return Returns true if the formula was successfully received, false otherwise.
 bool
-sendFormula(std::vector<simpleClause>& clauses, unsigned int* varCount, int rootRank);
+sendFormula(std::vector<Painless::ClauseUtils::simpleClause>& clauses, unsigned int* varCount, int rootRank);
 
 /// @brief Serializes a vector of Clauses into a vector of integers.
 /// @param clauses The vector of Clauses to be serialized.
@@ -50,14 +50,14 @@ sendFormula(std::vector<simpleClause>& clauses, unsigned int* varCount, int root
 /// @return Returns true if the serialization was successful, false otherwise.
 /// @todo A version with a function parameter for GlobalSharingStrategies
 bool
-serializeClauses(const std::vector<simpleClause>& clauses, std::vector<int>& serializedClauses);
+serializeClauses(const std::vector<Painless::ClauseUtils::simpleClause>& clauses, std::vector<int>& serializedClauses);
 
-/// @brief Deserializes a vector of characters into a vector of simpleClause objects.
+/// @brief Deserializes a vector of characters into a vector of Painless::ClauseUtils::simpleClause objects.
 /// @param serializedClauses The vector of characters that represents the serialized  array.
-/// @param clauses The vector where the deserialized simpleClause objects will be stored.
+/// @param clauses The vector where the deserialized Painless::ClauseUtils::simpleClause objects will be stored.
 /// @return Returns true if the deserialization was successful, false otherwise.
 bool
-deserializeClauses(const std::vector<int>& serializedClauses, std::vector<simpleClause>& clauses);
+deserializeClauses(const std::vector<int>& serializedClauses, std::vector<Painless::ClauseUtils::simpleClause>& clauses);
 
 /// @brief The winner determined by the root will send the model if the answer was SATISFIABLE
 void

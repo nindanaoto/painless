@@ -44,7 +44,7 @@ HordeSatSharing::HordeSatSharing(const std::shared_ptr<ClauseDatabase>& clauseDB
 HordeSatSharing::~HordeSatSharing() {}
 
 bool
-HordeSatSharing::importClause(const ClauseExchangePtr& clause)
+HordeSatSharing::importClause(const Painless::ClauseExchangePtr& clause)
 {
 	assert(clause->size > 0 && clause->from != -1);
 

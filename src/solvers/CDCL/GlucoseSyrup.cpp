@@ -19,7 +19,7 @@ using namespace Glucose;
 #define INT_LIT(lit) sign(lit) ? -(var(lit) + 1) : (var(lit) + 1)
 
 void
-makeGlueVec(ClauseExchangePtr cls, Glucose::vec<Lit>& gcls)
+makeGlueVec(Painless::ClauseExchangePtr cls, Glucose::vec<Lit>& gcls)
 {
 	for (size_t i = 0; i < cls->size; i++) {
 		gcls.push(GLUE_LIT(cls->lits[i]));
@@ -31,7 +31,7 @@ glucoseExportUnary(void* issuer, Lit& l)
 {
 	GlucoseSyrup* gs = (GlucoseSyrup*)issuer;
 
-	ClauseExchangePtr ncls = ClauseExchange::create(1);
+	Painless::ClauseExchangePtr ncls = Painless::ClauseExchange::create(1);
 
 	ncls->from = gs->getSharingId();
 	ncls->lbd = 1;
@@ -46,7 +46,7 @@ glucoseExportClause(void* issuer, Clause& cls)
 {
 	GlucoseSyrup* gs = (GlucoseSyrup*)issuer;
 
-	ClauseExchangePtr ncls = ClauseExchange::create(cls.size(), cls.lbd(), gs->getSharingId());
+	Painless::ClauseExchangePtr ncls = Painless::ClauseExchange::create(cls.size(), cls.lbd(), gs->getSharingId());
 
 	for (unsigned int i = 0; i < cls.size(); i++) {
 		ncls->lits[i] = INT_LIT(cls[i]);
@@ -63,7 +63,7 @@ glucoseImportUnary(void* issuer)
 
 	Lit l = lit_Undef;
 
-	ClauseExchangePtr cls;
+	Painless::ClauseExchangePtr cls;
 
 	if (gs->unitsToImport->getOneClause(cls) == false)
 		return l;
@@ -78,7 +78,7 @@ glucoseImportClause(void* issuer, int* from, vec<Lit>& gcls)
 {
 	GlucoseSyrup* gs = (GlucoseSyrup*)issuer;
 
-	ClauseExchangePtr cls;
+	Painless::ClauseExchangePtr cls;
 
 	if (gs->m_clausesToImport->getOneClause(cls) == false) {
 		gs->m_clausesToImport->shrinkDatabase();
@@ -149,7 +149,7 @@ GlucoseSyrup::GlucoseSyrup(const GlucoseSyrup& other, int id, const std::shared_
 
 GlucoseSyrup::~GlucoseSyrup()
 {
-	std::vector<ClauseExchangePtr> tmp;
+	std::vector<Painless::ClauseExchangePtr> tmp;
 
 	unitsToImport->getClauses(tmp);
 	m_clausesToImport->getClauses(tmp);
@@ -315,7 +315,7 @@ GlucoseSyrup::solve(const std::vector<int>& cube)
 {
 	unsetSolverInterrupt();
 
-	std::vector<ClauseExchangePtr> tmp;
+	std::vector<Painless::ClauseExchangePtr> tmp;
 	clausesToAdd.getClauses(tmp);
 
 	for (size_t i = 0; i < tmp.size(); i++) {
@@ -348,7 +348,7 @@ GlucoseSyrup::solve(const std::vector<int>& cube)
 }
 
 bool
-GlucoseSyrup::importClause(const ClauseExchangePtr& clause)
+GlucoseSyrup::importClause(const Painless::ClauseExchangePtr& clause)
 {
 	assert(clause->size > 0);
 
@@ -361,7 +361,7 @@ GlucoseSyrup::importClause(const ClauseExchangePtr& clause)
 }
 
 void
-GlucoseSyrup::importClauses(const std::vector<ClauseExchangePtr>& clauses)
+GlucoseSyrup::importClauses(const std::vector<Painless::ClauseExchangePtr>& clauses)
 {
 	for (size_t i = 0; i < clauses.size(); i++) {
 		if (clauses[i]->size == 1) {
@@ -373,7 +373,7 @@ GlucoseSyrup::importClauses(const std::vector<ClauseExchangePtr>& clauses)
 }
 
 void
-GlucoseSyrup::addClause(ClauseExchangePtr clause)
+GlucoseSyrup::addClause(Painless::ClauseExchangePtr clause)
 {
 	clausesToAdd.addClause(clause);
 
@@ -381,7 +381,7 @@ GlucoseSyrup::addClause(ClauseExchangePtr clause)
 }
 
 void
-GlucoseSyrup::addClauses(const std::vector<ClauseExchangePtr>& clauses)
+GlucoseSyrup::addClauses(const std::vector<Painless::ClauseExchangePtr>& clauses)
 {
 	clausesToAdd.addClauses(clauses);
 
@@ -389,7 +389,7 @@ GlucoseSyrup::addClauses(const std::vector<ClauseExchangePtr>& clauses)
 }
 
 void
-GlucoseSyrup::addInitialClauses(const std::vector<simpleClause>& clauses, unsigned int nbVars)
+GlucoseSyrup::addInitialClauses(const std::vector<Painless::ClauseUtils::simpleClause>& clauses, unsigned int nbVars)
 {
 	for (size_t ind = 0; ind < clauses.size(); ind++) {
 		vec<Lit> mcls;

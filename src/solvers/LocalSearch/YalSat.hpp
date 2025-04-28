@@ -33,11 +33,11 @@ class YalSat : public LocalSearchInterface
 
 	SatResult solve(const std::vector<int>& cube);
 
-	void addClause(ClauseExchangePtr clause);
+	void addClause(Painless::ClauseExchangePtr clause);
 
-	void addClauses(const std::vector<ClauseExchangePtr>& clauses);
+	void addClauses(const std::vector<Painless::ClauseExchangePtr>& clauses);
 
-	void addInitialClauses(const std::vector<simpleClause>& clauses, unsigned int nbVars);
+	void addInitialClauses(const std::vector<Painless::ClauseUtils::simpleClause>& clauses, unsigned int nbVars);
 
 	void loadFormula(const char* filename);
 

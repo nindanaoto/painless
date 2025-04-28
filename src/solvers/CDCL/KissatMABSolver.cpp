@@ -21,7 +21,7 @@ KissatMabImportClause(void* painless_interface, kissat* internal_solver)
 	KissatMABSolver* painless_kissat = (KissatMABSolver*)painless_interface;
 	/* Needed for the KISSAT macros to work */
 
-	ClauseExchangePtr clause;
+	Painless::ClauseExchangePtr clause;
 
 	if (!painless_kissat->m_clausesToImport->getOneClause(clause)) {
 		painless_kissat->m_clausesToImport->shrinkDatabase();
@@ -47,7 +47,7 @@ KissatMabExportClause(void* painless_interface, kissat* internal_solver)
 
 	assert(size > 0);
 
-	ClauseExchangePtr new_clause = ClauseExchange::create(size, lbd, painless_kissat->getSharingId());
+	Painless::ClauseExchangePtr new_clause = Painless::ClauseExchange::create(size, lbd, painless_kissat->getSharingId());
 
 	for (unsigned int i = 0; i < size; i++) {
 		new_clause->lits[i] = kissat_mab_peek_plit(internal_solver, i);
@@ -194,7 +194,7 @@ KissatMABSolver::solve(const std::vector<int>& cube)
 }
 
 void
-KissatMABSolver::addClause(ClauseExchangePtr clause)
+KissatMABSolver::addClause(Painless::ClauseExchangePtr clause)
 {
 	unsigned int maxVar = kissat_mab_get_maxVar(this->solver);
 	for (int lit : clause->lits) {
@@ -210,14 +210,14 @@ KissatMABSolver::addClause(ClauseExchangePtr clause)
 }
 
 bool
-KissatMABSolver::importClause(const ClauseExchangePtr& clause)
+KissatMABSolver::importClause(const Painless::ClauseExchangePtr& clause)
 {
 	m_clausesToImport->addClause(clause);
 	return true;
 }
 
 void
-KissatMABSolver::importClauses(const std::vector<ClauseExchangePtr>& clauses)
+KissatMABSolver::importClauses(const std::vector<Painless::ClauseExchangePtr>& clauses)
 {
 	for (auto cls : clauses) {
 		importClause(cls);
@@ -225,14 +225,14 @@ KissatMABSolver::importClauses(const std::vector<ClauseExchangePtr>& clauses)
 }
 
 void
-KissatMABSolver::addClauses(const std::vector<ClauseExchangePtr>& clauses)
+KissatMABSolver::addClauses(const std::vector<Painless::ClauseExchangePtr>& clauses)
 {
 	for (auto clause : clauses)
 		this->addClause(clause);
 }
 
 void
-KissatMABSolver::addInitialClauses(const std::vector<simpleClause>& clauses, unsigned int nbVars)
+KissatMABSolver::addInitialClauses(const std::vector<Painless::ClauseUtils::simpleClause>& clauses, unsigned int nbVars)
 {
 	kissat_mab_set_maxVar(this->solver, nbVars);
 	kissat_mab_reserve(this->solver, nbVars);

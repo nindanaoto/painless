@@ -45,7 +45,7 @@ ClauseDatabaseMallob::ClauseDatabaseMallob(int maxClauseSize,
 ClauseDatabaseMallob::~ClauseDatabaseMallob() {}
 
 bool
-ClauseDatabaseMallob::addClause(ClauseExchangePtr clause)
+ClauseDatabaseMallob::addClause(Painless::ClauseExchangePtr clause)
 {
         /*
         - From my understanding ABA problems shouldn't be an issue thanks to the shared_mutex with shrinkDatabase, thus the
@@ -80,7 +80,7 @@ ClauseDatabaseMallob::addClause(ClauseExchangePtr clause)
                 return true;
         }
 
-        /* enforced by ClauseExchange */
+        /* enforced by Painless::ClauseExchange */
         // if (clsLbd < MIN_LBD)
         //      clsLbd = MIN_LBD;
 
@@ -118,7 +118,7 @@ ClauseDatabaseMallob::addClause(ClauseExchangePtr clause)
 }
 
 size_t
-ClauseDatabaseMallob::giveSelection(std::vector<ClauseExchangePtr>& selectedCls, unsigned int literalCountLimit)
+ClauseDatabaseMallob::giveSelection(std::vector<Painless::ClauseExchangePtr>& selectedCls, unsigned int literalCountLimit)
 {
         std::shared_lock<std::shared_mutex> sharedLock(m_shrinkMutex);
 
@@ -131,7 +131,7 @@ ClauseDatabaseMallob::giveSelection(std::vector<ClauseExchangePtr>& selectedCls,
 
         // load all units separately since currentLiteralSize doesn't count them (trulySelectedLitrals is not update)
         while (!m_clauses[0]->empty() && selectedLiterals < literalCountLimit) {
-                ClauseExchangePtr cls;
+                Painless::ClauseExchangePtr cls;
                 if (m_clauses[0]->getClause(cls)) {
                         // count unit size only if m_freeMaxSize is null
                         if (1 > m_freeMaxSize) {
@@ -146,7 +146,7 @@ ClauseDatabaseMallob::giveSelection(std::vector<ClauseExchangePtr>& selectedCls,
                 auto& bucket = m_clauses[i];
                 // stop if selectedLiterals >= literalCountLimit or no more clauses to consume
                 while (!bucket->empty() && selectedLiterals < literalCountLimit) {
-                        ClauseExchangePtr cls;
+                        Painless::ClauseExchangePtr cls;
                         if (bucket->getClause(cls)) {
                                 trulySelectedLiterals += cls->size;
                                 // if actual cls.size() <= freeMaxSize, do not update selectedLiterals
@@ -170,7 +170,7 @@ ClauseDatabaseMallob::giveSelection(std::vector<ClauseExchangePtr>& selectedCls,
 }
 
 void
-ClauseDatabaseMallob::getClauses(std::vector<ClauseExchangePtr>& v_cls)
+ClauseDatabaseMallob::getClauses(std::vector<Painless::ClauseExchangePtr>& v_cls)
 {
         // get all clauses
         std::shared_lock<std::shared_mutex> sharedLock(m_shrinkMutex);
@@ -179,12 +179,12 @@ ClauseDatabaseMallob::getClauses(std::vector<ClauseExchangePtr>& v_cls)
                 m_clauses[i]->getClauses(v_cls);
         }
 
-        size_t literalsConsumed = ClauseUtils::getLiteralsCount(v_cls);
+        size_t literalsConsumed = Painless::ClauseUtils::getLiteralsCount(v_cls);
         m_currentLiteralSize.fetch_sub(literalsConsumed); // can be negative for a while
 }
 
 bool
-ClauseDatabaseMallob::getOneClause(ClauseExchangePtr& cls)
+ClauseDatabaseMallob::getOneClause(Painless::ClauseExchangePtr& cls)
 {
         std::shared_lock<std::shared_mutex> sharedLock(m_shrinkMutex);
 
@@ -217,7 +217,7 @@ ClauseDatabaseMallob::shrinkDatabase()
          capacity, thus going against the concept of shrinking */
         if (m_missedAdditionsBfr.size() > 0) {
                 LOGDEBUG2("Previous shrinking made me miss %u clauses", m_missedAdditionsBfr.size());
-                ClauseExchangePtr missedCls;
+                Painless::ClauseExchangePtr missedCls;
                 while (m_missedAdditionsBfr.getClause(missedCls)) {
                         this->addClause(missedCls);
                 }
@@ -260,7 +260,7 @@ ClauseDatabaseMallob::shrinkDatabase()
                         if (currentSize - literalsInBucket < m_totalLiteralCapacity) {
                                 // Remove clauses one by one until we're under capacity
                                 while (currentSize > m_totalLiteralCapacity) {
-                                        ClauseExchangePtr cls;
+                                        Painless::ClauseExchangePtr cls;
                                         if (m_clauses[i]->getClause(cls)) {
                                                 assert(cls->size == clauseSize);
                                                 ++removedClausesInBucket;

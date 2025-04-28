@@ -42,7 +42,7 @@ class ClauseProcessor
          * @param clause The clause to process.
          * @return true if the clause should be kept, false if it should be filtered out.
          */
-        virtual bool operator()(simpleClause& clause) = 0;
+        virtual bool operator()(Painless::ClauseUtils::simpleClause& clause) = 0;
 
         virtual ~ClauseProcessor() = default;
 };
@@ -72,10 +72,10 @@ class RedundancyFilter : public ClauseProcessor
          * @param clause The clause to check.
          * @return true if the clause is not redundant, false if it is.
          */
-        bool operator()(simpleClause& clause) override;
+        bool operator()(Painless::ClauseUtils::simpleClause& clause) override;
 
   private:
-        mutable std::unordered_set<simpleClause, ClauseUtils::ClauseHash> clauseCache;
+        mutable std::unordered_set<Painless::ClauseUtils::simpleClause, Painless::ClauseUtils::ClauseHash> clauseCache;
 };
 
 /**
@@ -103,7 +103,7 @@ class TautologyFilter : public ClauseProcessor
          * @param clause The clause to check.
          * @return true if the clause is not a tautology, false if it is.
          */
-        bool operator()(simpleClause& clause) override;
+        bool operator()(Painless::ClauseUtils::simpleClause& clause) override;
 };
 
 /**
@@ -117,7 +117,7 @@ class TautologyFilter : public ClauseProcessor
  */
 bool
 parseCNF(const char* filename,
-                 std::vector<simpleClause>& clauses,
+                 std::vector<Painless::ClauseUtils::simpleClause>& clauses,
                  unsigned int* varCount,
                  const std::vector<std::unique_ptr<ClauseProcessor>>& processors = {});
 

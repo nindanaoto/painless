@@ -61,7 +61,7 @@ class ClauseDatabaseMallob : public ClauseDatabase
          * @param clause pointer to the clause to be added.
          * @return true if the clause was successfully added, false otherwise.
          */
-        bool addClause(ClauseExchangePtr clause) override;
+        bool addClause(Painless::ClauseExchangePtr clause) override;
 
         /**
          * @brief Fills a buffer with selected clauses up to a given size limit.
@@ -73,14 +73,14 @@ class ClauseDatabaseMallob : public ClauseDatabase
          * @param literalCountLimit Maximum number of literals to select.
          * @return Number of literals in the selected clauses.
          */
-        size_t giveSelection(std::vector<ClauseExchangePtr>& selectedCls, unsigned int literalCountLimit) override;
+        size_t giveSelection(std::vector<Painless::ClauseExchangePtr>& selectedCls, unsigned int literalCountLimit) override;
 
         /**
          * @brief Fills a buffer with all clauses in the database.
          *
          * @param v_cls Vector to be filled with all clauses.
          */
-        void getClauses(std::vector<ClauseExchangePtr>& v_cls) override;
+        void getClauses(std::vector<Painless::ClauseExchangePtr>& v_cls) override;
 
         /**
          * @brief Retrieves a single clause from the best (smallest index) buffer possible.
@@ -90,7 +90,7 @@ class ClauseDatabaseMallob : public ClauseDatabase
          * @param cls Reference to store the retrieved clause.
          * @return true if a clause was found, false if the database is empty.
          */
-        bool getOneClause(ClauseExchangePtr& cls) override;
+        bool getOneClause(Painless::ClauseExchangePtr& cls) override;
 
         /**
          * @brief Gets the total number of clauses in the database.

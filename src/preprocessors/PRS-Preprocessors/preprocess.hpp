@@ -347,7 +347,7 @@ struct preprocess : public PreprocessorInterface
 
 	void loadFormula(const char* filename) override;
 
-	void addInitialClauses(const std::vector<simpleClause>& clauses, unsigned int nbVariables)
+	void addInitialClauses(const std::vector<Painless::ClauseUtils::simpleClause>& clauses, unsigned int nbVariables)
 	{
 		LOGERROR("NOT IMPLEMENTED, YET!");
 		exit(PERR_NOT_SUPPORTED);
@@ -359,7 +359,7 @@ struct preprocess : public PreprocessorInterface
 		exit(PERR_NOT_SUPPORTED);
 	}
 
-	std::vector<simpleClause> getSimplifiedFormula()
+	std::vector<Painless::ClauseUtils::simpleClause> getSimplifiedFormula()
 	{
 		// PRS uses indexes from 1 to prs.clauses
 		clause.erase(clause.begin());
@@ -378,6 +378,6 @@ struct preprocess : public PreprocessorInterface
 
 	int getDivisionVariable() { return 0; }
 
-	void addClause(ClauseExchangePtr clause) { return; }
-	void addClauses(const std::vector<ClauseExchangePtr>& clauses) { return; }
+	void addClause(Painless::ClauseExchangePtr clause) { return; }
+	void addClauses(const std::vector<Painless::ClauseExchangePtr>& clauses) { return; }
 };

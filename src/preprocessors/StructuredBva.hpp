@@ -107,13 +107,13 @@ class StructuredBVA : public PreprocessorInterface
 
         SatResult solve(const std::vector<int>& cube = {}) override;
 
-        void addInitialClauses(const std::vector<simpleClause>& clauses, unsigned int nbVariables) override;
+        void addInitialClauses(const std::vector<Painless::ClauseUtils::simpleClause>& clauses, unsigned int nbVariables) override;
 
         void loadFormula(const char* filename) override;
 
         void printStatistics() override;
 
-        std::vector<simpleClause> getSimplifiedFormula() override;
+        std::vector<Painless::ClauseUtils::simpleClause> getSimplifiedFormula() override;
 
         PreprocessorStats getPreprocessorStatistics()
         {
@@ -122,9 +122,9 @@ class StructuredBVA : public PreprocessorInterface
 
         int getDivisionVariable() { return 0; }
 
-        void addClause(ClauseExchangePtr clause) { return; }
+        void addClause(Painless::ClauseExchangePtr clause) { return; }
 
-        void addClauses(const std::vector<ClauseExchangePtr>& clauses) { return; }
+        void addClauses(const std::vector<Painless::ClauseExchangePtr>& clauses) { return; }
 
         /**
          * @brief Diversify the preprocessor's behavior.
@@ -137,7 +137,7 @@ class StructuredBVA : public PreprocessorInterface
         unsigned int getThreeHopHeuristic(int lit1, int lit2);
 
         /* returns the least occuring literal in a clause c\var */
-        int leastFrequentLiteral(simpleClause& clause, int lit);
+        int leastFrequentLiteral(Painless::ClauseUtils::simpleClause& clause, int lit);
 
         void setTieBreakHeuristic(SBVATieBreak tieBreak);
 
@@ -230,7 +230,7 @@ class StructuredBVA : public PreprocessorInterface
         std::atomic<bool> stopPreprocessing;
 
         /// @brief Vector of clauses
-        std::vector<simpleClause> clauses;
+        std::vector<Painless::ClauseUtils::simpleClause> clauses;
 
         /// @brief Instead of using another struct for clauses
         std::vector<bool> isClauseDeleted;
@@ -303,7 +303,7 @@ class SBVAInit : public Painless::Parsers::ClauseProcessor
         }
 
         bool initMembers(unsigned int varCount, unsigned int clauseCount);
-        bool operator()(simpleClause& clause) override;
+        bool operator()(Painless::ClauseUtils::simpleClause& clause) override;
 
   private:
         std::vector<std::vector<unsigned int>>& m_litToClause;

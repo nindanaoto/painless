@@ -21,7 +21,7 @@ using namespace MapleCOMSPS;
 #define INT_LIT(lit) sign(lit) ? -(var(lit) + 1) : (var(lit) + 1)
 
 static void
-makeMiniVec(ClauseExchangePtr cls, vec<Lit>& mcls)
+makeMiniVec(Painless::ClauseExchangePtr cls, vec<Lit>& mcls)
 {
 	for (size_t i = 0; i < cls->size; i++) {
 		mcls.push(MINI_LIT(cls->lits[i]));
@@ -33,7 +33,7 @@ cbkMapleCOMSPSExportClause(void* issuer, unsigned int lbd, vec<Lit>& cls)
 {
 	MapleCOMSPSSolver* mp = (MapleCOMSPSSolver*)issuer;
 
-	ClauseExchangePtr ncls = ClauseExchange::create(cls.size(), lbd, mp->getSharingId());
+	Painless::ClauseExchangePtr ncls = Painless::ClauseExchange::create(cls.size(), lbd, mp->getSharingId());
 
 	for (int i = 0; i < cls.size(); i++) {
 		ncls->lits[i] = INT_LIT(cls[i]);
@@ -49,7 +49,7 @@ cbkMapleCOMSPSImportUnit(void* issuer)
 
 	Lit l = lit_Undef;
 
-	ClauseExchangePtr cls;
+	Painless::ClauseExchangePtr cls;
 
 	if (mp->unitsToImport->getOneClause(cls) == false)
 		return l;
@@ -64,7 +64,7 @@ cbkMapleCOMSPSImportClause(void* issuer, unsigned int* lbd, vec<Lit>& mcls)
 {
 	MapleCOMSPSSolver* mp = (MapleCOMSPSSolver*)issuer;
 
-	ClauseExchangePtr cls;
+	Painless::ClauseExchangePtr cls;
 
 	if (mp->m_clausesToImport->getOneClause(cls) == false)
 	{
@@ -207,7 +207,7 @@ MapleCOMSPSSolver::solve(const std::vector<int>& cube)
 {
 	unsetSolverInterrupt();
 
-	std::vector<ClauseExchangePtr> tmp;
+	std::vector<Painless::ClauseExchangePtr> tmp;
 
 	tmp.clear();
 	clausesToAdd.getClauses(tmp);
@@ -247,7 +247,7 @@ MapleCOMSPSSolver::loadFormula(const char* filename)
 }
 
 void
-MapleCOMSPSSolver::addClause(ClauseExchangePtr clause)
+MapleCOMSPSSolver::addClause(Painless::ClauseExchangePtr clause)
 {
 	clausesToAdd.addClause(clause);
 
@@ -255,7 +255,7 @@ MapleCOMSPSSolver::addClause(ClauseExchangePtr clause)
 }
 
 bool
-MapleCOMSPSSolver::importClause(const ClauseExchangePtr& clause)
+MapleCOMSPSSolver::importClause(const Painless::ClauseExchangePtr& clause)
 {
 	assert(clause->size > 0);
 
@@ -268,7 +268,7 @@ MapleCOMSPSSolver::importClause(const ClauseExchangePtr& clause)
 }
 
 void
-MapleCOMSPSSolver::addClauses(const std::vector<ClauseExchangePtr>& clauses)
+MapleCOMSPSSolver::addClauses(const std::vector<Painless::ClauseExchangePtr>& clauses)
 {
 	clausesToAdd.addClauses(clauses);
 
@@ -276,7 +276,7 @@ MapleCOMSPSSolver::addClauses(const std::vector<ClauseExchangePtr>& clauses)
 }
 
 void
-MapleCOMSPSSolver::addInitialClauses(const std::vector<simpleClause>& clauses, unsigned int nbVars)
+MapleCOMSPSSolver::addInitialClauses(const std::vector<Painless::ClauseUtils::simpleClause>& clauses, unsigned int nbVars)
 {
 	for (size_t ind = 0; ind < clauses.size(); ind++) {
 		vec<Lit> mcls;
@@ -302,7 +302,7 @@ MapleCOMSPSSolver::addInitialClauses(const std::vector<simpleClause>& clauses, u
 }
 
 void
-MapleCOMSPSSolver::importClauses(const std::vector<ClauseExchangePtr>& clauses)
+MapleCOMSPSSolver::importClauses(const std::vector<Painless::ClauseExchangePtr>& clauses)
 {
 	for (auto cls : clauses) {
 		importClause(cls);

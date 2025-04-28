@@ -20,7 +20,7 @@ SimpleSharing::SimpleSharing(const std::shared_ptr<ClauseDatabase>& clauseDB,
 SimpleSharing::~SimpleSharing() {}
 
 bool
-SimpleSharing::importClause(const ClauseExchangePtr& clause)
+SimpleSharing::importClause(const Painless::ClauseExchangePtr& clause)
 {
 	assert(clause->size > 0 && clause->from != -1);
 

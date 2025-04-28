@@ -99,7 +99,7 @@ YalSat::setPhase(const unsigned int var, const bool phase)
 }
 
 void
-YalSat::addClause(ClauseExchangePtr clause)
+YalSat::addClause(Painless::ClauseExchangePtr clause)
 {
 	for (int lit : clause->lits) {
 		yals_add(this->solver, lit);
@@ -108,7 +108,7 @@ YalSat::addClause(ClauseExchangePtr clause)
 }
 
 void
-YalSat::addClauses(const std::vector<ClauseExchangePtr>& clauses)
+YalSat::addClauses(const std::vector<Painless::ClauseExchangePtr>& clauses)
 {
 	for (auto clause : clauses) {
 		addClause(clause);
@@ -116,7 +116,7 @@ YalSat::addClauses(const std::vector<ClauseExchangePtr>& clauses)
 }
 
 void
-YalSat::addInitialClauses(const std::vector<simpleClause>& clauses, unsigned int nbVars)
+YalSat::addInitialClauses(const std::vector<Painless::ClauseUtils::simpleClause>& clauses, unsigned int nbVars)
 {
 	if (clauses.size() > 33 * Painless::MILLION) {
 		LOGERROR("The number of clauses %u is too high for yalsat!", clauses.size());

@@ -48,7 +48,7 @@ class GlobalSharingStrategy : public SharingStrategy
 	 * @param cls Pointer to the clause to be imported.
 	 * @return True if the clause was successfully imported, false otherwise.
 	 */
-	bool importClause(const ClauseExchangePtr& cls) override
+	bool importClause(const Painless::ClauseExchangePtr& cls) override
 	{
 		LOGDEBUG3("Global Strategy %d importing a cls %p", this->getSharingId(), cls.get());
 		return m_clauseDB->addClause(cls);
@@ -58,7 +58,7 @@ class GlobalSharingStrategy : public SharingStrategy
 	 * @brief Imports multiple clauses into the clause database.
 	 * @param v_cls Vector of clauses to be imported.
 	 */
-	void importClauses(const std::vector<ClauseExchangePtr>& v_cls) override
+	void importClauses(const std::vector<Painless::ClauseExchangePtr>& v_cls) override
 	{
 		for (auto& cls : v_cls)
 			importClause(cls);
@@ -70,7 +70,7 @@ class GlobalSharingStrategy : public SharingStrategy
 	 * @param client Shared pointer to the client receiving the clause.
 	 * @return True if the clause was successfully exported, false otherwise.
 	 */
-	bool exportClauseToClient(const ClauseExchangePtr& clause, std::shared_ptr<SharingEntity> client)
+	bool exportClauseToClient(const Painless::ClauseExchangePtr& clause, std::shared_ptr<SharingEntity> client)
 	{
 		LOGDEBUG3(
 			"Global Strategy %d exports a cls %p to %d", this->getSharingId(), clause.get(), client->getSharingId());

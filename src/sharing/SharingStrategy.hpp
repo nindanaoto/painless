@@ -133,7 +133,7 @@ class SharingStrategy : public SharingEntity
 	/**
 	 * @brief A SharingStrategy doesn't send a clause to the source client (->from must store the sharingId of its producer)
 	 */
-	bool exportClauseToClient(const ClauseExchangePtr& clause, std::shared_ptr<SharingEntity> client) override
+	bool exportClauseToClient(const Painless::ClauseExchangePtr& clause, std::shared_ptr<SharingEntity> client) override
 	{
 		if (clause->from != client->getSharingId())
 			return client->importClause(clause);

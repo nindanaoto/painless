@@ -22,7 +22,7 @@ Painless::ClauseDatabasePerSize::ClauseDatabasePerSize(int maxClauseSize)
 Painless::ClauseDatabasePerSize::~ClauseDatabasePerSize() {}
 
 bool
-Painless::ClauseDatabasePerSize::addClause(ClauseExchangePtr clause)
+Painless::ClauseDatabasePerSize::addClause(Painless::ClauseExchangePtr clause)
 {
         int clsSize = clause->size;
         if (clsSize <= 0) {
@@ -38,10 +38,10 @@ Painless::ClauseDatabasePerSize::addClause(ClauseExchangePtr clause)
 }
 
 size_t
-Painless::ClauseDatabasePerSize::giveSelection(std::vector<ClauseExchangePtr>& selectedCls, unsigned int literalCountLimit)
+Painless::ClauseDatabasePerSize::giveSelection(std::vector<Painless::ClauseExchangePtr>& selectedCls, unsigned int literalCountLimit)
 {
         int used = 0;
-        ClauseExchangePtr tmp_clause;
+        Painless::ClauseExchangePtr tmp_clause;
 
         for (unsigned int i = 0; i < maxClauseSize && literalCountLimit - used >= i + 1; ++i) {
                 while (clauses[i]->getClause(tmp_clause) && (literalCountLimit <= 0 || literalCountLimit - used >= i + 1)) {
@@ -54,7 +54,7 @@ Painless::ClauseDatabasePerSize::giveSelection(std::vector<ClauseExchangePtr>& s
 }
 
 bool
-Painless::ClauseDatabasePerSize::getOneClause(ClauseExchangePtr& cls)
+Painless::ClauseDatabasePerSize::getOneClause(Painless::ClauseExchangePtr& cls)
 {
         for (size_t i = 0; i < clauses.size(); ++i) {
                 if (clauses[i]->getClause(cls)) {
@@ -65,7 +65,7 @@ Painless::ClauseDatabasePerSize::getOneClause(ClauseExchangePtr& cls)
 }
 
 void
-Painless::ClauseDatabasePerSize::getClauses(std::vector<ClauseExchangePtr>& v_cls)
+Painless::ClauseDatabasePerSize::getClauses(std::vector<Painless::ClauseExchangePtr>& v_cls)
 {
         for (auto& clauseBuffer : clauses) {
                 clauseBuffer->getClauses(v_cls);

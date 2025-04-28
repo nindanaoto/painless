@@ -43,7 +43,7 @@ class ClauseDatabaseSingleBuffer : public ClauseDatabase
          * @param clause The clause to be added.
          * @return True if the clause was successfully added, false otherwise.
          */
-        bool addClause(ClauseExchangePtr clause) override { return buffer.addClause(std::move(clause)); }
+        bool addClause(Painless::ClauseExchangePtr clause) override { return buffer.addClause(std::move(clause)); }
 
         /**
          * @brief Selects clauses up to the specified total size.
@@ -54,10 +54,10 @@ class ClauseDatabaseSingleBuffer : public ClauseDatabase
          * @note This method fills the buffer without exceeding  by getting one clause at a time.
          * @warning This method may not select exactly  literals if the last clause added exceeds the limit.
          */
-        size_t giveSelection(std::vector<ClauseExchangePtr>& selectedCls, unsigned int literalCountLimit) override
+        size_t giveSelection(std::vector<Painless::ClauseExchangePtr>& selectedCls, unsigned int literalCountLimit) override
         {
                 size_t selectedLiterals = 0;
-                ClauseExchangePtr clause;
+                Painless::ClauseExchangePtr clause;
 
                 while (buffer.getClause(clause)) {
                         if (selectedLiterals + clause->size <= literalCountLimit) {
@@ -77,14 +77,14 @@ class ClauseDatabaseSingleBuffer : public ClauseDatabase
          * @brief Retrieves all clauses from the database.
          * @param v_cls Vector to store the retrieved clauses.
          */
-        void getClauses(std::vector<ClauseExchangePtr>& v_cls) override { buffer.getClauses(v_cls); }
+        void getClauses(std::vector<Painless::ClauseExchangePtr>& v_cls) override { buffer.getClauses(v_cls); }
 
         /**
          * @brief Retrieves a single clause from the database.
          * @param cls Shared pointer to store the retrieved clause.
          * @return True if a clause was retrieved, false if the database is empty.
          */
-        bool getOneClause(ClauseExchangePtr& cls) override { return buffer.getClause(cls); }
+        bool getOneClause(Painless::ClauseExchangePtr& cls) override { return buffer.getClause(cls); }
 
         /**
          * @brief Returns the current number of clauses in the database.

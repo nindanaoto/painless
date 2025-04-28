@@ -40,7 +40,7 @@ class ClauseDatabasePerSize : public ClauseDatabase
          * @param clause The clause to be added.
          * @return true if the clause was successfully added, false otherwise.
          */
-        bool addClause(ClauseExchangePtr clause) override;
+        bool addClause(Painless::ClauseExchangePtr clause) override;
 
         /**
          * @brief Selects clauses up to a specified total size.
@@ -48,20 +48,20 @@ class ClauseDatabasePerSize : public ClauseDatabase
          * @param literalCountLimit The maximum literals count to select.
          * @return The number of literals in the selected clauses.
          */
-        size_t giveSelection(std::vector<ClauseExchangePtr>& selectedCls, unsigned int literalCountLimit) override;
+        size_t giveSelection(std::vector<Painless::ClauseExchangePtr>& selectedCls, unsigned int literalCountLimit) override;
 
         /**
          * @brief Retrieves all clauses from all size-based buffers.
          * @param v_cls Vector to store the retrieved clauses.
          */
-        void getClauses(std::vector<ClauseExchangePtr>& v_cls) override;
+        void getClauses(std::vector<Painless::ClauseExchangePtr>& v_cls) override;
 
         /**
          * @brief Retrieves the smallest clause from the database.
          * @param cls Reference to store the retrieved clause.
          * @return true if a clause was retrieved, false if all buffers are empty.
          */
-        bool getOneClause(ClauseExchangePtr& cls) override;
+        bool getOneClause(Painless::ClauseExchangePtr& cls) override;
 
         /**
          * @brief Gets the total number of clauses across all size-based buffers.

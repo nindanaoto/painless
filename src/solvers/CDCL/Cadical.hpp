@@ -57,13 +57,13 @@ class Cadical
         void loadFormula(const char* filename) override;
 
         /// Add a list of initial clauses to the formula.
-        void addInitialClauses(const std::vector<simpleClause>& clauses, unsigned int nbVars) override;
+        void addInitialClauses(const std::vector<Painless::ClauseUtils::simpleClause>& clauses, unsigned int nbVars) override;
 
         /// Add a permanent clause to the formula.
-        void addClause(ClauseExchangePtr clause) override;
+        void addClause(Painless::ClauseExchangePtr clause) override;
 
         /// Add a list of permanent clauses to the formula.
-        void addClauses(const std::vector<ClauseExchangePtr>& clauses) override;
+        void addClauses(const std::vector<Painless::ClauseExchangePtr>& clauses) override;
 
         // /// Set clauseToImport Database
         // void setClausesToImportDatabase(std::unique_ptr<ClauseDatabase>&& db) { this->clausesToImport = std::move(db); }
@@ -71,10 +71,10 @@ class Cadical
         /* Sharing */
 
         /// Add a learned clause to the formula.
-        bool importClause(const ClauseExchangePtr& clause) override;
+        bool importClause(const Painless::ClauseExchangePtr& clause) override;
 
         /// Add a list of learned clauses to the formula.
-        void importClauses(const std::vector<ClauseExchangePtr>& clauses) override;
+        void importClauses(const std::vector<Painless::ClauseExchangePtr>& clauses) override;
 
         /* Variable Management */
 
@@ -149,13 +149,13 @@ class Cadical
 
   private:
         /// A vector to store the clause to export
-        simpleClause tempClause;
+        Painless::ClauseUtils::simpleClause tempClause;
         
         /// Stores the lbd value of the clause to export (loaded in learning)
         int lbd;
         
         /// A pointer pointing to the next clause to be exported (loaded in hasClauseToImprot)
-        ClauseExchangePtr tempClauseToImport;
+        Painless::ClauseExchangePtr tempClauseToImport;
 
         /*-----------------------Terminator----------------------*/
         /**

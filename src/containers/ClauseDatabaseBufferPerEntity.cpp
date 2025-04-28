@@ -12,7 +12,7 @@ ClauseDatabaseBufferPerEntity::ClauseDatabaseBufferPerEntity(int maxClauseSize)
 }
 
 bool
-ClauseDatabaseBufferPerEntity::addClause(ClauseExchangePtr clause)
+ClauseDatabaseBufferPerEntity::addClause(Painless::ClauseExchangePtr clause)
 {
         int entityId = clause->from;
 
@@ -39,10 +39,10 @@ ClauseDatabaseBufferPerEntity::addClause(ClauseExchangePtr clause)
 }
 
 size_t
-ClauseDatabaseBufferPerEntity::giveSelection(std::vector<ClauseExchangePtr>& selectedCls, unsigned int literalCountLimit )
+ClauseDatabaseBufferPerEntity::giveSelection(std::vector<Painless::ClauseExchangePtr>& selectedCls, unsigned int literalCountLimit )
 {
         Painless::ClauseDatabasePerSize tempDatabase(maxClauseSize);
-        std::vector<ClauseExchangePtr> tempVector;
+        std::vector<Painless::ClauseExchangePtr> tempVector;
 
         {
                 std::shared_lock<std::shared_mutex> readLock(dbmutex);
@@ -58,7 +58,7 @@ ClauseDatabaseBufferPerEntity::giveSelection(std::vector<ClauseExchangePtr>& sel
 }
 
 void
-ClauseDatabaseBufferPerEntity::getClauses(std::vector<ClauseExchangePtr>& v_cls)
+ClauseDatabaseBufferPerEntity::getClauses(std::vector<Painless::ClauseExchangePtr>& v_cls)
 {
         std::shared_lock<std::shared_mutex> readLock(dbmutex);
         for (auto& [entityId, buffer] : entityDatabases) {
@@ -67,7 +67,7 @@ ClauseDatabaseBufferPerEntity::getClauses(std::vector<ClauseExchangePtr>& v_cls)
 }
 
 bool
-ClauseDatabaseBufferPerEntity::getOneClause(ClauseExchangePtr& cls)
+ClauseDatabaseBufferPerEntity::getOneClause(Painless::ClauseExchangePtr& cls)
 {
         std::shared_lock<std::shared_mutex> readLock(dbmutex);
         for (auto& [entityId, buffer] : entityDatabases) {

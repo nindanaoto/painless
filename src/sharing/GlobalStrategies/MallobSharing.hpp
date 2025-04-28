@@ -75,7 +75,7 @@ class MallobSharing : public GlobalSharingStrategy
          * @param cls Pointer to the clause to be imported.
          * @return true if the clause was successfully imported, false otherwise.
          */
-        bool importClause(const ClauseExchangePtr& cls) override;
+        bool importClause(const Painless::ClauseExchangePtr& cls) override;
 
         /**
          * @brief Gets the sleeping time for the sharing strategy.
@@ -90,7 +90,7 @@ class MallobSharing : public GlobalSharingStrategy
          * @param client Shared pointer to the client receiving the clause.
          * @return true if the clause was successfully exported, false otherwise.
          */
-        bool exportClauseToClient(const ClauseExchangePtr& clause, std::shared_ptr<SharingEntity> client) override;
+        bool exportClauseToClient(const Painless::ClauseExchangePtr& clause, std::shared_ptr<SharingEntity> client) override;
 
         /**
          * @brief Deserializes received clauses.
@@ -121,7 +121,7 @@ class MallobSharing : public GlobalSharingStrategy
          * @param cls Output parameter to store the retrieved clause.
          * @return true if a clause was successfully retrieved, false otherwise.
          */
-        bool getOneClauseWrapper(ClauseExchangePtr& cls)
+        bool getOneClauseWrapper(Painless::ClauseExchangePtr& cls)
         {
                 if (this->m_clauseDB->getOneClause(cls)) {
                         return insertClause(cls);
@@ -145,7 +145,7 @@ class MallobSharing : public GlobalSharingStrategy
         std::vector<int> receivedClausesRight;    ///< Buffer for clauses received from right child
         std::vector<int> receivedClausesFather;   ///< Buffer for clauses received from parent
 
-        std::vector<ClauseExchangePtr> deserializedClauses; ///< Buffer for deserialized clauses
+        std::vector<Painless::ClauseExchangePtr> deserializedClauses; ///< Buffer for deserialized clauses
 
         Painless::Bitset myBitVector; ///< Bitset for tracking shared clauses
 
@@ -192,7 +192,7 @@ class MallobSharing : public GlobalSharingStrategy
          * @param cls Pointer to the clause to check.
          * @return true if the clause is present in the map, false otherwise.
          */
-        bool doesClauseExist(const ClauseExchangePtr& cls) const;
+        bool doesClauseExist(const Painless::ClauseExchangePtr& cls) const;
 
         /**
          * @brief Updates the metadata for an existing clause.
@@ -200,7 +200,7 @@ class MallobSharing : public GlobalSharingStrategy
          * @param cls Pointer to the clause to update.
          * @note Updates the sources bitset and sets the production epoch to the current epoch.
          */
-        void updateClause(const ClauseExchangePtr& cls);
+        void updateClause(const Painless::ClauseExchangePtr& cls);
 
         /**
          * @brief Inserts a new clause or updates an existing one in the sharing map.
@@ -215,7 +215,7 @@ class MallobSharing : public GlobalSharingStrategy
          *          If the clause exists:
          *          - Updates the existing clause information
          */
-        bool insertClause(const ClauseExchangePtr& cls);
+        bool insertClause(const Painless::ClauseExchangePtr& cls);
 
         /**
          * @brief Checks if a clause has been shared recently.
@@ -226,7 +226,7 @@ class MallobSharing : public GlobalSharingStrategy
          * @note The condition is always true for newly inserted clauses due to sharingEpoch initialization.
          *       This allows resharing of clauses not yet removed from the filter.
          */
-        bool isClauseShared(const ClauseExchangePtr& cls) const;
+        bool isClauseShared(const Painless::ClauseExchangePtr& cls) const;
 
         /**
          * @brief Determines if a consumer can import a given clause.
@@ -238,7 +238,7 @@ class MallobSharing : public GlobalSharingStrategy
          * @details Checks if the clause is in the filter (produced but not shared) and if the consumer was not one of its
          * producers.
          */
-        bool canConsumerImportClause(const ClauseExchangePtr& cls, unsigned consumerId);
+        bool canConsumerImportClause(const Painless::ClauseExchangePtr& cls, unsigned consumerId);
 
         /**
          * @brief Increments the current epoch.
@@ -252,7 +252,7 @@ class MallobSharing : public GlobalSharingStrategy
          *
          * @details Updates the shared epoch to the current epoch and resets the sources bitset to 0.
          */
-        void markClauseAsShared(ClauseExchangePtr& cls);
+        void markClauseAsShared(Painless::ClauseExchangePtr& cls);
 
         /**
          * @brief Shrinks the filter to remove entries of clauses that can be reshared. Once a clause was shared
@@ -271,11 +271,11 @@ class MallobSharing : public GlobalSharingStrategy
         /**
          * @brief Map storing clause metadata.
          *
-         * Uses custom hash and equality functions for ClauseExchangePtr keys.
+         * Uses custom hash and equality functions for Painless::ClauseExchangePtr keys.
          */
-        std::unordered_map<ClauseExchangePtr,
+        std::unordered_map<Painless::ClauseExchangePtr,
                                            ClauseMeta,
-                                           ClauseUtils::ClauseExchangePtrHash,
-                                           ClauseUtils::ClauseExchangePtrEqual>
+                                           Painless::ClauseUtils::ClauseExchangePtrHash,
+                                           Painless::ClauseUtils::ClauseExchangePtrEqual>
                 m_clauseMetaMap;
 };

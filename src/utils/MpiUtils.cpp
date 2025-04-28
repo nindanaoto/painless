@@ -53,13 +53,13 @@ decompressBuffer(const std::vector<unsigned char>& input, size_t originalSize)
         return output;
 }
 
-typedef std::vector<int> simpleClause;
+
 
 bool
-serializeClauses(const std::vector<simpleClause>& clauses, std::vector<int>& serializedClauses)
+serializeClauses(const std::vector<Painless::ClauseUtils::simpleClause>& clauses, std::vector<int>& serializedClauses)
 {
         // Calculate the total size needed for serialization
-        size_t totalSize = std::accumulate(clauses.begin(), clauses.end(), 0, [](size_t sum, const simpleClause& clause) {
+        size_t totalSize = std::accumulate(clauses.begin(), clauses.end(), 0, [](size_t sum, const Painless::ClauseUtils::simpleClause& clause) {
                 return sum + clause.size() + 1;
         });
 
@@ -82,7 +82,7 @@ serializeClauses(const std::vector<simpleClause>& clauses, std::vector<int>& ser
 /* TODO use a functor for generic filtering during deserialization and serialization */
 
 bool
-deserializeClauses(const std::vector<int>& serializedClauses, std::vector<simpleClause>& clauses)
+deserializeClauses(const std::vector<int>& serializedClauses, std::vector<Painless::ClauseUtils::simpleClause>& clauses)
 {
         clauses.clear();
         size_t index = 0;
@@ -106,7 +106,7 @@ deserializeClauses(const std::vector<int>& serializedClauses, std::vector<simple
 }
 
 bool
-sendFormula(std::vector<simpleClause>& clauses, unsigned int* varCount, int rootRank)
+sendFormula(std::vector<Painless::ClauseUtils::simpleClause>& clauses, unsigned int* varCount, int rootRank)
 {
         // Broadcast varCount
         TESTRUNMPI(MPI_Bcast(varCount, 1, MPI_UNSIGNED, rootRank, MPI_COMM_WORLD));

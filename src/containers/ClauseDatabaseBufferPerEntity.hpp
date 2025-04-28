@@ -12,7 +12,7 @@
  * @brief A clause database that maintain separate buffers for each entity, mimicing old painless default behavior
  *
  * This class extends ClauseDatabase to provide a mechanism for storing and managing clauses in separate buffers for
- * different entities thanks to the from attributed in ClauseExchange. It uses fine-grained locking to allow concurrent
+ * different entities thanks to the from attributed in Painless::ClauseExchange. It uses fine-grained locking to allow concurrent
  * access where possible.
  *
  * Since Painless::ClauseBuffer is lockfree, all consumption operations (read) can be done concurently. The only synchronization
@@ -47,7 +47,7 @@ class ClauseDatabaseBufferPerEntity : public ClauseDatabase
          * @return true if the clause was successfully added, false otherwise.
          * @note This method is thread-safe and allows concurrent additions to different buffers.
          */
-        bool addClause(ClauseExchangePtr clause) override;
+        bool addClause(Painless::ClauseExchangePtr clause) override;
 
         /**
          * @brief Selects clauses up to a specified total size.
@@ -56,14 +56,14 @@ class ClauseDatabaseBufferPerEntity : public ClauseDatabase
          * @return The number of literals in the selected clauses.
          * @note This method acquires a shared lock and can be called concurrently with other read operations.
          */
-        size_t giveSelection(std::vector<ClauseExchangePtr>& selectedCls, unsigned int literalCountLimit) override;
+        size_t giveSelection(std::vector<Painless::ClauseExchangePtr>& selectedCls, unsigned int literalCountLimit) override;
 
         /**
          * @brief Retrieves all clauses from all entity buffers.
          * @param v_cls Vector to store the retrieved clauses.
          * @note This method acquires a shared lock and can be called concurrently with other read operations.
          */
-        void getClauses(std::vector<ClauseExchangePtr>& v_cls) override;
+        void getClauses(std::vector<Painless::ClauseExchangePtr>& v_cls) override;
 
         /**
          * @brief Retrieves a single clause from any entity buffer.
@@ -71,7 +71,7 @@ class ClauseDatabaseBufferPerEntity : public ClauseDatabase
          * @return true if a clause was retrieved, false if all buffers are empty.
          * @note This method acquires a shared lock and can be called concurrently with other read operations.
          */
-        bool getOneClause(ClauseExchangePtr& cls) override;
+        bool getOneClause(Painless::ClauseExchangePtr& cls) override;
 
         /**
          * @brief Gets the total number of clauses across all entity buffers.

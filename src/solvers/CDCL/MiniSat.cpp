@@ -18,7 +18,7 @@ using namespace Minisat;
 #define INT_LIT(lit) sign(lit) ? -(var(lit) + 1) : (var(lit) + 1)
 
 static void
-makeMiniVec(ClauseExchangePtr cls, vec<Lit>& mcls)
+makeMiniVec(Painless::ClauseExchangePtr cls, vec<Lit>& mcls)
 {
 	for (size_t i = 0; i < cls->size; i++) {
 		mcls.push(MINI_LIT(cls->lits[i]));
@@ -31,7 +31,7 @@ minisatExportClause(void* issuer, vec<Lit>& cls)
 	/* TODO: a better fake glue management ?*/
 	MiniSat* ms = (MiniSat*)issuer;
 
-	ClauseExchangePtr ncls = ClauseExchange::create(cls.size());
+	Painless::ClauseExchangePtr ncls = Painless::ClauseExchange::create(cls.size());
 
 	// Fake glue value
 	int madeUpGlue = cls.size();
@@ -53,7 +53,7 @@ minisatImportUnit(void* issuer)
 
 	Lit l = lit_Undef;
 
-	ClauseExchangePtr cls;
+	Painless::ClauseExchangePtr cls;
 
 	if (ms->unitsToImport->getOneClause(cls) == false)
 		return l;
@@ -67,7 +67,7 @@ minisatImportClause(void* issuer, vec<Lit>& mcls)
 {
 	MiniSat* ms = (MiniSat*)issuer;
 
-	ClauseExchangePtr cls;
+	Painless::ClauseExchangePtr cls;
 
 	if (ms->m_clausesToImport->getOneClause(cls) == false) {
 		ms->m_clausesToImport->shrinkDatabase();
@@ -167,7 +167,7 @@ MiniSat::diversify(const SeedGenerator& getSeed)
 SatResult
 MiniSat::solve(const std::vector<int>& cube)
 {
-	std::vector<ClauseExchangePtr> tmp;
+	std::vector<Painless::ClauseExchangePtr> tmp;
 	clausesToAdd.getClauses(tmp);
 
 	for (size_t ind = 0; ind < tmp.size(); ind++) {
@@ -197,7 +197,7 @@ MiniSat::solve(const std::vector<int>& cube)
 }
 
 void
-MiniSat::addClause(ClauseExchangePtr clause)
+MiniSat::addClause(Painless::ClauseExchangePtr clause)
 {
 	clausesToAdd.addClause(clause);
 
@@ -205,7 +205,7 @@ MiniSat::addClause(ClauseExchangePtr clause)
 }
 
 bool
-MiniSat::importClause(const ClauseExchangePtr& clause)
+MiniSat::importClause(const Painless::ClauseExchangePtr& clause)
 {
 	assert(clause->size > 0);
 
@@ -219,7 +219,7 @@ MiniSat::importClause(const ClauseExchangePtr& clause)
 }
 
 void
-MiniSat::addClauses(const std::vector<ClauseExchangePtr>& clauses)
+MiniSat::addClauses(const std::vector<Painless::ClauseExchangePtr>& clauses)
 {
 	clausesToAdd.addClauses(clauses);
 
@@ -227,7 +227,7 @@ MiniSat::addClauses(const std::vector<ClauseExchangePtr>& clauses)
 }
 
 void
-MiniSat::addInitialClauses(const std::vector<simpleClause>& clauses, unsigned int nbVars)
+MiniSat::addInitialClauses(const std::vector<Painless::ClauseUtils::simpleClause>& clauses, unsigned int nbVars)
 {
 	for (size_t ind = 0; ind < clauses.size(); ind++) {
 		vec<Lit> mcls;
@@ -254,7 +254,7 @@ MiniSat::addInitialClauses(const std::vector<simpleClause>& clauses, unsigned in
 }
 
 void
-MiniSat::importClauses(const std::vector<ClauseExchangePtr>& clauses)
+MiniSat::importClauses(const std::vector<Painless::ClauseExchangePtr>& clauses)
 {
 	for (size_t i = 0; i < clauses.size(); i++) {
 		importClause(clauses[i]);

@@ -112,7 +112,7 @@ AllGatherSharing::serializeClauses(std::vector<int>& serialized_v_cls)
 {
         int nb_clauses = 0;
         unsigned int dataCount = serialized_v_cls.size(); // it is an append operation so datacount do not start from zero
-        ClauseExchangePtr tmp_cls;
+        Painless::ClauseExchangePtr tmp_cls;
 
         while (dataCount < totalSize &&
                    m_clauseDB->getOneClause(tmp_cls)) // stops when buffer is full or no more clauses are available
@@ -152,7 +152,7 @@ AllGatherSharing::deserializeClauses(const std::vector<int>& serialized_v_cls, i
 {
         unsigned int i = 0;
         int size, lbd;
-        ClauseExchangePtr p_cls;
+        Painless::ClauseExchangePtr p_cls;
         int bufferSize = serialized_v_cls.size();
         int single_buffer_size = bufferSize / num_buffers;
 
@@ -176,7 +176,7 @@ AllGatherSharing::deserializeClauses(const std::vector<int>& serialized_v_cls, i
 
                 if (!this->b_filter.contains(serialized_v_cls.data() + i, size)) {
                         p_cls =
-                                ClauseExchange::create(&serialized_v_cls[i], &serialized_v_cls[i + size], lbd, this->getSharingId());
+                                Painless::ClauseExchange::create(&serialized_v_cls[i], &serialized_v_cls[i + size], lbd, this->getSharingId());
                         if (this->exportClause(p_cls)) {
                                 gstats.receivedClauses++;
                         }

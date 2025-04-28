@@ -125,7 +125,7 @@ MallobSharing::computeBufferSize(unsigned int count)
 
 /* Called by Solvers !!!*/
 bool
-MallobSharing::importClause(const ClauseExchangePtr& cls)
+MallobSharing::importClause(const Painless::ClauseExchangePtr& cls)
 {
         LOGDEBUG3("Mallob Strategy %d importing a cls %p", this->getSharingId(), cls.get());
         // Filter is updated only when strategy gets the clause from clauseDB
@@ -136,7 +136,7 @@ MallobSharing::importClause(const ClauseExchangePtr& cls)
 };
 
 bool
-MallobSharing::exportClauseToClient(const ClauseExchangePtr& cls, std::shared_ptr<SharingEntity> client)
+MallobSharing::exportClauseToClient(const Painless::ClauseExchangePtr& cls, std::shared_ptr<SharingEntity> client)
 {
         // Hypothesis: isClauseShared returned false
         // check in filter if should import to client
@@ -424,8 +424,8 @@ MallobSharing::deserializeClauses(const std::vector<int>& serialized_v_cls)
                         break;
                 }
 
-                ClauseExchangePtr p_cls =
-                        ClauseExchange::create(&serialized_v_cls[i], &serialized_v_cls[i + size], lbd, this->getSharingId());
+                Painless::ClauseExchangePtr p_cls =
+                        Painless::ClauseExchange::create(&serialized_v_cls[i], &serialized_v_cls[i + size], lbd, this->getSharingId());
                 if (p_cls->size > 1) {
                         p_cls->lbd += 1; // increment lbd value for non units
                 }
@@ -471,7 +471,7 @@ MallobSharing::mergeSerializedBuffersWithMine(std::vector<std::reference_wrapper
         unsigned int buffer_count = buffers.size();
         int winner = -1; // the buffer that had its tmp_clause selected
 
-        ClauseExchangePtr localClause;
+        Painless::ClauseExchangePtr localClause;
 
         std::vector<unsigned int> indexes(buffer_count, 0);
         std::vector<unsigned int> bufferSizes(buffer_count);
@@ -621,7 +621,7 @@ MallobSharing::mergeSerializedBuffersWithMine(std::vector<std::reference_wrapper
         // Process remaining clauses from both tmp_clauses and buffers
         auto processRemainingClauses = [this, &filter](const simpleSpan& cls) {
                 if (!filter.contains_or_insert(cls.lits, cls.size)) {
-                        importClause(ClauseExchange::create(cls.lits, cls.lits + cls.size, cls.lbd, this->getSharingId()));
+                        importClause(Painless::ClauseExchange::create(cls.lits, cls.lits + cls.size, cls.lbd, this->getSharingId()));
                 }
         };
 

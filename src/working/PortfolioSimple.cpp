@@ -40,7 +40,7 @@ PortfolioSimple::solve(const std::vector<int>& cube)
 
 	strategyEnding = false;
 
-	std::vector<simpleClause> initClauses;
+	std::vector<Painless::ClauseUtils::simpleClause> initClauses;
 	unsigned int varCount;
 
 	if (Painless::mpi_rank <= 0)

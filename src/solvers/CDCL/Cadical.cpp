@@ -34,7 +34,7 @@ Cadical::learn(int lit)
 		tempClause.push_back(lit);
 	else {
 		assert(tempClause.size() > 0 && this->lbd >= 0);
-		auto exportedClause = ClauseExchange::create(tempClause, this->lbd, this->getSharingId());
+		auto exportedClause = Painless::ClauseExchange::create(tempClause, this->lbd, this->getSharingId());
 
 		assert(tempClause.size() == exportedClause->size);
 		assert((exportedClause->size > 1 && exportedClause->lbd > 0) ||
@@ -295,7 +295,7 @@ Cadical::loadFormula(const char* filename)
 }
 
 void
-Cadical::addInitialClauses(const std::vector<simpleClause>& clauses, unsigned int nbVars)
+Cadical::addInitialClauses(const std::vector<Painless::ClauseUtils::simpleClause>& clauses, unsigned int nbVars)
 {
 	solver->reserve(nbVars);
 
@@ -313,7 +313,7 @@ Cadical::addInitialClauses(const std::vector<simpleClause>& clauses, unsigned in
 }
 
 void
-Cadical::addClause(ClauseExchangePtr clause)
+Cadical::addClause(Painless::ClauseExchangePtr clause)
 {
 	unsigned int maxVar = solver->vars();
 	for (int lit : clause->lits) {
@@ -330,7 +330,7 @@ Cadical::addClause(ClauseExchangePtr clause)
 }
 
 void
-Cadical::addClauses(const std::vector<ClauseExchangePtr>& clauses)
+Cadical::addClauses(const std::vector<Painless::ClauseExchangePtr>& clauses)
 {
 	for (auto clause : clauses)
 		this->addClause(clause);
@@ -339,7 +339,7 @@ Cadical::addClauses(const std::vector<ClauseExchangePtr>& clauses)
 /* Sharing */
 
 bool
-Cadical::importClause(const ClauseExchangePtr& clause)
+Cadical::importClause(const Painless::ClauseExchangePtr& clause)
 {
 	assert(clause->size > 0);
 	m_clausesToImport->addClause(clause);
@@ -347,7 +347,7 @@ Cadical::importClause(const ClauseExchangePtr& clause)
 }
 
 void
-Cadical::importClauses(const std::vector<ClauseExchangePtr>& clauses)
+Cadical::importClauses(const std::vector<Painless::ClauseExchangePtr>& clauses)
 {
 	for (auto cls : clauses) {
 		importClause(cls);

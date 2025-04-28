@@ -10,7 +10,7 @@
 // Requires that clause and other are sorted.
 /* clause1 \ clause2 */
 inline void
-orderedClauseSub(simpleClause& clause1, simpleClause& clause2, simpleClause& diff, int maxDiff)
+orderedClauseSub(Painless::ClauseUtils::simpleClause& clause1, Painless::ClauseUtils::simpleClause& clause2, Painless::ClauseUtils::simpleClause& diff, int maxDiff)
 {
 	diff.clear();
 

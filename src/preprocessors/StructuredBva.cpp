@@ -151,7 +151,7 @@ StructuredBVA::getThreeHopHeuristic(int lit1, int lit2)
 }
 
 int
-StructuredBVA::leastFrequentLiteral(simpleClause& clause, int elit)
+StructuredBVA::leastFrequentLiteral(Painless::ClauseUtils::simpleClause& clause, int elit)
 {
 	int leastOccuringLit = 0;
 	int occurenceCount = INT32_MAX;
@@ -172,12 +172,12 @@ StructuredBVA::leastFrequentLiteral(simpleClause& clause, int elit)
 }
 
 void
-StructuredBVA::addInitialClauses(const std::vector<simpleClause>& initClauses, unsigned int nbVariables)
+StructuredBVA::addInitialClauses(const std::vector<Painless::ClauseUtils::simpleClause>& initClauses, unsigned int nbVariables)
 {
-	std::unordered_set<simpleClause, ClauseUtils::ClauseHash> clausesCache;
+	std::unordered_set<Painless::ClauseUtils::simpleClause, Painless::ClauseUtils::ClauseHash> clausesCache;
 	unsigned int duplicatesCount = 0;
 	unsigned int nbClauses = initClauses.size();
-	simpleClause tmpClause;
+	Painless::ClauseUtils::simpleClause tmpClause;
 	unsigned int actualIdx = 0; /* since duplicates may exists */
 
 	this->originalClauseCount = nbClauses;
@@ -254,12 +254,12 @@ StructuredBVA::loadFormula(const char* filename)
 	this->m_initialized = true;
 }
 
-std::vector<simpleClause>
+std::vector<Painless::ClauseUtils::simpleClause>
 StructuredBVA::getSimplifiedFormula()
 {
 	if (!this->m_initialized)
 		return {};
-	std::vector<simpleClause> actualClauses;
+	std::vector<Painless::ClauseUtils::simpleClause> actualClauses;
 	unsigned int nbClauses = this->clauses.size();
 	for (unsigned int i = 0; i < nbClauses; i++) {
 		if (!this->isClauseDeleted[i]) {
@@ -376,7 +376,7 @@ Painless::Parsers::SBVAInit::initMembers(unsigned int varCount, unsigned int cla
 }
 
 bool
-Painless::Parsers::SBVAInit::operator()(simpleClause& clause)
+Painless::Parsers::SBVAInit::operator()(Painless::ClauseUtils::simpleClause& clause)
 {
 	bool shouldKeep = true;
 

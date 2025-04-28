@@ -47,19 +47,19 @@ class GlucoseSyrup : public SolverCdclInterface
         SatResult solve(const std::vector<int>& cube);
 
         /// Add a permanent clause to the formula.
-        void addClause(ClauseExchangePtr clause);
+        void addClause(Painless::ClauseExchangePtr clause);
 
         /// Add a list of permanent clauses to the formula.
-        void addClauses(const std::vector<ClauseExchangePtr>& clauses);
+        void addClauses(const std::vector<Painless::ClauseExchangePtr>& clauses);
 
         /// Add a list of initial clauses to the formula.
-        void addInitialClauses(const std::vector<simpleClause>& clauses, unsigned int nbVars) override;
+        void addInitialClauses(const std::vector<Painless::ClauseUtils::simpleClause>& clauses, unsigned int nbVars) override;
 
         /// Add a learned clause to the formula.
-        bool importClause(const ClauseExchangePtr& clause);
+        bool importClause(const Painless::ClauseExchangePtr& clause);
 
         /// Add a list of learned clauses to the formula.
-        void importClauses(const std::vector<ClauseExchangePtr>& clauses);
+        void importClauses(const std::vector<Painless::ClauseExchangePtr>& clauses);
 
         /// Get solver statistics.
         void printStatistics();

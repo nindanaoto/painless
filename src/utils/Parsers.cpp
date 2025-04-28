@@ -21,7 +21,7 @@ RedundancyFilter::initMembers(unsigned int varCount, unsigned int clauseCount)
 }
 
 bool
-RedundancyFilter::operator()(simpleClause& clause)
+RedundancyFilter::operator()(Painless::ClauseUtils::simpleClause& clause)
 {
         std::sort(clause.begin(), clause.end());
         auto newLast = std::unique(clause.begin(), clause.end());
@@ -36,7 +36,7 @@ TautologyFilter::initMembers(unsigned int varCount, unsigned int clauseCount)
 }
 
 bool
-TautologyFilter::operator()(simpleClause& clause)
+TautologyFilter::operator()(Painless::ClauseUtils::simpleClause& clause)
 {
         std::unordered_set<int> literals;
         for (int lit : clause) {
@@ -116,7 +116,7 @@ parseCNFParameters(FILE* f, unsigned int& varCount, unsigned int& clauseCount)
 
 // Parse a single clause
 static bool
-parseClause(FILE* f, simpleClause& cls)
+parseClause(FILE* f, Painless::ClauseUtils::simpleClause& cls)
 {
         cls.clear();
         char c;
@@ -172,7 +172,7 @@ parseCNF(const char* filename, Formula& parsedFormula, const std::vector<std::un
                 }
         }
 
-        simpleClause cls;
+        Painless::ClauseUtils::simpleClause cls;
         while (parseClause(f, cls)) {
                 if (!cls.empty()) {
                         bool keepClause = true;
@@ -205,7 +205,7 @@ parseCNF(const char* filename, Formula& parsedFormula, const std::vector<std::un
 
 bool
 parseCNF(const char* filename,
-                 std::vector<simpleClause>& clauses,
+                 std::vector<Painless::ClauseUtils::simpleClause>& clauses,
                  unsigned int* varCount,
                  const std::vector<std::unique_ptr<ClauseProcessor>>& processors)
 {
@@ -229,7 +229,7 @@ parseCNF(const char* filename,
                 }
         }
 
-        simpleClause cls;
+        Painless::ClauseUtils::simpleClause cls;
         while (parseClause(f, cls)) {
                 if (!cls.empty()) {
                         bool keepClause = true;

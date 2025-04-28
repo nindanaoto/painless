@@ -38,13 +38,13 @@ class SimpleSharing : public SharingStrategy
 	 * @param clause Pointer to the clause to be imported.
 	 * @return True if the clause was successfully imported, false otherwise.
 	 */
-	bool importClause(const ClauseExchangePtr& clause) override;
+	bool importClause(const Painless::ClauseExchangePtr& clause) override;
 
 	/**
 	 * @brief Imports multiple clauses.
 	 * @param v_clauses Vector of clause pointers to be imported.
 	 */
-	void importClauses(const std::vector<ClauseExchangePtr>& v_clauses) override
+	void importClauses(const std::vector<Painless::ClauseExchangePtr>& v_clauses) override
 	{
 		for (auto clause : v_clauses)
 			importClause(clause);
@@ -64,7 +64,7 @@ class SimpleSharing : public SharingStrategy
 	int literalPerRound;
 
 	/// Used to manipulate clauses (as a member to reduce number of allocations).
-	std::vector<ClauseExchangePtr> selection;
+	std::vector<Painless::ClauseExchangePtr> selection;
 
 	/// Maximum clause size
 	unsigned int sizeLimit;
