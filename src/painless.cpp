@@ -8,6 +8,7 @@
 #include "utils/System.hpp"
 
 #include "solvers/SolverFactory.hpp"
+#include "working/WorkingStrategy.hpp"
 
 #include "working/PortfolioPRS.hpp"
 #include "working/PortfolioSimple.hpp"
@@ -63,7 +64,7 @@ std::condition_variable condGlobalEnd;
 
 // int nSharers = 0;
 
-WorkingStrategy* working = NULL;
+Painless::WorkingStrategy* working = nullptr;
 
 std::atomic<bool> dist = false;
 
@@ -123,14 +124,14 @@ main(int argc, char** argv)
 
         // TODO: better choice options, think about description file using yaml or json with semantic checking
         if (Painless::__globalParameters__.simple)
-                working = new PortfolioSimple();
+                working = new Painless::PortfolioSimple();
         else
-                working = new PortfolioPRS();
+                working = new Painless::PortfolioPRS();
 
         // Launch working
         std::vector<int> cube;
 
-        std::thread mainWorker(&WorkingStrategy::solve, (WorkingStrategy*)working, std::ref(cube));
+        std::thread mainWorker(&Painless::WorkingStrategy::solve, working, std::ref(cube));
 
         int wakeupRet = 0;
 

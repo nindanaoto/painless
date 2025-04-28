@@ -6,6 +6,8 @@
 
 #include <unistd.h>
 
+namespace Painless {
+
 ;
 
 // Main executed by worker threads
@@ -144,3 +146,4 @@ SequentialWorker::unsetSolverInterrupt()
         force = false;
         solver->unsetSolverInterrupt();
 }
+} // namespace Painless

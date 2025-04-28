@@ -24,6 +24,8 @@
 
 #include <thread>
 
+namespace Painless {
+
 PortfolioPRS::PortfolioPRS() {}
 
 PortfolioPRS::~PortfolioPRS()
@@ -407,3 +409,5 @@ PortfolioPRS::waitInterrupt()
                 slaves[i]->waitInterrupt();
         }
 }
+
+} // namespace Painless

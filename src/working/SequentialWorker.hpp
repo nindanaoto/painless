@@ -10,6 +10,7 @@
 static void*
 mainWorker(void* arg);
 
+namespace Painless {
 /**
  * @brief Basic Implementation of WorkingStrategy for a sequential execution
  * @ingroup working
@@ -49,3 +50,4 @@ class SequentialWorker : public WorkingStrategy
         pthread_mutex_t mutexStart;
         pthread_cond_t mutexCondStart;
 };
+} // namespace Painless
