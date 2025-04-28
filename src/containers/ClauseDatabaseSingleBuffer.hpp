@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <random>
 
+namespace Painless {
 /**
  * @class ClauseDatabaseSingleBuffer
  * @brief This is just a ClauseDatabase wrapper around a ClauseBuufer
@@ -109,4 +110,4 @@ class ClauseDatabaseSingleBuffer : public ClauseDatabase
          * @brief Clears all clauses from the database.
          */
         void clearDatabase() override { buffer.clear(); }
-};
+};} // namespace Painless

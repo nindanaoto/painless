@@ -77,7 +77,7 @@ SolverFactory::createSolver(char type, char importDBType, std::shared_ptr<Solver
 
         switch (importDBType) {
                 case 's':
-                        importDB = std::make_shared<ClauseDatabaseSingleBuffer>(Painless::__globalParameters__.defaultClauseBufferSize);
+                        importDB = std::make_shared<Painless::ClauseDatabaseSingleBuffer>(Painless::__globalParameters__.defaultClauseBufferSize);
                         break;
                 case 'm':
                         importDB = std::make_shared<ClauseDatabaseMallob>(

@@ -99,7 +99,7 @@ GlucoseSyrup::GlucoseSyrup(int id, const std::shared_ptr<ClauseDatabase>& clause
 	/* use sharing id to not have the assert(importedFromThread != thn) fail */
 	solver = new ParallelSolver(this->getSharingId());
 
-	this->unitsToImport = std::make_unique<ClauseDatabaseSingleBuffer>(Painless::__globalParameters__.defaultClauseBufferSize);
+	this->unitsToImport = std::make_unique<Painless::ClauseDatabaseSingleBuffer>(Painless::__globalParameters__.defaultClauseBufferSize);
 
 	switch (Painless::__globalParameters__.glucoseSplitHeuristic) {
 		case 2:
@@ -126,7 +126,7 @@ GlucoseSyrup::GlucoseSyrup(const GlucoseSyrup& other, int id, const std::shared_
 {
 	solver = new ParallelSolver(*(other.solver), this->getSharingId());
 
-	this->unitsToImport = std::make_unique<ClauseDatabaseSingleBuffer>(Painless::__globalParameters__.defaultClauseBufferSize);
+	this->unitsToImport = std::make_unique<Painless::ClauseDatabaseSingleBuffer>(Painless::__globalParameters__.defaultClauseBufferSize);
 
 	switch (Painless::__globalParameters__.glucoseSplitHeuristic) {
 		case 2:

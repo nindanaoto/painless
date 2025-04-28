@@ -84,7 +84,7 @@ MapleCOMSPSSolver::MapleCOMSPSSolver(int id, const std::shared_ptr<ClauseDatabas
 {
 	solver = new SimpSolver();
 
-	this->unitsToImport = std::make_unique<ClauseDatabaseSingleBuffer>(Painless::__globalParameters__.defaultClauseBufferSize);
+	this->unitsToImport = std::make_unique<Painless::ClauseDatabaseSingleBuffer>(Painless::__globalParameters__.defaultClauseBufferSize);
 
 	solver->cbkExportClause = cbkMapleCOMSPSExportClause;
 	solver->cbkImportClause = cbkMapleCOMSPSImportClause;
@@ -102,7 +102,7 @@ MapleCOMSPSSolver::MapleCOMSPSSolver(const MapleCOMSPSSolver& other,
 {
 	solver = new SimpSolver(*(other.solver));
 
-	this->unitsToImport = std::make_unique<ClauseDatabaseSingleBuffer>(Painless::__globalParameters__.defaultClauseBufferSize);
+	this->unitsToImport = std::make_unique<Painless::ClauseDatabaseSingleBuffer>(Painless::__globalParameters__.defaultClauseBufferSize);
 
 	solver->cbkExportClause = cbkMapleCOMSPSExportClause;
 	solver->cbkImportClause = cbkMapleCOMSPSImportClause;
