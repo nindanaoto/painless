@@ -144,7 +144,7 @@ Lingeling::initialize()
 	initializeTypeId<Lingeling>();
 }
 
-Lingeling::Lingeling(int id, const std::shared_ptr<ClauseDatabase>& clauseDB)
+Lingeling::Lingeling(int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB)
 	: unitsToImport(256)
 	, clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 	, SolverCdclInterface(id, clauseDB, SolverCdclType::LINGELING)
@@ -153,7 +153,7 @@ Lingeling::Lingeling(int id, const std::shared_ptr<ClauseDatabase>& clauseDB)
 	initialize();
 }
 
-Lingeling::Lingeling(const Lingeling& other, int id, const std::shared_ptr<ClauseDatabase>& clauseDB)
+Lingeling::Lingeling(const Lingeling& other, int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB)
 	: unitsToImport(256)
 	, clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 	, SolverCdclInterface(id, clauseDB, SolverCdclType::LINGELING)

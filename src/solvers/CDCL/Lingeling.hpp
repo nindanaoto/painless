@@ -72,10 +72,10 @@ class Lingeling : public SolverCdclInterface
         std::vector<int> getSatAssumptions();
 
         /// Constructor.
-        Lingeling(int id, const std::shared_ptr<ClauseDatabase>& clauseDB);
+        Lingeling(int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB);
 
         /// Copy constructor.
-        Lingeling(const Lingeling& other, int id, const std::shared_ptr<ClauseDatabase>& clauseDB);
+        Lingeling(const Lingeling& other, int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB);
 
         /// Destructor.
         ~Lingeling();

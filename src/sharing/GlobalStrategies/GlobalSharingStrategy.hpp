@@ -33,7 +33,7 @@ class GlobalSharingStrategy : public SharingStrategy
 	 * @param producers Vector of sharing entities that produce clauses.
 	 * @param consumers Vector of sharing entities that consume clauses.
 	 */
-	GlobalSharingStrategy(const std::shared_ptr<ClauseDatabase>& clauseDB,
+	GlobalSharingStrategy(const std::shared_ptr<Painless::ClauseDatabase>& clauseDB,
 						  const std::vector<std::shared_ptr<SharingEntity>>& producers = {},
 						  const std::vector<std::shared_ptr<SharingEntity>>& consumers = {});
 

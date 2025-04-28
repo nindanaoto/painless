@@ -31,7 +31,7 @@ class SharingStrategy : public SharingEntity
 	 *
 	 * @param producers A vector of shared pointers to SharingEntity objects that produce clauses.
 	 * @param consumers A vector of shared pointers to SharingEntity objects that consume clauses.
-	 * @param clauseDB A shared pointer to the ClauseDatabase where exported clauses are stored.
+	 * @param clauseDB A shared pointer to the Painless::ClauseDatabase where exported clauses are stored.
 	 *
 	 * This constructor initializes the SharingStrategy with the given producers, consumers, and
 	 * clause database. It stores weak pointers to the producers and consumers internally since
@@ -41,7 +41,7 @@ class SharingStrategy : public SharingEntity
 	 */
 	SharingStrategy(const std::vector<std::shared_ptr<SharingEntity>>& producers,
 					const std::vector<std::shared_ptr<SharingEntity>>& consumers,
-					const std::shared_ptr<ClauseDatabase>& clauseDB)
+					const std::shared_ptr<Painless::ClauseDatabase>& clauseDB)
 		: SharingEntity(consumers)
 		, m_producers(producers.begin(), producers.end())
 		, m_clauseDB(clauseDB)
@@ -144,7 +144,7 @@ class SharingStrategy : public SharingEntity
 	/**
 	 * @brief Clause database where exported clauses are stored.
 	 */
-	std::shared_ptr<ClauseDatabase> m_clauseDB;
+	std::shared_ptr<Painless::ClauseDatabase> m_clauseDB;
 
 	/// Sharing statistics.
 	SharingStatistics stats;

@@ -60,7 +60,7 @@ KissatMabExportClause(void* painless_interface, kissat* internal_solver)
 		return false;
 }
 
-KissatMABSolver::KissatMABSolver(int id, const std::shared_ptr<ClauseDatabase>& clauseDB)
+KissatMABSolver::KissatMABSolver(int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB)
 	: SolverCdclInterface(id, clauseDB, SolverCdclType::KISSATMAB)
 	, clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 {

@@ -6,7 +6,7 @@
 #include "utils/Parameters.hpp"
 #include <random>
 
-GenericGlobalSharing::GenericGlobalSharing(const std::shared_ptr<ClauseDatabase>& clauseDB,
+GenericGlobalSharing::GenericGlobalSharing(const std::shared_ptr<Painless::ClauseDatabase>& clauseDB,
                                                                                    const std::vector<int>& subscriptions,
                                                                                    const std::vector<int>& subscribers,
                                                                                    unsigned long bufferSize)

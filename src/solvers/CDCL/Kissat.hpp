@@ -25,7 +25,7 @@ class Kissat : public SolverCdclInterface
 {
   public:
         /// Constructor.
-        Kissat(int id, const std::shared_ptr<ClauseDatabase>& clauseDB);
+        Kissat(int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB);
 
         /// Destructor.
         virtual ~Kissat();

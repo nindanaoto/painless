@@ -86,12 +86,12 @@ class GlucoseSyrup : public SolverCdclInterface
 
         /// Constructor.
         GlucoseSyrup(int id,
-                                 const std::shared_ptr<ClauseDatabase>& clauseDB);
+                                 const std::shared_ptr<Painless::ClauseDatabase>& clauseDB);
 
         /// Copy constructor.
         GlucoseSyrup(const GlucoseSyrup& other,
                                  int id,
-                                 const std::shared_ptr<ClauseDatabase>& clauseDB);
+                                 const std::shared_ptr<Painless::ClauseDatabase>& clauseDB);
 
         /// Destructor.
         virtual ~GlucoseSyrup();
@@ -101,7 +101,7 @@ class GlucoseSyrup : public SolverCdclInterface
         Glucose::ParallelSolver* solver;
 
         /// Database used to import units. (TODO use a lockfree queue as in lingeling)
-        std::unique_ptr<ClauseDatabase> unitsToImport;  
+        std::unique_ptr<Painless::ClauseDatabase> unitsToImport;  
 
         /// Buffer used to add permanent clauses.
         Painless::ClauseBuffer clausesToAdd;

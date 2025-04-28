@@ -92,7 +92,7 @@ glucoseImportClause(void* issuer, int* from, vec<Lit>& gcls)
 	return true;
 }
 
-GlucoseSyrup::GlucoseSyrup(int id, const std::shared_ptr<ClauseDatabase>& clauseDB)
+GlucoseSyrup::GlucoseSyrup(int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB)
 	: SolverCdclInterface(id, clauseDB, SolverCdclType::GLUCOSE)
 	, clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 {
@@ -120,7 +120,7 @@ GlucoseSyrup::GlucoseSyrup(int id, const std::shared_ptr<ClauseDatabase>& clause
 	initializeTypeId<GlucoseSyrup>();
 }
 
-GlucoseSyrup::GlucoseSyrup(const GlucoseSyrup& other, int id, const std::shared_ptr<ClauseDatabase>& clauseDB)
+GlucoseSyrup::GlucoseSyrup(const GlucoseSyrup& other, int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB)
 	: SolverCdclInterface(id, clauseDB, SolverCdclType::GLUCOSE)
 	, clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 {

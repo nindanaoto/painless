@@ -78,7 +78,7 @@ minisatImportClause(void* issuer, vec<Lit>& mcls)
 	return true;
 }
 
-MiniSat::MiniSat(int id, const std::shared_ptr<ClauseDatabase>& clauseDB)
+MiniSat::MiniSat(int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB)
 	: SolverCdclInterface(id, clauseDB, SolverCdclType::MINISAT)
 	, clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 {

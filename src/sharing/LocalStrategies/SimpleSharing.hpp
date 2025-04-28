@@ -20,7 +20,7 @@ class SimpleSharing : public SharingStrategy
 	 * @param sizeLimitAtImport The maximum size of allowed clauses at import.
 	 * @param literalsPerRoundPerProducer  The number of literals each producer should export at each round.
 	 */
-	SimpleSharing(const std::shared_ptr<ClauseDatabase>& clauseDB,
+	SimpleSharing(const std::shared_ptr<Painless::ClauseDatabase>& clauseDB,
 				  unsigned int  sizeLimitAtImport,
 				  unsigned long literalsPerRoundPerProducer,
 				  const std::vector<std::shared_ptr<SharingEntity>>& producers = {},

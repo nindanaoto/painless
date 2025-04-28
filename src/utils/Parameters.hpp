@@ -36,7 +36,7 @@ namespace Painless {
     PARAM(localSearchFlips, int, "ls-flips", -1, "Number of local search flips") \
     \
     CATEGORY("Sharing options") \
-    PARAM(maxClauseSize, int, "max-cls-size", 60, "Maximum size of clauses to be added in ClauseDatabase") \
+    PARAM(maxClauseSize, int, "max-cls-size", 60, "Maximum size of clauses to be added in Painless::ClauseDatabase") \
     PARAM(initSleep, int, "init-sleep", 10'000, "Initial sleep time in microseconds for a Sharer") \
     PARAM(sharingStrategy, int, "shr-strat", 1, "Strategy selection for local sharing (ongoing re-organization)") \
     PARAM(globalSharingStrategy, int, "gshr-strat", 1, "Global sharing strategy") \

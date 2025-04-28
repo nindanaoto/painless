@@ -10,13 +10,13 @@ namespace Painless {
  * @class ClauseDatabasePerSize
  * @brief A clause database that organizes clauses based on their size.
  *
- * This class implements the ClauseDatabase interface, storing clauses in separate
+ * This class implements the Painless::ClauseDatabase interface, storing clauses in separate
  * buffers based on their size.
  *
  * @ingroup pl_containers_db
  * @todo resize by changing maxClauseSize for dynamically managing the maximum size
  */
-class ClauseDatabasePerSize : public ClauseDatabase
+class ClauseDatabasePerSize : public Painless::ClauseDatabase
 {
   public:
         /**

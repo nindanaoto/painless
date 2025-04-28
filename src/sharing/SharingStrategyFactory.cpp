@@ -129,7 +129,7 @@ SharingStrategyFactory::instantiateGlobalStrategies(
         std::vector<int> subscriptions;
         std::vector<int> subscribers;
 
-        std::shared_ptr<ClauseDatabase> simpleDB;
+        std::shared_ptr<Painless::ClauseDatabase> simpleDB;
 
         switch (strategyNumber) {
                 case 0:

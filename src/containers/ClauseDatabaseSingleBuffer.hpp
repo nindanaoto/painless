@@ -8,15 +8,15 @@
 namespace Painless {
 /**
  * @class ClauseDatabaseSingleBuffer
- * @brief This is just a ClauseDatabase wrapper around a ClauseBuufer
+ * @brief This is just a Painless::ClauseDatabase wrapper around a ClauseBuufer
  *
- * This class provides a simple implementation of the ClauseDatabase interface
+ * This class provides a simple implementation of the Painless::ClauseDatabase interface
  * using a single Painless::ClauseBuffer for clause storage and management.
  *
- * I wanted Painless::ClauseBuffer to not implement ClauseDatabase to make it easier to change(independent).
+ * I wanted Painless::ClauseBuffer to not implement Painless::ClauseDatabase to make it easier to change(independent).
  *
  */
-class ClauseDatabaseSingleBuffer : public ClauseDatabase
+class ClauseDatabaseSingleBuffer : public Painless::ClauseDatabase
 {
   private:
         /// @brief The single buffer of this database, it stores all the clauses

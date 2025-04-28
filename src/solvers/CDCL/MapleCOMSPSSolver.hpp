@@ -91,10 +91,10 @@ class MapleCOMSPSSolver : public SolverCdclInterface
         void diversify(const SeedGenerator& getSeed);
 
         /// Constructor.
-        MapleCOMSPSSolver(int id, const std::shared_ptr<ClauseDatabase>& clauseDB);
+        MapleCOMSPSSolver(int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB);
 
         /// Copy constructor.
-        MapleCOMSPSSolver(const MapleCOMSPSSolver& other, int id, const std::shared_ptr<ClauseDatabase>& clauseDB);
+        MapleCOMSPSSolver(const MapleCOMSPSSolver& other, int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB);
         /// Destructor.
         virtual ~MapleCOMSPSSolver();
 
@@ -114,7 +114,7 @@ class MapleCOMSPSSolver : public SolverCdclInterface
 
         /// Buffer used to import clauses (units included).
 
-        std::unique_ptr<ClauseDatabase> unitsToImport;
+        std::unique_ptr<Painless::ClauseDatabase> unitsToImport;
 
         /// Buffer used to add permanent clauses.
         Painless::ClauseBuffer clausesToAdd;

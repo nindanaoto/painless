@@ -11,7 +11,7 @@
  * @class ClauseDatabaseBufferPerEntity
  * @brief A clause database that maintain separate buffers for each entity, mimicing old painless default behavior
  *
- * This class extends ClauseDatabase to provide a mechanism for storing and managing clauses in separate buffers for
+ * This class extends Painless::ClauseDatabase to provide a mechanism for storing and managing clauses in separate buffers for
  * different entities thanks to the from attributed in Painless::ClauseExchange. It uses fine-grained locking to allow concurrent
  * access where possible.
  *
@@ -22,7 +22,7 @@
  *
  * @ingroup pl_containers_db
  */
-class ClauseDatabaseBufferPerEntity : public ClauseDatabase
+class ClauseDatabaseBufferPerEntity : public Painless::ClauseDatabase
 {
   public:
         /**

@@ -98,7 +98,7 @@ class SolverCdclInterface
 	 * @param solverId Unique identifier for the solver
 	 * @param solverCdclType Type of CDCL solver
 	 */
-	SolverCdclInterface(int solverId, const std::shared_ptr<ClauseDatabase>& clauseDB, SolverCdclType solverCdclType)
+	SolverCdclInterface(int solverId, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB, SolverCdclType solverCdclType)
 		: SolverInterface(SolverAlgorithmType::CDCL, solverId)
 		, m_clausesToImport(clauseDB)
 		, m_cdclType(solverCdclType)
@@ -116,7 +116,7 @@ class SolverCdclInterface
 
   protected:
 	/// @brief Database used to import clauses. Can be common with other solvers
-	std::shared_ptr<ClauseDatabase> m_clausesToImport;
+	std::shared_ptr<Painless::ClauseDatabase> m_clausesToImport;
 };
 
 /**

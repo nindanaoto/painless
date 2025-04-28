@@ -29,7 +29,7 @@ class Cadical
 {
   public:
         /// Constructor.
-        Cadical(int id, const std::shared_ptr<ClauseDatabase>& clauseDB);
+        Cadical(int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB);
 
         /// Destructor.
         virtual ~Cadical();
@@ -66,7 +66,7 @@ class Cadical
         void addClauses(const std::vector<Painless::ClauseExchangePtr>& clauses) override;
 
         // /// Set clauseToImport Database
-        // void setClausesToImportDatabase(std::unique_ptr<ClauseDatabase>&& db) { this->clausesToImport = std::move(db); }
+        // void setClausesToImportDatabase(std::unique_ptr<Painless::ClauseDatabase>&& db) { this->clausesToImport = std::move(db); }
 
         /* Sharing */
 

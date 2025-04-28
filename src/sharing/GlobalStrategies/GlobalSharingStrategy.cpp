@@ -7,7 +7,7 @@
 // for now the loops works only for root = 0
 #define MY_MPI_ROOT 0
 
-GlobalSharingStrategy::GlobalSharingStrategy(const std::shared_ptr<ClauseDatabase>& clauseDB,
+GlobalSharingStrategy::GlobalSharingStrategy(const std::shared_ptr<Painless::ClauseDatabase>& clauseDB,
                                                                                          const std::vector<std::shared_ptr<SharingEntity>>& producers,
                                                                                          const std::vector<std::shared_ptr<SharingEntity>>& consumers)
         : SharingStrategy(producers, consumers, clauseDB)

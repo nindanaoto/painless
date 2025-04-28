@@ -35,7 +35,7 @@ class MallobSharing : public GlobalSharingStrategy
          * @param maxCompensation The maximum compensation factor
          * @param resharePeriodMicroSec The resharing period for the exact filter
          */
-        MallobSharing(const std::shared_ptr<ClauseDatabase>& clauseDB,
+        MallobSharing(const std::shared_ptr<Painless::ClauseDatabase>& clauseDB,
                                   unsigned long baseBufferSize,
                                   unsigned long maxBufferSize,
                                   unsigned int  lbdLimitAtImport,

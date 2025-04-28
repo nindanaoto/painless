@@ -29,7 +29,7 @@
  *
  * @todo fix the lbd partitioning to not have empty vectors, worth it ?
  */
-class ClauseDatabaseMallob : public ClauseDatabase
+class ClauseDatabaseMallob : public Painless::ClauseDatabase
 {
   public:
         ClauseDatabaseMallob() = delete;

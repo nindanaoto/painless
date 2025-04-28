@@ -69,7 +69,7 @@ SolverFactory::createSolver(char type, char importDBType, std::shared_ptr<Solver
                 return SolverAlgorithmType::UNKNOWN;
         }
 
-        std::shared_ptr<ClauseDatabase> importDB;
+        std::shared_ptr<Painless::ClauseDatabase> importDB;
         uint maxClauseSize = Painless::__globalParameters__.maxClauseSize;
         uint maxPartitioningLbd = 2;
         uint maxLiteralCapacity = Painless::__globalParameters__.importDBCap;

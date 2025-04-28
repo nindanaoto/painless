@@ -5,7 +5,7 @@
 #include "utils/Logger.hpp"
 #include "utils/Parameters.hpp"
 
-SimpleSharing::SimpleSharing(const std::shared_ptr<ClauseDatabase>& clauseDB,
+SimpleSharing::SimpleSharing(const std::shared_ptr<Painless::ClauseDatabase>& clauseDB,
 							 unsigned int sizeLimitAtImport,
 							 unsigned long literalsPerRoundPerProducer,
 							 const std::vector<std::shared_ptr<SharingEntity>>& producers,

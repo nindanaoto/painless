@@ -82,7 +82,7 @@ class KissatINCSolver : public SolverCdclInterface
         void diversify(const SeedGenerator& getSeed) override;
 
         /// Constructor.
-        KissatINCSolver(int id, const std::shared_ptr<ClauseDatabase>& clauseDB);
+        KissatINCSolver(int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB);
 
         /// Destructor.
         virtual ~KissatINCSolver();

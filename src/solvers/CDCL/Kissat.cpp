@@ -68,7 +68,7 @@ kissatExportClause(void* painless_interface, kissat* internal_solver)
 		return false;
 }
 
-Kissat::Kissat(int id, const std::shared_ptr<ClauseDatabase>& clauseDB)
+Kissat::Kissat(int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB)
 	: SolverCdclInterface(id, clauseDB, SolverCdclType::KISSAT)
 	, clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 {

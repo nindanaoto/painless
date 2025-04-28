@@ -88,7 +88,7 @@ class KissatMABSolver : public SolverCdclInterface
         void initkissatMABOptions();
 
         /// Constructor.
-        KissatMABSolver(int id, const std::shared_ptr<ClauseDatabase>& clauseDB);
+        KissatMABSolver(int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB);
 
         /// Destructor.
         virtual ~KissatMABSolver();

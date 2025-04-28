@@ -20,7 +20,7 @@ class AllGatherSharing : public GlobalSharingStrategy
 	 * @param clauseDB Shared pointer to the clause database.
 	 * @param bufferSize Size of the buffer to send to all the other processes.
 	 */
-	AllGatherSharing(const std::shared_ptr<ClauseDatabase>& clauseDB, unsigned long bufferSize);
+	AllGatherSharing(const std::shared_ptr<Painless::ClauseDatabase>& clauseDB, unsigned long bufferSize);
 
 	/**
 	 * @brief Destructor for AllGatherSharing.

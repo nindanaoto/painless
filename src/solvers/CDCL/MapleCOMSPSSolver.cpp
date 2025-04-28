@@ -78,7 +78,7 @@ cbkMapleCOMSPSImportClause(void* issuer, unsigned int* lbd, vec<Lit>& mcls)
 	return true;
 }
 
-MapleCOMSPSSolver::MapleCOMSPSSolver(int id, const std::shared_ptr<ClauseDatabase>& clauseDB)
+MapleCOMSPSSolver::MapleCOMSPSSolver(int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB)
 	: SolverCdclInterface(id, clauseDB, SolverCdclType::MAPLECOMSPS)
 	, clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 {
@@ -96,7 +96,7 @@ MapleCOMSPSSolver::MapleCOMSPSSolver(int id, const std::shared_ptr<ClauseDatabas
 
 MapleCOMSPSSolver::MapleCOMSPSSolver(const MapleCOMSPSSolver& other,
 									 int id,
-									 const std::shared_ptr<ClauseDatabase>& clauseDB)
+									 const std::shared_ptr<Painless::ClauseDatabase>& clauseDB)
 	: SolverCdclInterface(id, clauseDB, SolverCdclType::MAPLECOMSPS)
 	, clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 {

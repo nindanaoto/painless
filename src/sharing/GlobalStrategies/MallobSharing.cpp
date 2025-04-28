@@ -11,7 +11,7 @@
 #define MALLOB_MPI_ROOT 0
 #define COMPENSATED_SIZE (unsigned int)(std::ceil(this->compensationFactor * this->defaultBufferSize))
 
-MallobSharing::MallobSharing(const std::shared_ptr<ClauseDatabase>& clauseDB,
+MallobSharing::MallobSharing(const std::shared_ptr<Painless::ClauseDatabase>& clauseDB,
                                   unsigned long baseBufferSize,
                                   unsigned long maxBufferSize,
                                   unsigned int lbdLimitAtImport,

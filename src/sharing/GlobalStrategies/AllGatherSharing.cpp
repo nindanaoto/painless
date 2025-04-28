@@ -6,7 +6,7 @@
 #include "utils/Parameters.hpp"
 #include <random>
 
-AllGatherSharing::AllGatherSharing(const std::shared_ptr<ClauseDatabase>& clauseDB, unsigned long bufferSize)
+AllGatherSharing::AllGatherSharing(const std::shared_ptr<Painless::ClauseDatabase>& clauseDB, unsigned long bufferSize)
         : totalSize(bufferSize)
         , GlobalSharingStrategy(clauseDB)
 {

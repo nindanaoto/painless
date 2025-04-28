@@ -7,7 +7,7 @@
 
 #include <chrono>
 
-HordeSatSharing::HordeSatSharing(const std::shared_ptr<ClauseDatabase>& clauseDB,
+HordeSatSharing::HordeSatSharing(const std::shared_ptr<Painless::ClauseDatabase>& clauseDB,
 								 unsigned long literalsPerProducerPerRound,
 								 unsigned int initialLbdLimit,
 								 unsigned int roundsBeforeLbdIncrease,

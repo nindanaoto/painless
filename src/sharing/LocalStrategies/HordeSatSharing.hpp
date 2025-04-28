@@ -30,7 +30,7 @@ class HordeSatSharing : public SharingStrategy
 	 * @param initialLbdLimit The initial value of the maximum allowed lbd value for a given producer
 	 * @param roundsBeforeLbdIncrease The number of rounds to wait before updating the lbd limit of the producers
 	 */
-	HordeSatSharing(const std::shared_ptr<ClauseDatabase>& clauseDB,
+	HordeSatSharing(const std::shared_ptr<Painless::ClauseDatabase>& clauseDB,
 					unsigned long literalsPerProducerPerRound,
 					unsigned int  initialLbdLimit,
 					unsigned int  roundsBeforeLbdIncrease,

@@ -75,7 +75,7 @@ class MiniSat : public SolverCdclInterface
         std::vector<int> getSatAssumptions();
 
         /// Constructor.
-        MiniSat(int id, const std::shared_ptr<ClauseDatabase>& clauseDB);
+        MiniSat(int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB);
 
         /// Destructor.
         virtual ~MiniSat();
@@ -85,7 +85,7 @@ class MiniSat : public SolverCdclInterface
         Minisat::SimpSolver* solver;
 
         /// Database used to import units.
-        std::unique_ptr<ClauseDatabase> unitsToImport;
+        std::unique_ptr<Painless::ClauseDatabase> unitsToImport;
 
         /// Buffer used to add permanent clauses.
         Painless::ClauseBuffer clausesToAdd;

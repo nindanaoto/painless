@@ -8,6 +8,7 @@
 #include <sstream>
 #include <vector>
 
+namespace Painless {
 /**
  * @defgroup pl_containers_db Clause Databases
  * @brief Different ClauseDatabase implementations
@@ -80,4 +81,4 @@ class ClauseDatabase
 
 /**
  * @}
- */
+ */} // namespace Painless
