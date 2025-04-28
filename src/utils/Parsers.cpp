@@ -151,7 +151,7 @@ parseClause(FILE* f, Painless::ClauseUtils::simpleClause& cls)
 }
 
 bool
-parseCNF(const char* filename, Formula& parsedFormula, const std::vector<std::unique_ptr<ClauseProcessor>>& processors)
+parseCNF(const char* filename, Painless::Formula& parsedFormula, const std::vector<std::unique_ptr<ClauseProcessor>>& processors)
 {
         FILE* f = fopen(filename, "r");
         if (f == NULL)

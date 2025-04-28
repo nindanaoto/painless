@@ -2,6 +2,7 @@
 #include "vector2D.hpp"
 #include <unordered_set>
 
+namespace Painless {
 using namespace painless;
 
 // Macros for literal representation conversion
@@ -19,7 +20,7 @@ using namespace painless;
 class Formula
 {
   public:
-	 /**
+         /**
      * @brief Adds a new clause to the formula.
      * @param clause The clause to be added.
      * @return True if the clause was successfully added, false otherwise.
@@ -62,87 +63,88 @@ class Formula
      */
     bool delete_nonUnit_occurence(int lit, unsigned int index);
 
-	/**
+        /**
      * @brief Deletes a unit clause from the formula.
      * @param lit The literal representing the unit clause to be deleted.
      */
-	void delete_unit(int lit) { units.erase(lit); }
+        void delete_unit(int lit) { units.erase(lit); }
 
-	/**
+        /**
      * @brief Sets the number of variables in the formula.
      * @param varCount The number of variables.
      */
-	void setVarCount(unsigned int varCount) { this->varCount = varCount; }
+        void setVarCount(unsigned int varCount) { this->varCount = varCount; }
 
-	/**
+        /**
      * @brief Gets the number of variables in the formula.
      * @return The number of variables.
      */
-	unsigned int getVarCount() { return this->varCount; }
+        unsigned int getVarCount() { return this->varCount; }
 
-	/**
+        /**
      * @brief Gets a non-unit clause from the formula.
      * @param i The index of the non-unit clause.
      * @return A span of the clause literals, skipping zeros.
      */
-	skipzero_span<const int> getNonUnit(unsigned int i) const { return nonUnits[i]; }
+        skipzero_span<const int> getNonUnit(unsigned int i) const { return nonUnits[i]; }
 
-	/**
+        /**
      * @brief Gets the number of non-zero literals in a non-unit clause.
      * @param i The index of the non-unit clause.
      * @return The number of non-zero literals in the clause.
      */
-	unsigned int getNonUnitEfficientSize(unsigned int i) const { return nonUnits.getRowSize(i); }
+        unsigned int getNonUnitEfficientSize(unsigned int i) const { return nonUnits.getRowSize(i); }
 
-	/**
+        /**
      * @brief Gets the set of unit clauses.
      * @return A constant reference to the set of unit clauses.
      */
-	const std::unordered_set<int>& getUnits() const { return this->units; }
+        const std::unordered_set<int>& getUnits() const { return this->units; }
 
-	 /**
+         /**
      * @brief Gets a modifiable reference to the set of unit clauses.
      * @return A reference to the set of unit clauses.
      */
-	std::unordered_set<int>& getUnits() { return this->units; }
+        std::unordered_set<int>& getUnits() { return this->units; }
 
-	/**
+        /**
      * @brief Gets the occurrence list of a literal.
      * @param lit The literal.
      * @return A span of clause indices where the literal occurs.
      */
-	skipzero_span<unsigned int> getOccurenceList(int lit)
-	{
-		return skipzero_span<unsigned int>(this->occurenceLists.at(LIT_IDX(lit)));
-	}
+        skipzero_span<unsigned int> getOccurenceList(int lit)
+        {
+                return skipzero_span<unsigned int>(this->occurenceLists.at(LIT_IDX(lit)));
+        }
 
-	/**
+        /**
      * @brief Gets the number of unit clauses in the formula.
      * @return The number of unit clauses.
      */
-	unsigned int getUnitCount() { return this->units.size(); }
+        unsigned int getUnitCount() { return this->units.size(); }
 
-	 /**
+         /**
      * @brief Gets the number of non-unit clauses in the formula.
      * @return The number of non-unit clauses.
      */
-	unsigned int getNonUnitsCount() { return this->nonUnits.getRowsCount() - this->deletedClausesCount; }
+        unsigned int getNonUnitsCount() { return this->nonUnits.getRowsCount() - this->deletedClausesCount; }
 
-	 /**
+         /**
      * @brief Gets the total number of clauses (unit and non-unit) in the formula.
      * @return The total number of clauses.
      */
-	unsigned int getAllClauseCount() { return this->getUnitCount() + this->getNonUnitsCount(); }
+        unsigned int getAllClauseCount() { return this->getUnitCount() + this->getNonUnitsCount(); }
 
-	/**
+        /**
      * @brief Shrinks the internal data structures to save memory.
      */
-	void shrink_structures();
+        void shrink_structures();
 
   private:
-	std::unordered_set<int> units;  ///< Set of unit clauses.
+        std::unordered_set<int> units;  ///< Set of unit clauses.
     vector2D<int> nonUnits;  ///< 2D vector storing non-unit clauses.
     std::vector<std::vector<unsigned int>> occurenceLists;  ///< Occurrence lists for each literal.
     unsigned int varCount = 0;  ///< Number of variables in the formula.
     unsigned int deletedClausesCount = 0;  ///< Count of deleted clauses for efficient non-unit clause counting
 };
+} // namespace Painless

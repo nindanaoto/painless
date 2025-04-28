@@ -130,7 +130,7 @@ parseCNF(const char* filename,
  * @return true if parsing was successful, false otherwise.
  */
 bool
-parseCNF(const char* filename, Formula& formula, const std::vector<std::unique_ptr<ClauseProcessor>>& processors = {});
+parseCNF(const char* filename, Painless::Formula& formula, const std::vector<std::unique_ptr<ClauseProcessor>>& processors = {});
 
 /**
  * @brief Parse the CNF parameters (variable count and clause count) from a file.
