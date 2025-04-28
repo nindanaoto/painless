@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <vector>
 
+namespace Painless {
 #define MIN_LBD 2
 #define UNIT_SIZE 1
 
@@ -173,4 +174,4 @@ class ClauseDatabaseMallob : public Painless::ClauseDatabase
         std::atomic<int> m_currentWorstIndex;    ///< Index of the current worst clause in the database.
         mutable std::shared_mutex m_shrinkMutex; ///< Mutex used to coordinate shrinking and clause addition.
         Painless::ClauseBuffer m_missedAdditionsBfr;
-};
+};} // namespace Painless

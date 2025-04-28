@@ -102,7 +102,7 @@ SharingStrategyFactory::instantiateLocalStrategies(int strategyNumber,
                 case 5:
                         LOG0("LSTRAT>> HordeSatSharing(1Grp, MallobDB)");
                         localStrategies.emplace_back(
-                                new HordeSatSharing(std::make_shared<ClauseDatabaseMallob>(maxClauseSize, 2, 100'000, 1),
+                                new HordeSatSharing(std::make_shared<Painless::ClauseDatabaseMallob>(maxClauseSize, 2, 100'000, 1),
                                                                         Painless::__globalParameters__.sharedLiteralsPerProducer,
                                                                         Painless::__globalParameters__.hordeInitialLbdLimit,
                                                                         Painless::__globalParameters__.hordeInitRound,
@@ -141,7 +141,7 @@ SharingStrategyFactory::instantiateGlobalStrategies(
                         break;
                 case 2:
                         LOG0("GSTRAT>> MallobSharing");
-                        simpleDB = std::make_shared<ClauseDatabaseMallob>(
+                        simpleDB = std::make_shared<Painless::ClauseDatabaseMallob>(
                                 Painless::__globalParameters__.maxClauseSize, 2, Painless::__globalParameters__.globalSharedLiterals * 10, 1);
                         globalStrategies.emplace_back(new MallobSharing(simpleDB,
                                                                                                                         Painless::__globalParameters__.globalSharedLiterals,

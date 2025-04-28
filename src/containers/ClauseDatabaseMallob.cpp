@@ -6,7 +6,8 @@
 #include <mutex>
 #include <numeric>
 
-ClauseDatabaseMallob::ClauseDatabaseMallob(int maxClauseSize,
+namespace Painless {
+Painless::ClauseDatabaseMallob::ClauseDatabaseMallob(int maxClauseSize,
                                                                                    int maxPartitioningLbd,
                                                                                    size_t maxCapacity,
                                                                                    int maxFreeSize)
@@ -42,10 +43,10 @@ ClauseDatabaseMallob::ClauseDatabaseMallob(int maxClauseSize,
         // LOGSTAT("  Initial Clause Vector Size: %zu", m_clauses.size());
 }
 
-ClauseDatabaseMallob::~ClauseDatabaseMallob() {}
+Painless::ClauseDatabaseMallob::~ClauseDatabaseMallob() {}
 
 bool
-ClauseDatabaseMallob::addClause(Painless::ClauseExchangePtr clause)
+Painless::ClauseDatabaseMallob::addClause(Painless::ClauseExchangePtr clause)
 {
         /*
         - From my understanding ABA problems shouldn't be an issue thanks to the shared_mutex with shrinkDatabase, thus the
@@ -118,7 +119,7 @@ ClauseDatabaseMallob::addClause(Painless::ClauseExchangePtr clause)
 }
 
 size_t
-ClauseDatabaseMallob::giveSelection(std::vector<Painless::ClauseExchangePtr>& selectedCls, unsigned int literalCountLimit)
+Painless::ClauseDatabaseMallob::giveSelection(std::vector<Painless::ClauseExchangePtr>& selectedCls, unsigned int literalCountLimit)
 {
         std::shared_lock<std::shared_mutex> sharedLock(m_shrinkMutex);
 
@@ -170,7 +171,7 @@ ClauseDatabaseMallob::giveSelection(std::vector<Painless::ClauseExchangePtr>& se
 }
 
 void
-ClauseDatabaseMallob::getClauses(std::vector<Painless::ClauseExchangePtr>& v_cls)
+Painless::ClauseDatabaseMallob::getClauses(std::vector<Painless::ClauseExchangePtr>& v_cls)
 {
         // get all clauses
         std::shared_lock<std::shared_mutex> sharedLock(m_shrinkMutex);
@@ -184,7 +185,7 @@ ClauseDatabaseMallob::getClauses(std::vector<Painless::ClauseExchangePtr>& v_cls
 }
 
 bool
-ClauseDatabaseMallob::getOneClause(Painless::ClauseExchangePtr& cls)
+Painless::ClauseDatabaseMallob::getOneClause(Painless::ClauseExchangePtr& cls)
 {
         std::shared_lock<std::shared_mutex> sharedLock(m_shrinkMutex);
 
@@ -201,7 +202,7 @@ ClauseDatabaseMallob::getOneClause(Painless::ClauseExchangePtr& cls)
 }
 
 size_t
-ClauseDatabaseMallob::getSize() const
+Painless::ClauseDatabaseMallob::getSize() const
 {
         return std::accumulate(
                 m_clauses.begin(), m_clauses.end(), 0u, [](unsigned int sum, const std::unique_ptr<Painless::ClauseBuffer>& buffer) {
@@ -210,7 +211,7 @@ ClauseDatabaseMallob::getSize() const
 }
 
 size_t
-ClauseDatabaseMallob::shrinkDatabase()
+Painless::ClauseDatabaseMallob::shrinkDatabase()
 {
 
         /* Push missed clauses in previous shrink, if it is done after a shrink directly we could easily overflow the
@@ -303,11 +304,11 @@ ClauseDatabaseMallob::shrinkDatabase()
 }
 
 void
-ClauseDatabaseMallob::clearDatabase()
+Painless::ClauseDatabaseMallob::clearDatabase()
 {
         for (auto& bucket : m_clauses) {
                 bucket->clear();
         }
         m_currentLiteralSize.store(0);
         m_currentWorstIndex.store(1);
-}
+}} // namespace Painless
