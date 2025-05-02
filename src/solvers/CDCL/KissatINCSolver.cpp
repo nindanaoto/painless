@@ -15,6 +15,9 @@ extern "C"
 #include "kissat-inc/src/parse.h"
 }
 
+namespace Painless {
+
+
 char
 KissatIncImportClause(void* painless_interface, kissat* internal_solver)
 {
@@ -380,4 +383,5 @@ KissatINCSolver::printWinningLog()
                         this->getSolverId(),
                         this->getSolverTypeId(),
                         (family) ? (family == 1) ? "MIXED_SWITCH" : "UNSAT_FOCUSED" : "SAT_STABLE");
-}
+        }
+} // namespace Painless

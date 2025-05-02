@@ -120,7 +120,7 @@ SolverFactory::createSolver(char type, char importDBType, std::shared_ptr<Solver
 
 #ifdef KISSAT_INC_
                 case 'I':
-                        createdSolver = std::make_shared<KissatINCSolver>(id, importDB);
+                        createdSolver = std::make_shared<Painless::KissatINCSolver>(id, importDB);
                         return SolverAlgorithmType::CDCL;
                         // break;
 #endif

@@ -20,6 +20,9 @@ extern "C"
 #include "kissat-inc/src/kissat.h"
 }
 
+namespace Painless {
+
+
 // Wrapping struct
 typedef struct kissat kissat_mab;
 
@@ -110,3 +113,4 @@ class KissatINCSolver : public SolverCdclInterface
         friend char KissatIncImportClause(void*, kissat*);
         friend char KissatIncExportClause(void*, kissat*);
 };
+} // namespace Painless
