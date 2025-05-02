@@ -18,6 +18,7 @@ extern "C"
 {
 #include "kissat/src/kissat.h"
 }
+namespace Painless {
 
 /// Instance of a Kissat solver
 /// @ingroup solving_cdcl
@@ -131,3 +132,4 @@ class Kissat : public SolverCdclInterface
         friend char kissatImportClause(void*, kissat*);
         friend char kissatExportClause(void*, kissat*);
 };
+} // namespace Painless
