@@ -75,7 +75,7 @@ PortfolioPRS::solve(const std::vector<int>& cube)
         // Mpi rank 0 is the leader, sole executor of PRS preprocessing.
         if (0 == Painless::mpi_rank) {
                 /* PRS */
-                this->preprocessors.push_back(std::make_shared<preprocess>(0));
+                this->preprocessors.push_back(std::make_shared<Painless::preprocess>(0));
                 this->preprocessors.at(0)->loadFormula(Painless::__globalParameters__.filename.c_str());
                 for (auto& preproc : preprocessors) {
                         res = preproc->solve({});
