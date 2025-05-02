@@ -7,6 +7,7 @@
 
 #include "preprocessors/PreprocessorInterface.hpp"
 #include "utils/Parsers.hpp"
+namespace Painless {
 
 //===============litQueue.h====================
 
@@ -283,6 +284,7 @@ class StructuredBVA : public PreprocessorInterface
         //--------
 };
 
+} // namespace Painless
 namespace Painless {
 namespace Parsers {
 
