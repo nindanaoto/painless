@@ -99,7 +99,7 @@ SolverFactory::createSolver(char type, char importDBType, std::shared_ptr<Solver
 
 #ifdef LINGELING_
                 case 'l':
-                        createdSolver = std::make_shared<Lingeling>(id, importDB);
+                        createdSolver = std::make_shared<Painless::Lingeling>(id, importDB);
                         return SolverAlgorithmType::CDCL;
                         // break;
 #endif

@@ -8,9 +8,12 @@
 
 #include <atomic>
 
-#define LINGELING_
 
 struct LGL;
+
+namespace Painless {
+
+#define LINGELING_
 
 /// Instance of a Lingeling solver
 /// @ingroup solving_cdcl
@@ -124,3 +127,4 @@ class Lingeling : public SolverCdclInterface
         /// Callback to import clauses.
         friend void consumeCls(void* sp, int** clause, int* glue);
 };
+} // namespace Painless
