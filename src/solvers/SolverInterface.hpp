@@ -5,9 +5,9 @@
 
 #pragma once
 
-#include "containers/ClauseExchange.hpp"
-#include "containers/ClauseUtils.hpp"
-#include "utils/Logger.hpp"
+#include "../containers/ClauseExchange.hpp"
+#include "../containers/ClauseUtils.hpp"
+#include "../utils/Logger.hpp"
 
 #include <atomic>
 #include <memory>
@@ -19,6 +19,7 @@
 #include <unordered_map>
 #include <vector>
 
+namespace Painless {
 
 /**
  * @defgroup solving SAT Solvers
@@ -247,6 +248,7 @@ class SolverInterface
         static inline std::unordered_map<std::type_index, std::atomic<unsigned int>> s_instanceCounts;
 };
 
+} // namespace Painless
 /**
  * @} // end of solving group
  */

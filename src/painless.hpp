@@ -17,7 +17,7 @@ extern std::mutex mutexGlobalEnd;
 extern std::condition_variable condGlobalEnd;
 
 /// Final result
-extern std::atomic<SatResult> finalResult;
+extern std::atomic<Painless::SatResult> finalResult;
 
 /// Model for SAT instances
 extern std::vector<int> finalModel;

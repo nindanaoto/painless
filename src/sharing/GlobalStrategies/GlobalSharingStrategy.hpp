@@ -93,7 +93,7 @@ class GlobalSharingStrategy : public SharingStrategy
 	 * @param res The result of the SAT solving process.
 	 * @param model The satisfying assignment, if any.
 	 */
-	virtual void joinProcess(int winnerRank, SatResult res, const std::vector<int>& model);
+	virtual void joinProcess(int winnerRank, Painless::SatResult res, const std::vector<int>& model);
 
 	/**
 	 * @brief Prints the statistics of the sharing strategy.

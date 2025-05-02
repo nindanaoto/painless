@@ -16,7 +16,7 @@ AllGatherSharing::AllGatherSharing(const std::shared_ptr<Painless::ClauseDatabas
 AllGatherSharing::~AllGatherSharing() {}
 
 void
-AllGatherSharing::joinProcess(int winnerRank, SatResult res, const std::vector<int>& model)
+AllGatherSharing::joinProcess(int winnerRank, Painless::SatResult res, const std::vector<int>& model)
 {
         this->GlobalSharingStrategy::joinProcess(winnerRank, res, model);
 }
@@ -46,7 +46,7 @@ AllGatherSharing::doSharing()
 
         /* Ending Detection */
         if (GlobalSharingStrategy::doSharing()) {
-                this->joinProcess(Painless::mpi_winner, finalResult, {});
+                this->joinProcess(Painless::mpi_winner, finalResult.load(), {});
                 return true;
         }
 

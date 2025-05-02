@@ -24,12 +24,16 @@
 #include <iomanip>
 #include <map>
 #include <random>
+#include <vector>  // Added
+#include <memory>  // Added
+
+namespace Painless {
 
 std::atomic<int> SolverFactory::currentIdSolver(0);
 
 void
 SolverFactory::diversification(const std::vector<std::shared_ptr<Painless::SolverCdclInterface>>& cdclSolvers,
-                                                           const std::vector<std::shared_ptr<LocalSearchInterface>>& localSolvers,
+                                                           const std::vector<std::shared_ptr<Painless::LocalSearchInterface>>& localSolvers,
                                                            const IDScaler& gIDScaler,
                                                            const IDScaler& typeIDScaler)
 {
@@ -55,8 +59,8 @@ SolverFactory::diversification(const std::vector<std::shared_ptr<Painless::Solve
         LOG0("Diversification done");
 }
 
-SolverAlgorithmType
-SolverFactory::createSolver(char type, char importDBType, std::shared_ptr<SolverInterface>& createdSolver)
+Painless::SolverAlgorithmType
+SolverFactory::createSolver(char type, char importDBType, std::shared_ptr<Painless::SolverInterface>& createdSolver)
 {
         int id = currentIdSolver.fetch_add(1);
         LOGDEBUG1("Creating Solver %d, type %c, importDB %c", id, type, importDBType);
@@ -66,7 +70,7 @@ SolverFactory::createSolver(char type, char importDBType, std::shared_ptr<Solver
                                 type,
                                 id,
                                 Painless::__globalParameters__.cpus);
-                return SolverAlgorithmType::UNKNOWN;
+                return Painless::SolverAlgorithmType::UNKNOWN;
         }
 
         std::shared_ptr<Painless::ClauseDatabase> importDB;
@@ -93,63 +97,63 @@ SolverFactory::createSolver(char type, char importDBType, std::shared_ptr<Solver
 #ifdef GLUCOSE_
                 case 'g':
                         createdSolver = std::make_shared<Painless::GlucoseSyrup>(id, importDB);
-                        return SolverAlgorithmType::CDCL;
+                        return Painless::SolverAlgorithmType::CDCL;
                         // break;
 #endif
 
 #ifdef LINGELING_
                 case 'l':
                         createdSolver = std::make_shared<Painless::Lingeling>(id, importDB);
-                        return SolverAlgorithmType::CDCL;
+                        return Painless::SolverAlgorithmType::CDCL;
                         // break;
 #endif
 
 #ifdef MAPLECOMSPS_
                 case 'M':
                         createdSolver = std::make_shared<Painless::MapleCOMSPSSolver>(id, importDB);
-                        return SolverAlgorithmType::CDCL;
+                        return Painless::SolverAlgorithmType::CDCL;
                         // break;
 #endif
 
 #ifdef MINISAT_
                 case 'm':
                         createdSolver = std::make_shared<Painless::MiniSat>(id, importDB);
-                        return SolverAlgorithmType::CDCL;
+                        return Painless::SolverAlgorithmType::CDCL;
                         // break;
 #endif
 
 #ifdef KISSAT_INC_
                 case 'I':
                         createdSolver = std::make_shared<Painless::KissatINCSolver>(id, importDB);
-                        return SolverAlgorithmType::CDCL;
+                        return Painless::SolverAlgorithmType::CDCL;
                         // break;
 #endif
 
 #ifdef KISSAT_MAB_
                 case 'K':
                         createdSolver = std::make_shared<Painless::KissatMABSolver>(id, importDB);
-                        return SolverAlgorithmType::CDCL;
+                        return Painless::SolverAlgorithmType::CDCL;
                         // break;
 #endif
 
 #ifdef KISSAT_
                 case 'k':
                         createdSolver = std::make_shared<Painless::Kissat>(id, importDB);
-                        return SolverAlgorithmType::CDCL;
+                        return Painless::SolverAlgorithmType::CDCL;
                         // break;
 #endif
 
 #ifdef CADICAL_
                 case 'c':
                         createdSolver = std::make_shared<Painless::Cadical>(id, importDB);
-                        return SolverAlgorithmType::CDCL;
+                        return Painless::SolverAlgorithmType::CDCL;
                         // break;
 #endif
 
 #ifdef YALSAT_
                 case 'y':
-                        createdSolver = std::make_shared<YalSat>(id, Painless::__globalParameters__.localSearchFlips, Painless::__globalParameters__.maxDivNoise);
-                        return SolverAlgorithmType::LOCAL_SEARCH;
+                        createdSolver = std::make_shared<Painless::YalSat>(id, Painless::__globalParameters__.localSearchFlips, Painless::__globalParameters__.maxDivNoise);
+                        return Painless::SolverAlgorithmType::LOCAL_SEARCH;
                         // break;
 #endif
 
@@ -159,24 +163,24 @@ SolverFactory::createSolver(char type, char importDBType, std::shared_ptr<Solver
         }
 }
 
-SolverAlgorithmType
+Painless::SolverAlgorithmType
 SolverFactory::createSolver(char type,
                                                         char importDBType,
                                                         std::vector<std::shared_ptr<Painless::SolverCdclInterface>>& cdclSolvers,
-                                                        std::vector<std::shared_ptr<LocalSearchInterface>>& localSolvers)
+                                                        std::vector<std::shared_ptr<Painless::LocalSearchInterface>>& localSolvers)
 {
-        std::shared_ptr<SolverInterface> createdSolver;
+        std::shared_ptr<Painless::SolverInterface> createdSolver;
         switch (createSolver(type, importDBType, createdSolver)) {
-                case SolverAlgorithmType::CDCL:
+                case Painless::SolverAlgorithmType::CDCL:
                         cdclSolvers.push_back(std::static_pointer_cast<Painless::SolverCdclInterface>(createdSolver));
-                        return SolverAlgorithmType::CDCL;
+                        return Painless::SolverAlgorithmType::CDCL;
 
-                case SolverAlgorithmType::LOCAL_SEARCH:
-                        localSolvers.push_back(std::static_pointer_cast<LocalSearchInterface>(createdSolver));
-                        return SolverAlgorithmType::LOCAL_SEARCH;
+                case Painless::SolverAlgorithmType::LOCAL_SEARCH:
+                        localSolvers.push_back(std::static_pointer_cast<Painless::LocalSearchInterface>(createdSolver));
+                        return Painless::SolverAlgorithmType::LOCAL_SEARCH;
 
                 default: /* TODO add preprocessor case */
-                        return SolverAlgorithmType::UNKNOWN;
+                        return Painless::SolverAlgorithmType::UNKNOWN;
         }
 }
 
@@ -185,7 +189,7 @@ SolverFactory::createSolvers(int maxSolvers,
                                                          char importDBType,
                                                          std::string portfolio,
                                                          std::vector<std::shared_ptr<Painless::SolverCdclInterface>>& cdclSolvers,
-                                                         std::vector<std::shared_ptr<LocalSearchInterface>>& localSolvers)
+                                                         std::vector<std::shared_ptr<Painless::LocalSearchInterface>>& localSolvers)
 {
         unsigned int typeCount = portfolio.size();
         LOGDEBUG1("Portfolio is '%s', of size %u", portfolio.c_str(), typeCount);
@@ -196,7 +200,7 @@ SolverFactory::createSolvers(int maxSolvers,
 
 void
 SolverFactory::printStats(const std::vector<std::shared_ptr<Painless::SolverCdclInterface>>& cdclSolvers,
-                                                  const std::vector<std::shared_ptr<LocalSearchInterface>>& localSolvers)
+                                                  const std::vector<std::shared_ptr<Painless::LocalSearchInterface>>& localSolvers)
 {
         Painless::lockLogger();
         // Print header
@@ -215,3 +219,4 @@ SolverFactory::printStats(const std::vector<std::shared_ptr<Painless::SolverCdcl
         //    "of decisions is per conflict\n\n");
         Painless::unlockLogger();
 }
+} // namespace Painless

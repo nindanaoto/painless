@@ -35,7 +35,7 @@ PortfolioPRS::~PortfolioPRS()
                 sharers[i]->join();
         }
         Painless::mpiutils::sendModelToRoot();
-        if (0 == Painless::mpi_rank && finalResult == SatResult::SAT) {
+        if (0 == Painless::mpi_rank && finalResult.load() == Painless::SatResult::SAT) {
                 this->restoreModelDist(finalModel);
         }
 
@@ -54,12 +54,12 @@ PortfolioPRS::solve(const std::vector<int>& cube)
         std::vector<std::thread> clausesLoad;
 
         std::vector<std::shared_ptr<Painless::SolverCdclInterface>> cdclSolvers;
-        std::vector<std::shared_ptr<LocalSearchInterface>> localSolvers;
+        std::vector<std::shared_ptr<Painless::LocalSearchInterface>> localSolvers;
         std::vector<std::shared_ptr<SharingStrategy>> sharingStrategies;
 
         int receivedFinalResultBcast = 0;
         unsigned int varCount;
-        SatResult res;
+        Painless::SatResult res;
 
         if (!dist) {
                 LOGERROR("PortfolioPRS is only available on dist mode for now.");
@@ -82,13 +82,13 @@ PortfolioPRS::solve(const std::vector<int>& cube)
                         LOGDEBUG1("PRS returned %d", res);
                         if (20 == static_cast<int>(res)) {
                                 LOG0("PRS answered UNSAT");
-                                finalResult = SatResult::UNSAT;
-                                this->join(this, finalResult, {});
+                                finalResult = Painless::SatResult::UNSAT;
+                                this->join(this, finalResult.load(), {});
                         } else if (10 == static_cast<int>(res)) {
                                 LOG0("PRS answered SAT");
                                 finalModel = preproc->getModel();
-                                finalResult = SatResult::SAT;
-                                this->join(this, finalResult, finalModel);
+                                finalResult = Painless::SatResult::SAT;
+                                this->join(this, finalResult.load(), finalModel);
                         }
                 }
 
@@ -112,7 +112,7 @@ prs_sync:
 
         if (receivedFinalResultBcast != 0) {
                 Painless::mpi_winner = 0;
-                finalResult = static_cast<SatResult>(receivedFinalResultBcast);
+                finalResult = static_cast<Painless::SatResult>(receivedFinalResultBcast);
                 globalEnding = true;
                 LOGDEBUG1("[PRS] It is the mpi end: %d", receivedFinalResultBcast);
                 mutexGlobalEnd.lock();
@@ -147,11 +147,11 @@ prs_sync:
                         this->solversPortfolio = portfolio[0];
                         SolverFactory::createSolvers(threadsPerProc, 'd', this->solversPortfolio, cdclSolvers, localSolvers);
                         for (auto& kissat : cdclSolvers) {
-                                if (kissat->getSolverType() == SolverCdclType::KISSATINC) {
+                                if (kissat->getSolverType() == Painless::SolverCdclType::KISSATINC) {
                                         static_cast<KissatINCSolver*>(kissat.get())->setFamily(Painless::KissatFamily::SAT_STABLE);
-                                } else if (kissat->getSolverType() == SolverCdclType::KISSAT) {
+                                } else if (kissat->getSolverType() == Painless::SolverCdclType::KISSAT) {
                                         static_cast<Kissat*>(kissat.get())->setFamily(Painless::KissatFamily::SAT_STABLE);
-                                } else if (kissat->getSolverType() == SolverCdclType::KISSATMAB) {
+                                } else if (kissat->getSolverType() == Painless::SolverCdclType::KISSATMAB) {
                                         static_cast<KissatMABSolver*>(kissat.get())->setFamily(Painless::KissatFamily::SAT_STABLE);
                                 }
                         }
@@ -160,11 +160,11 @@ prs_sync:
                         this->solversPortfolio = portfolio[0];
                         SolverFactory::createSolvers(threadsPerProc, 'd', this->solversPortfolio, cdclSolvers, localSolvers);
                         for (auto& kissat : cdclSolvers) {
-                                if (kissat->getSolverType() == SolverCdclType::KISSATINC) {
+                                if (kissat->getSolverType() == Painless::SolverCdclType::KISSATINC) {
                                         static_cast<KissatINCSolver*>(kissat.get())->setFamily(Painless::KissatFamily::UNSAT_FOCUSED);
-                                } else if (kissat->getSolverType() == SolverCdclType::KISSAT) {
+                                } else if (kissat->getSolverType() == Painless::SolverCdclType::KISSAT) {
                                         static_cast<Kissat*>(kissat.get())->setFamily(Painless::KissatFamily::UNSAT_FOCUSED);
-                                } else if (kissat->getSolverType() == SolverCdclType::KISSATMAB) {
+                                } else if (kissat->getSolverType() == Painless::SolverCdclType::KISSATMAB) {
                                         static_cast<KissatMABSolver*>(kissat.get())->setFamily(Painless::KissatFamily::UNSAT_FOCUSED);
                                 }
                         }
@@ -173,11 +173,11 @@ prs_sync:
                         this->solversPortfolio = portfolio[0];
                         SolverFactory::createSolvers(threadsPerProc, 'd', this->solversPortfolio, cdclSolvers, localSolvers);
                         for (auto& kissat : cdclSolvers) {
-                                if (kissat->getSolverType() == SolverCdclType::KISSATINC) {
+                                if (kissat->getSolverType() == Painless::SolverCdclType::KISSATINC) {
                                         static_cast<KissatINCSolver*>(kissat.get())->setFamily(Painless::KissatFamily::MIXED_SWITCH);
-                                } else if (kissat->getSolverType() == SolverCdclType::KISSAT) {
+                                } else if (kissat->getSolverType() == Painless::SolverCdclType::KISSAT) {
                                         static_cast<Kissat*>(kissat.get())->setFamily(Painless::KissatFamily::MIXED_SWITCH);
-                                } else if (kissat->getSolverType() == SolverCdclType::KISSATMAB) {
+                                } else if (kissat->getSolverType() == Painless::SolverCdclType::KISSATMAB) {
                                         static_cast<KissatMABSolver*>(kissat.get())->setFamily(Painless::KissatFamily::MIXED_SWITCH);
                                 }
                         }
@@ -198,11 +198,11 @@ prs_sync:
         // auto generalIDScaler = [rank = Painless::mpi_rank, size = Painless::mpi_world_size](unsigned id) { return rank * size + id; };
         // auto typeIDScaler = [rank = rankInMyGroup, size = sizePerGroup.at(nodeGroup)](unsigned id) {
         auto generalIDScaler = [rank = Painless::mpi_rank,
-                                                        size = Painless::__globalParameters__.cpus](const std::shared_ptr<SolverInterface>& solver) {
+                                                        size = Painless::__globalParameters__.cpus](const std::shared_ptr<Painless::SolverInterface>& solver) {
                 return rank * size + solver->getSolverId();
         };
         auto typeIDScaler = [rank = rankInMyGroup,
-                                                 size = Painless::__globalParameters__.cpus](const std::shared_ptr<SolverInterface>& solver) {
+                                                 size = Painless::__globalParameters__.cpus](const std::shared_ptr<Painless::SolverInterface>& solver) {
                 return rank * size + solver->getSolverTypeId();
         };
 
@@ -215,10 +215,10 @@ prs_sync:
         // Load Formula in Solvers
 
         for (auto cdcl : cdclSolvers) {
-                clausesLoad.emplace_back(&LocalSearchInterface::addInitialClauses, cdcl, std::ref(initClauses), varCount);
+                clausesLoad.emplace_back(&Painless::LocalSearchInterface::addInitialClauses, cdcl, std::ref(initClauses), varCount);
         }
         for (auto local : localSolvers) {
-                clausesLoad.emplace_back(&LocalSearchInterface::addInitialClauses, local, std::ref(initClauses), varCount);
+                clausesLoad.emplace_back(&Painless::LocalSearchInterface::addInitialClauses, local, std::ref(initClauses), varCount);
         }
 
         // Wait for clauses init
@@ -354,9 +354,9 @@ PortfolioPRS::restoreModelDist(std::vector<int>& model)
 }
 
 void
-PortfolioPRS::join(WorkingStrategy* strat, SatResult res, const std::vector<int>& model)
+PortfolioPRS::join(WorkingStrategy* strat, Painless::SatResult res, const std::vector<int>& model)
 {
-        if (res == SatResult::UNKNOWN || strategyEnding)
+        if (res == Painless::SatResult::UNKNOWN || strategyEnding)
                 return;
 
         strategyEnding = true;
@@ -367,7 +367,7 @@ PortfolioPRS::join(WorkingStrategy* strat, SatResult res, const std::vector<int>
                 finalResult = res;
                 globalEnding = true;
 
-                if (res == SatResult::SAT) {
+                if (res == Painless::SatResult::SAT) {
                         finalModel = model;
                 }
                 if (strat != this) {

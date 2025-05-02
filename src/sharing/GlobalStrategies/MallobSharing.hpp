@@ -68,7 +68,7 @@ class MallobSharing : public GlobalSharingStrategy
          * @param res The result of the SAT solving process.
          * @param model The satisfying assignment, if any.
          */
-        void joinProcess(int winnerRank, SatResult res, const std::vector<int>& model) override;
+        void joinProcess(int winnerRank, Painless::SatResult res, const std::vector<int>& model) override;
 
         /**
          * @brief Imports a clause into the clause database.

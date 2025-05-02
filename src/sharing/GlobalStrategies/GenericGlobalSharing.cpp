@@ -20,7 +20,7 @@ GenericGlobalSharing::GenericGlobalSharing(const std::shared_ptr<Painless::Claus
 GenericGlobalSharing::~GenericGlobalSharing() {}
 
 void
-GenericGlobalSharing::joinProcess(int winnerRank, SatResult res, const std::vector<int>& model)
+GenericGlobalSharing::joinProcess(int winnerRank, Painless::SatResult res, const std::vector<int>& model)
 {
         this->GlobalSharingStrategy::joinProcess(winnerRank, res, model);
 }
@@ -52,7 +52,7 @@ GenericGlobalSharing::doSharing()
 
         /* Ending Detection */
         if (GlobalSharingStrategy::doSharing()) {
-                this->joinProcess(Painless::mpi_winner, finalResult, {});
+                this->joinProcess(Painless::mpi_winner, finalResult.load(), {});
                 return true;
         }
 

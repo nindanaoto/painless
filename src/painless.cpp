@@ -68,7 +68,7 @@ Painless::WorkingStrategy* working = nullptr;
 
 std::atomic<bool> dist = false;
 
-std::atomic<SatResult> finalResult = SatResult::UNKNOWN;
+std::atomic<Painless::SatResult> finalResult = Painless::SatResult::UNKNOWN;
 
 std::vector<int> finalModel;
 
@@ -156,10 +156,10 @@ main(int argc, char** argv)
 
                 if ((unsigned int)Painless::SystemResourceMonitor::getRelativeTimeSeconds() >= Painless::__globalParameters__.timeout &&
                         finalResult ==
-                                SatResult::UNKNOWN) // if Painless::__globalParameters__.timeout set globalEnding otherwise a solver woke me up
+                                Painless::SatResult::UNKNOWN) // if Painless::__globalParameters__.timeout set globalEnding otherwise a solver woke me up
                 {
                         globalEnding = true;
-                        finalResult = SatResult::TIMEOUT;
+                        finalResult = Painless::SatResult::TIMEOUT;
                 }
         } else {
                 // no Painless::__globalParameters__.timeout waiting
@@ -181,23 +181,23 @@ main(int argc, char** argv)
         }
 
         if (Painless::mpi_rank == Painless::mpi_winner) {
-                if (finalResult == SatResult::SAT) {
+                if (finalResult.load() == Painless::SatResult::SAT) {
                         Painless::logSolution("SATISFIABLE");
 
                         if (Painless::__globalParameters__.noModel == false) {
                                 Painless::logModel(finalModel);
                         }
-                } else if (finalResult == SatResult::UNSAT) {
+                } else if (finalResult.load() == Painless::SatResult::UNSAT) {
                         Painless::logSolution("UNSATISFIABLE");
                 } else // if Painless::__globalParameters__.timeout or unknown
                 {
                         Painless::logSolution("UNKNOWN");
-                        finalResult = SatResult::UNKNOWN;
+                        finalResult = Painless::SatResult::UNKNOWN;
                 }
 
                 LOGSTAT("Resolution time: %f s", Painless::SystemResourceMonitor::getRelativeTimeSeconds());
         } else
-                finalResult = SatResult::UNKNOWN; /* mpi will be forced to suspend job only by the winner */
+                finalResult = Painless::SatResult::UNKNOWN; /* mpi will be forced to suspend job only by the winner */
 
         LOGDEBUG1("Mpi process %d returns %d", Painless::mpi_rank, static_cast<int>(finalResult.load()));
 

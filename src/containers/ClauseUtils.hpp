@@ -1,6 +1,6 @@
 #pragma once
 
-#include "containers/ClauseExchange.hpp"
+#include "ClauseExchange.hpp"
 #include <cstdint>
 #include <memory>
 #include <vector>

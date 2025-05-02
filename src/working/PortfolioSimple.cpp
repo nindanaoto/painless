@@ -149,9 +149,9 @@ PortfolioSimple::solve(const std::vector<int>& cube)
 }
 
 void
-PortfolioSimple::join(WorkingStrategy* strat, SatResult res, const std::vector<int>& model)
+PortfolioSimple::join(WorkingStrategy* strat, Painless::SatResult res, const std::vector<int>& model)
 {
-        if (res == SatResult::UNKNOWN || strategyEnding)
+        if (res == Painless::SatResult::UNKNOWN || strategyEnding)
                 return;
 
         strategyEnding = true;
@@ -162,7 +162,7 @@ PortfolioSimple::join(WorkingStrategy* strat, SatResult res, const std::vector<i
                 finalResult = res;
                 globalEnding = true;
 
-                if (res == SatResult::SAT) {
+                if (res == Painless::SatResult::SAT) {
                         finalModel = model;
                 }
 

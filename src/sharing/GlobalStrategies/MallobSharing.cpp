@@ -59,7 +59,7 @@ MallobSharing::MallobSharing(const std::shared_ptr<Painless::ClauseDatabase>& cl
 MallobSharing::~MallobSharing() {}
 
 void
-MallobSharing::joinProcess(int winnerRank, SatResult res, const std::vector<int>& model)
+MallobSharing::joinProcess(int winnerRank, Painless::SatResult res, const std::vector<int>& model)
 {
         this->GlobalSharingStrategy::joinProcess(winnerRank, res, model);
 }
@@ -162,7 +162,7 @@ MallobSharing::doSharing()
 
         /* Ending Detection */
         if (GlobalSharingStrategy::doSharing()) {
-                this->joinProcess(Painless::mpi_winner, finalResult, {});
+                this->joinProcess(Painless::mpi_winner, finalResult.load(), {});
                 return true;
         }
 
