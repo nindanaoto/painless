@@ -6,8 +6,8 @@
 #pragma once
 
 #include "../solvers/SolverInterface.hpp"
-#include "containers/ClauseUtils.hpp"
-#include "containers/Formula.hpp"
+#include "../containers/ClauseUtils.hpp"
+#include "../containers/Formula.hpp"
 #include <algorithm>
 #include <functional>
 
@@ -15,6 +15,7 @@
  * @ingroup utils
  * @brief A set of helper functions for CNF file parsing
  */
+namespace Painless {
 namespace Parsers {
 
 /**
@@ -26,24 +27,24 @@ namespace Parsers {
 class ClauseProcessor
 {
   public:
-	ClauseProcessor() = default;
+        ClauseProcessor() = default;
 
-	/**
-	 * @brief Initialize the processor with problem parameters.
-	 * @param varCount The number of variables in the formula.
-	 * @param clauseCount The number of clauses in the formula.
-	 * @return true if initialization was successful, false otherwise.
-	 */
-	virtual bool initMembers(unsigned int varCount, unsigned int clauseCount) = 0;
+        /**
+         * @brief Initialize the processor with problem parameters.
+         * @param varCount The number of variables in the formula.
+         * @param clauseCount The number of clauses in the formula.
+         * @return true if initialization was successful, false otherwise.
+         */
+        virtual bool initMembers(unsigned int varCount, unsigned int clauseCount) = 0;
 
-	/**
-	 * @brief Process a clause.
-	 * @param clause The clause to process.
-	 * @return true if the clause should be kept, false if it should be filtered out.
-	 */
-	virtual bool operator()(simpleClause& clause) = 0;
+        /**
+         * @brief Process a clause.
+         * @param clause The clause to process.
+         * @return true if the clause should be kept, false if it should be filtered out.
+         */
+        virtual bool operator()(Painless::ClauseUtils::simpleClause& clause) = 0;
 
-	virtual ~ClauseProcessor() = default;
+        virtual ~ClauseProcessor() = default;
 };
 
 /**
@@ -54,27 +55,27 @@ class ClauseProcessor
 class RedundancyFilter : public ClauseProcessor
 {
   public:
-	/**
-	 * @brief Initialize the redundancy filter.
-	 * @param varCount The number of variables in the problem.
-	 * @param clauseCount The number of clauses in the problem.
-	 * @return Always returns true.
-	 */
-	bool initMembers(unsigned int varCount, unsigned int clauseCount) override;
+        /**
+         * @brief Initialize the redundancy filter.
+         * @param varCount The number of variables in the problem.
+         * @param clauseCount The number of clauses in the problem.
+         * @return Always returns true.
+         */
+        bool initMembers(unsigned int varCount, unsigned int clauseCount) override;
 
-	/**
-	 * @brief Check if a clause is redundant.
-	 *
-	 * This method sorts the clause, removes duplicates, and checks if it's
-	 * already in the clauseCache. If it's new, it's added to the cache.
-	 *
-	 * @param clause The clause to check.
-	 * @return true if the clause is not redundant, false if it is.
-	 */
-	bool operator()(simpleClause& clause) override;
+        /**
+         * @brief Check if a clause is redundant.
+         *
+         * This method sorts the clause, removes duplicates, and checks if it's
+         * already in the clauseCache. If it's new, it's added to the cache.
+         *
+         * @param clause The clause to check.
+         * @return true if the clause is not redundant, false if it is.
+         */
+        bool operator()(Painless::ClauseUtils::simpleClause& clause) override;
 
   private:
-	mutable std::unordered_set<simpleClause, ClauseUtils::ClauseHash> clauseCache;
+        mutable std::unordered_set<Painless::ClauseUtils::simpleClause, Painless::ClauseUtils::ClauseHash> clauseCache;
 };
 
 /**
@@ -86,23 +87,23 @@ class RedundancyFilter : public ClauseProcessor
 class TautologyFilter : public ClauseProcessor
 {
   public:
-	/**
-	 * @brief Initialize the tautology filter.
-	 * @param varCount The number of variables in the problem.
-	 * @param clauseCount The number of clauses in the problem.
-	 * @return Always returns true.
-	 */
-	bool initMembers(unsigned int varCount, unsigned int clauseCount) override;
+        /**
+         * @brief Initialize the tautology filter.
+         * @param varCount The number of variables in the problem.
+         * @param clauseCount The number of clauses in the problem.
+         * @return Always returns true.
+         */
+        bool initMembers(unsigned int varCount, unsigned int clauseCount) override;
 
-	/**
-	 * @brief Check if a clause is a tautology.
-	 *
-	 * This method checks if the clause contains both a literal and its negation.
-	 *
-	 * @param clause The clause to check.
-	 * @return true if the clause is not a tautology, false if it is.
-	 */
-	bool operator()(simpleClause& clause) override;
+        /**
+         * @brief Check if a clause is a tautology.
+         *
+         * This method checks if the clause contains both a literal and its negation.
+         *
+         * @param clause The clause to check.
+         * @return true if the clause is not a tautology, false if it is.
+         */
+        bool operator()(Painless::ClauseUtils::simpleClause& clause) override;
 };
 
 /**
@@ -116,9 +117,9 @@ class TautologyFilter : public ClauseProcessor
  */
 bool
 parseCNF(const char* filename,
-		 std::vector<simpleClause>& clauses,
-		 unsigned int* varCount,
-		 const std::vector<std::unique_ptr<ClauseProcessor>>& processors = {});
+                 std::vector<Painless::ClauseUtils::simpleClause>& clauses,
+                 unsigned int* varCount,
+                 const std::vector<std::unique_ptr<ClauseProcessor>>& processors = {});
 
 /**
  * @brief Parse a CNF formula from a file into a Formula object.
@@ -129,7 +130,7 @@ parseCNF(const char* filename,
  * @return true if parsing was successful, false otherwise.
  */
 bool
-parseCNF(const char* filename, Formula& formula, const std::vector<std::unique_ptr<ClauseProcessor>>& processors = {});
+parseCNF(const char* filename, Painless::Formula& formula, const std::vector<std::unique_ptr<ClauseProcessor>>& processors = {});
 
 /**
  * @brief Parse the CNF parameters (variable count and clause count) from a file.
@@ -142,4 +143,5 @@ parseCNF(const char* filename, Formula& formula, const std::vector<std::unique_p
 bool
 parseCNFParameters(FILE* f, unsigned int& varCount, unsigned int& clauseCount);
 
+} // namespace Painless
 } // namespace Parsers

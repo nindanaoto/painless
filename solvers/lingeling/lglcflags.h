@@ -1,2 +1,2 @@
-#define LGL_CC "gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0"
+#define LGL_CC "gcc (Debian 12.2.0-14) 12.2.0"
 #define LGL_CFLAGS "-W -Wall -O3 -I../yalsat -DNLGLOG -DNDEBUG -DNCHKSOL -DNLGLDRUPLIG -DNLGLFILES -DNLGLDEMA"

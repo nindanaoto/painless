@@ -5,7 +5,7 @@
 #include "utils/Logger.hpp"
 #include "utils/Parameters.hpp"
 
-SimpleSharing::SimpleSharing(const std::shared_ptr<ClauseDatabase>& clauseDB,
+SimpleSharing::SimpleSharing(const std::shared_ptr<Painless::ClauseDatabase>& clauseDB,
 							 unsigned int sizeLimitAtImport,
 							 unsigned long literalsPerRoundPerProducer,
 							 const std::vector<std::shared_ptr<SharingEntity>>& producers,
@@ -20,7 +20,7 @@ SimpleSharing::SimpleSharing(const std::shared_ptr<ClauseDatabase>& clauseDB,
 SimpleSharing::~SimpleSharing() {}
 
 bool
-SimpleSharing::importClause(const ClauseExchangePtr& clause)
+SimpleSharing::importClause(const Painless::ClauseExchangePtr& clause)
 {
 	assert(clause->size > 0 && clause->from != -1);
 
@@ -40,7 +40,7 @@ SimpleSharing::importClause(const ClauseExchangePtr& clause)
 bool
 SimpleSharing::doSharing()
 {
-	if (globalEnding)
+	if (Painless::globalEnding)
 		return true;
 
 	// 1- Get selection
@@ -64,7 +64,7 @@ SimpleSharing::doSharing()
 
 	LOG1("[SimpleShr] received cls %ld, shared cls %ld", stats.receivedClauses.load(), stats.sharedClauses);
 
-	if (globalEnding)
+	if (Painless::globalEnding)
 		return true;
 	return false;
 }

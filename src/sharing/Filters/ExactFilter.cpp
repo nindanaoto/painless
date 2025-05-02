@@ -23,13 +23,13 @@ MallobSharing::initializeFilter(unsigned int resharingPeriod,
 }
 
 bool
-MallobSharing::doesClauseExist(const ClauseExchangePtr& cls) const
+MallobSharing::doesClauseExist(const Painless::ClauseExchangePtr& cls) const
 {
 	return m_clauseMetaMap.find(cls) != m_clauseMetaMap.end();
 }
 
 void
-MallobSharing::updateClause(const ClauseExchangePtr& cls)
+MallobSharing::updateClause(const Painless::ClauseExchangePtr& cls)
 {
 	ClauseMeta& currentMeta = m_clauseMetaMap.at(cls);
 	currentMeta.sources |= 1ULL << cls->from;
@@ -37,7 +37,7 @@ MallobSharing::updateClause(const ClauseExchangePtr& cls)
 }
 
 bool
-MallobSharing::insertClause(const ClauseExchangePtr& cls)
+MallobSharing::insertClause(const Painless::ClauseExchangePtr& cls)
 {
 	if (!doesClauseExist(cls)) {
 		ClauseMeta newClauseMeta = { .productionEpoch = m_currentEpoch,
@@ -52,7 +52,7 @@ MallobSharing::insertClause(const ClauseExchangePtr& cls)
 }
 
 bool
-MallobSharing::isClauseShared(const ClauseExchangePtr& cls) const
+MallobSharing::isClauseShared(const Painless::ClauseExchangePtr& cls) const
 {
 	auto it = m_clauseMetaMap.find(cls);
 	if (it != m_clauseMetaMap.end()) {
@@ -63,7 +63,7 @@ MallobSharing::isClauseShared(const ClauseExchangePtr& cls) const
 }
 
 bool
-MallobSharing::canConsumerImportClause(const ClauseExchangePtr& cls, unsigned consumerId)
+MallobSharing::canConsumerImportClause(const Painless::ClauseExchangePtr& cls, unsigned consumerId)
 {
 	// Ensure consumer ID is within supported range
 	assert(consumerId <= 63 && "Do not support more than 64 producer ids!");
@@ -73,7 +73,7 @@ MallobSharing::canConsumerImportClause(const ClauseExchangePtr& cls, unsigned co
 }
 
 void
-MallobSharing::markClauseAsShared(ClauseExchangePtr& cls)
+MallobSharing::markClauseAsShared(Painless::ClauseExchangePtr& cls)
 {
 	if (doesClauseExist(cls)) {
 		ClauseMeta& currentMeta = m_clauseMetaMap.at(cls);

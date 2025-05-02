@@ -33,6 +33,7 @@
 #define FUNCTION_NAME "UnknownFunction"
 #endif
 
+namespace Painless {
 /**
  * @brief Set the verbosity level for logging.
  * @param level The verbosity level to set.
@@ -103,6 +104,7 @@ logModel(const std::vector<int>& model);
  * @brief Global flag to enable/disable logging.
  */
 extern std::atomic<bool> quiet;
+} // namespace Painless
 
 // Logging macros for different verbosity levels and purposes
 
@@ -110,91 +112,91 @@ extern std::atomic<bool> quiet;
  * @brief Log a message with a specified verbosity level.
  */
 #define LOG(level, ...)                                                                                                \
-	do {                                                                                                               \
-		log(level, RESET, __VA_ARGS__);                                                                                \
-	} while (0)
+        do {                                                                                                               \
+                Painless::log(level, RESET, __VA_ARGS__);                                                                                \
+        } while (0)
 
 /**
  * @brief Log an error message.
  */
 #define LOGERROR(...)                                                                                                  \
-	do {                                                                                                               \
-		logDebug(0, RED, FUNCTION_NAME, __VA_ARGS__);                                                                  \
-	} while (0)
+        do {                                                                                                               \
+                Painless::logDebug(0, RED, FUNCTION_NAME, __VA_ARGS__);                                                                  \
+        } while (0)
 
 /**
  * @brief Log an error message and abort the program with a specified exit code.
  */
 #define PABORT(EXIT_CODE, ...)                                                                                         \
-	do {                                                                                                               \
-		logDebug(0, RED, FUNCTION_NAME, __VA_ARGS__);                                                                  \
-		exit(EXIT_CODE);                                                                                               \
-	} while (0)
+        do {                                                                                                               \
+                Painless::logDebug(0, RED, FUNCTION_NAME, __VA_ARGS__);                                                                  \
+                exit(EXIT_CODE);                                                                                               \
+        } while (0)
 
 /**
  * @brief Log a warning message.
  */
 #define LOGWARN(...)                                                                                                   \
-	do {                                                                                                               \
-		logDebug(0, YELLOW, FUNCTION_NAME, __VA_ARGS__);                                                               \
-	} while (0)
+        do {                                                                                                               \
+                Painless::logDebug(0, YELLOW, FUNCTION_NAME, __VA_ARGS__);                                                               \
+        } while (0)
 
 /**
  * @brief Log a statistics message.
  */
 #define LOGSTAT(...)                                                                                                   \
-	do {                                                                                                               \
-		log(0, GREEN, __VA_ARGS__);                                                                                    \
-	} while (0)
+        do {                                                                                                               \
+                Painless::log(0, GREEN, __VA_ARGS__);                                                                                    \
+        } while (0)
 
 #ifndef PQUIET
 /**
  * @brief Log a message with verbosity level 0.
  */
 #define LOG0(...)                                                                                                      \
-	do {                                                                                                               \
-		log(0, RESET, __VA_ARGS__);                                                                                    \
-	} while (0)
+        do {                                                                                                               \
+                Painless::log(0, RESET, __VA_ARGS__);                                                                                    \
+        } while (0)
 
 /**
  * @brief Log a message with verbosity level 1.
  */
 #define LOG1(...)                                                                                                      \
-	do {                                                                                                               \
-		log(1, RESET, __VA_ARGS__);                                                                                    \
-	} while (0)
+        do {                                                                                                               \
+                Painless::log(1, RESET, __VA_ARGS__);                                                                                    \
+        } while (0)
 
 /**
  * @brief Log a message with verbosity level 2.
  */
 #define LOG2(...)                                                                                                      \
-	do {                                                                                                               \
-		log(2, RESET, __VA_ARGS__);                                                                                    \
-	} while (0)
+        do {                                                                                                               \
+                Painless::log(2, RESET, __VA_ARGS__);                                                                                    \
+        } while (0)
 
 /**
  * @brief Log a message with verbosity level 3.
  */
 #define LOG3(...)                                                                                                      \
-	do {                                                                                                               \
-		log(3, RESET, __VA_ARGS__);                                                                                    \
-	} while (0)
+        do {                                                                                                               \
+                Painless::log(3, RESET, __VA_ARGS__);                                                                                    \
+        } while (0)
 
 /**
  * @brief Log a message with verbosity level 4.
  */
 #define LOG4(...)                                                                                                      \
-	do {                                                                                                               \
-		log(4, RESET, __VA_ARGS__);                                                                                    \
-	} while (0)
+        do {                                                                                                               \
+                Painless::log(4, RESET, __VA_ARGS__);                                                                                    \
+        } while (0)
 
 /**
  * @brief Log a vector (clause) with cyan color.
  */
 #define LOGVECTOR(lits, size, ...)                                                                                     \
-	do {                                                                                                               \
-		logClause(1, CYAN, lits, size, __VA_ARGS__);                                                                   \
-	} while (0)
+        do {                                                                                                               \
+                Painless::logClause(1, CYAN, lits, size, __VA_ARGS__);                                                                   \
+        } while (0)
 
 #else
 // Define empty macros when PQUIET is defined
@@ -211,41 +213,41 @@ extern std::atomic<bool> quiet;
  * @brief Log a debug message with verbosity level 1 and blue color.
  */
 #define LOGDEBUG1(...)                                                                                                 \
-	do {                                                                                                               \
-		logDebug(1, BLUE, FUNCTION_NAME, __VA_ARGS__);                                                                 \
-	} while (0)
+        do {                                                                                                               \
+                Painless::logDebug(1, BLUE, FUNCTION_NAME, __VA_ARGS__);                                                                 \
+        } while (0)
 
 /**
  * @brief Log a debug message with verbosity level 2 and magenta color.
  */
 #define LOGDEBUG2(...)                                                                                                 \
-	do {                                                                                                               \
-		logDebug(2, MAGENTA, FUNCTION_NAME, __VA_ARGS__);                                                              \
-	} while (0)
+        do {                                                                                                               \
+                Painless::logDebug(2, MAGENTA, FUNCTION_NAME, __VA_ARGS__);                                                              \
+        } while (0)
 
 /**
  * @brief Log a debug message with verbosity level 4 and magenta color.
  */
 #define LOGDEBUG3(...)                                                                                                 \
-	do {                                                                                                               \
-		logDebug(4, MAGENTA, FUNCTION_NAME, __VA_ARGS__);                                                              \
-	} while (0)
+        do {                                                                                                               \
+                Painless::logDebug(4, MAGENTA, FUNCTION_NAME, __VA_ARGS__);                                                              \
+        } while (0)
 
 /**
  * @brief Log a clause with verbosity level 2 and cyan color.
  */
 #define LOGCLAUSE1(lits, size, ...)                                                                                    \
-	do {                                                                                                               \
-		logClause(2, CYAN, lits, size, __VA_ARGS__);                                                                   \
-	} while (0)
+        do {                                                                                                               \
+                Painless::logClause(2, CYAN, lits, size, __VA_ARGS__);                                                                   \
+        } while (0)
 
 /**
  * @brief Log a clause with verbosity level 5 and cyan color.
  */
 #define LOGCLAUSE2(lits, size, ...)                                                                                    \
-	do {                                                                                                               \
-		logClause(5, CYAN, lits, size, __VA_ARGS__);                                                                   \
-	} while (0)
+        do {                                                                                                               \
+                Painless::logClause(5, CYAN, lits, size, __VA_ARGS__);                                                                   \
+        } while (0)
 
 #else
 // Define empty macros when NDEBUG is defined

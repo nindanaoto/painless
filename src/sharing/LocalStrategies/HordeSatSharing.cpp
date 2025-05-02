@@ -7,7 +7,7 @@
 
 #include <chrono>
 
-HordeSatSharing::HordeSatSharing(const std::shared_ptr<ClauseDatabase>& clauseDB,
+HordeSatSharing::HordeSatSharing(const std::shared_ptr<Painless::ClauseDatabase>& clauseDB,
 								 unsigned long literalsPerProducerPerRound,
 								 unsigned int initialLbdLimit,
 								 unsigned int roundsBeforeLbdIncrease,
@@ -44,7 +44,7 @@ HordeSatSharing::HordeSatSharing(const std::shared_ptr<ClauseDatabase>& clauseDB
 HordeSatSharing::~HordeSatSharing() {}
 
 bool
-HordeSatSharing::importClause(const ClauseExchangePtr& clause)
+HordeSatSharing::importClause(const Painless::ClauseExchangePtr& clause)
 {
 	assert(clause->size > 0 && clause->from != -1);
 
@@ -73,7 +73,7 @@ HordeSatSharing::doSharing()
 {
 
 	// Check for global termination condition
-	if (globalEnding)
+	if (Painless::globalEnding)
 		return true;
 
 	// Step 1: Get new clause selection
@@ -123,7 +123,7 @@ HordeSatSharing::doSharing()
 	LOG2("[HordeSat] received cls %ld, shared cls %ld", stats.receivedClauses.load(), stats.sharedClauses);
 
 	// Check for global termination condition again
-	if (globalEnding)
+	if (Painless::globalEnding)
 		return true;
 
 	return false;

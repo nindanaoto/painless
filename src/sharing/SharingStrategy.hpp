@@ -31,7 +31,7 @@ class SharingStrategy : public SharingEntity
 	 *
 	 * @param producers A vector of shared pointers to SharingEntity objects that produce clauses.
 	 * @param consumers A vector of shared pointers to SharingEntity objects that consume clauses.
-	 * @param clauseDB A shared pointer to the ClauseDatabase where exported clauses are stored.
+	 * @param clauseDB A shared pointer to the Painless::ClauseDatabase where exported clauses are stored.
 	 *
 	 * This constructor initializes the SharingStrategy with the given producers, consumers, and
 	 * clause database. It stores weak pointers to the producers and consumers internally since
@@ -41,7 +41,7 @@ class SharingStrategy : public SharingEntity
 	 */
 	SharingStrategy(const std::vector<std::shared_ptr<SharingEntity>>& producers,
 					const std::vector<std::shared_ptr<SharingEntity>>& consumers,
-					const std::shared_ptr<ClauseDatabase>& clauseDB)
+					const std::shared_ptr<Painless::ClauseDatabase>& clauseDB)
 		: SharingEntity(consumers)
 		, m_producers(producers.begin(), producers.end())
 		, m_clauseDB(clauseDB)
@@ -65,7 +65,7 @@ class SharingStrategy : public SharingEntity
 	 * @brief Determines the sleeping time for the sharer.
 	 * @return Number of microseconds to sleep.
 	 */
-	virtual std::chrono::microseconds getSleepingTime() { return std::chrono::microseconds(__globalParameters__.sharingSleep); };
+	virtual std::chrono::microseconds getSleepingTime() { return std::chrono::microseconds(Painless::__globalParameters__.sharingSleep); };
 
 	/**
 	 * @brief Prints the statistics of the strategy.
@@ -133,7 +133,7 @@ class SharingStrategy : public SharingEntity
 	/**
 	 * @brief A SharingStrategy doesn't send a clause to the source client (->from must store the sharingId of its producer)
 	 */
-	bool exportClauseToClient(const ClauseExchangePtr& clause, std::shared_ptr<SharingEntity> client) override
+	bool exportClauseToClient(const Painless::ClauseExchangePtr& clause, std::shared_ptr<SharingEntity> client) override
 	{
 		if (clause->from != client->getSharingId())
 			return client->importClause(clause);
@@ -144,7 +144,7 @@ class SharingStrategy : public SharingEntity
 	/**
 	 * @brief Clause database where exported clauses are stored.
 	 */
-	std::shared_ptr<ClauseDatabase> m_clauseDB;
+	std::shared_ptr<Painless::ClauseDatabase> m_clauseDB;
 
 	/// Sharing statistics.
 	SharingStatistics stats;

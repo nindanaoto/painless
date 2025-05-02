@@ -1,9 +1,10 @@
+#pragma once
+
+namespace Painless {
 /**
  * @file errors.h
  * @brief Error and warning codes for the SAT solver
  */
-
-#pragma once
 
 /** @brief Error code for parsing failures */
 #define PERR_PARSING -1
@@ -25,3 +26,4 @@
 
 /** @brief Warning code for CPU count mismatch in load strategy */
 #define PWARN_LSTRAT_CPU_COUNT 1
+} // namespace Painless

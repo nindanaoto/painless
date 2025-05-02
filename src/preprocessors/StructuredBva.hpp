@@ -7,14 +7,15 @@
 
 #include "preprocessors/PreprocessorInterface.hpp"
 #include "utils/Parsers.hpp"
+namespace Painless {
 
 //===============litQueue.h====================
 
 /// @brief queuePair struct used for the priorityQueue in solve
 typedef struct
 {
-	int lit;
-	unsigned int occurencesCount;
+        int lit;
+        unsigned int occurencesCount;
 } queuePair;
 
 /* Notes from cppreference:
@@ -36,28 +37,28 @@ randomOrder(const queuePair& lhs, const queuePair& rhs);
 /// Functor for the priority queue used in solve()
 struct PairCompare
 {
-	typedef bool (*compareFunc)(const queuePair&, const queuePair&);
+        typedef bool (*compareFunc)(const queuePair&, const queuePair&);
 
-	PairCompare(compareFunc func)
-		: func(func)
-	{
-	}
+        PairCompare(compareFunc func)
+                : func(func)
+        {
+        }
 
-	PairCompare()
-		: func(decreasingOrder)
-	{
-	}
+        PairCompare()
+                : func(decreasingOrder)
+        {
+        }
 
-	bool operator()(const queuePair& lhs, const queuePair& rhs) const { return func(lhs, rhs); }
+        bool operator()(const queuePair& lhs, const queuePair& rhs) const { return func(lhs, rhs); }
 
-	compareFunc func;
+        compareFunc func;
 };
 
 //=============================================
 
 // Occurence lists
 #define REAL_LIT_COUNT(LIT)                                                                                            \
-	((unsigned int)this->litToClause[LIT_IDX(LIT)].size() + this->litCountAdjustement[LIT_IDX(LIT)])
+        ((unsigned int)this->litToClause[LIT_IDX(LIT)].size() + this->litCountAdjustement[LIT_IDX(LIT)])
 
 // Adjacency Matrix
 #define MATRIX_VAR_TO_IDX(LIT) (LIT - 1)
@@ -67,18 +68,18 @@ struct PairCompare
 /// Tie-Breaking Heuristics
 enum class SBVATieBreak
 {
-	NONE = 1,
-	THREEHOPS = 2,
-	MOSTOCCUR = 3,
-	LEASTOCCUR = 4,
-	RANDOM = 5,
+        NONE = 1,
+        THREEHOPS = 2,
+        MOSTOCCUR = 3,
+        LEASTOCCUR = 4,
+        RANDOM = 5,
 };
 
 /* Do the same as isClauseDeleted ?*/
 struct ProofClause
 {
-	std::vector<int> lits;
-	bool isAddition;
+        std::vector<int> lits;
+        bool isAddition;
 };
 
 /**
@@ -93,219 +94,222 @@ struct ProofClause
 class StructuredBVA : public PreprocessorInterface
 {
   public:
-	/// Constructor.
-	StructuredBVA(int _id, unsigned long maxReplacements, bool shuffleTies);
+        /// Constructor.
+        StructuredBVA(int _id, unsigned long maxReplacements, bool shuffleTies);
 
-	/// Destructor.
-	~StructuredBVA();
+        /// Destructor.
+        ~StructuredBVA();
 
-	unsigned int getVariablesCount() override;
+        unsigned int getVariablesCount() override;
 
-	void setSolverInterrupt() override;
+        void setSolverInterrupt() override;
 
-	void unsetSolverInterrupt() override;
+        void unsetSolverInterrupt() override;
 
-	SatResult solve(const std::vector<int>& cube = {}) override;
+        SatResult solve(const std::vector<int>& cube = {}) override;
 
-	void addInitialClauses(const std::vector<simpleClause>& clauses, unsigned int nbVariables) override;
+        void addInitialClauses(const std::vector<Painless::ClauseUtils::simpleClause>& clauses, unsigned int nbVariables) override;
 
-	void loadFormula(const char* filename) override;
+        void loadFormula(const char* filename) override;
 
-	void printStatistics() override;
+        void printStatistics() override;
 
-	std::vector<simpleClause> getSimplifiedFormula() override;
+        std::vector<Painless::ClauseUtils::simpleClause> getSimplifiedFormula() override;
 
-	PreprocessorStats getPreprocessorStatistics()
-	{
-		return { (uint)this->clauses.size() - this->adjacencyDeleted, this->adjacencyDeleted, 0, this->replacementsCount, 0 };
-	}
+        PreprocessorStats getPreprocessorStatistics()
+        {
+                return { (uint)this->clauses.size() - this->adjacencyDeleted, this->adjacencyDeleted, 0, this->replacementsCount, 0 };
+        }
 
-	int getDivisionVariable() { return 0; }
+        int getDivisionVariable() { return 0; }
 
-	void addClause(ClauseExchangePtr clause) { return; }
+        void addClause(Painless::ClauseExchangePtr clause) { return; }
 
-	void addClauses(const std::vector<ClauseExchangePtr>& clauses) { return; }
+        void addClauses(const std::vector<Painless::ClauseExchangePtr>& clauses) { return; }
 
-	/**
-	 * @brief Diversify the preprocessor's behavior.
-	 * @param getSeed Function to get a random seed (default uses solver ID).
-	 */
-	void diversify(const SeedGenerator& getSeed = [](SolverInterface* s) { return s->getSolverId(); });
+        /**
+         * @brief Diversify the preprocessor's behavior.
+         * @param getSeed Function to get a random seed (default uses solver ID).
+         */
+        void diversify(const SeedGenerator& getSeed = [](SolverInterface* s) { return s->getSolverId(); });
 
-	void updateAdjacencyMatrix(int var);
+        void updateAdjacencyMatrix(int var);
 
-	unsigned int getThreeHopHeuristic(int lit1, int lit2);
+        unsigned int getThreeHopHeuristic(int lit1, int lit2);
 
-	/* returns the least occuring literal in a clause c\var */
-	int leastFrequentLiteral(simpleClause& clause, int lit);
+        /* returns the least occuring literal in a clause c\var */
+        int leastFrequentLiteral(Painless::ClauseUtils::simpleClause& clause, int lit);
 
-	void setTieBreakHeuristic(SBVATieBreak tieBreak);
+        void setTieBreakHeuristic(SBVATieBreak tieBreak);
 
-	void releaseMemory()
-	{
-		this->tempTieHeuristicCache.clear();
-		this->litCountAdjustement.clear();
-		this->adjacencyMatrix.clear();
-		this->isClauseDeleted.clear();
-		this->litToClause.clear();
-		this->clauses.clear();
-		this->proof.clear();
+        void releaseMemory()
+        {
+                this->tempTieHeuristicCache.clear();
+                this->litCountAdjustement.clear();
+                this->adjacencyMatrix.clear();
+                this->isClauseDeleted.clear();
+                this->litToClause.clear();
+                this->clauses.clear();
+                this->proof.clear();
 
-		this->litCountAdjustement.shrink_to_fit();
-		this->adjacencyMatrix.shrink_to_fit();
-		this->isClauseDeleted.shrink_to_fit();
-		this->litToClause.shrink_to_fit();
-		this->clauses.shrink_to_fit();
-		this->proof.shrink_to_fit();
-	}
+                this->litCountAdjustement.shrink_to_fit();
+                this->adjacencyMatrix.shrink_to_fit();
+                this->isClauseDeleted.shrink_to_fit();
+                this->litToClause.shrink_to_fit();
+                this->clauses.shrink_to_fit();
+                this->proof.shrink_to_fit();
+        }
 
-	/**
-	 * @brief Restore the model by removing added clauses.
-	 * @param model The model to be restored.
-	 */
-	void restoreModel(std::vector<int>& model) override { model.resize(this->varCount - this->replacementsCount); }
+        /**
+         * @brief Restore the model by removing added clauses.
+         * @param model The model to be restored.
+         */
+        void restoreModel(std::vector<int>& model) override { model.resize(this->varCount - this->replacementsCount); }
 
-	/* TODO factorize using a macro */
-	inline int threeHopTieBreak(const std::vector<int>& ties, const int currentLit)
-	{
-		int lmax = 0;
-		/* How much currentLit.lit is connected to ties[i] */
-		unsigned int maxHeuristicVal = 0;
-		for (int tie : ties) {
-			unsigned int temp = this->getThreeHopHeuristic(currentLit, tie);
-			if (temp > maxHeuristicVal) {
-				maxHeuristicVal = temp;
-				lmax = tie;
-			}
-		}
-		return lmax;
-	}
+        /* TODO factorize using a macro */
+        inline int threeHopTieBreak(const std::vector<int>& ties, const int currentLit)
+        {
+                int lmax = 0;
+                /* How much currentLit.lit is connected to ties[i] */
+                unsigned int maxHeuristicVal = 0;
+                for (int tie : ties) {
+                        unsigned int temp = this->getThreeHopHeuristic(currentLit, tie);
+                        if (temp > maxHeuristicVal) {
+                                maxHeuristicVal = temp;
+                                lmax = tie;
+                        }
+                }
+                return lmax;
+        }
 
-	inline int mostOccurTieBreak(const std::vector<int>& ties, const int currentLit)
-	{
-		int lmax = 0;
-		/* How much currentLit.lit is connected to ties[i] */
-		unsigned int maxHeuristicVal = 0;
-		for (int tie : ties) {
-			unsigned int temp = REAL_LIT_COUNT(tie);
-			if (temp > maxHeuristicVal) {
-				maxHeuristicVal = temp;
-				lmax = tie;
-			}
-		}
-		return lmax;
-	}
+        inline int mostOccurTieBreak(const std::vector<int>& ties, const int currentLit)
+        {
+                int lmax = 0;
+                /* How much currentLit.lit is connected to ties[i] */
+                unsigned int maxHeuristicVal = 0;
+                for (int tie : ties) {
+                        unsigned int temp = REAL_LIT_COUNT(tie);
+                        if (temp > maxHeuristicVal) {
+                                maxHeuristicVal = temp;
+                                lmax = tie;
+                        }
+                }
+                return lmax;
+        }
 
-	inline int leastOccurTieBreak(const std::vector<int>& ties, const int currentLit)
-	{
-		int lmax = 0;
-		/* How much currentLit.lit is connected to ties[i] */
-		unsigned int maxHeuristicVal = UINT32_MAX;
-		for (int tie : ties) {
-			unsigned int temp = REAL_LIT_COUNT(tie);
-			if (temp < maxHeuristicVal) {
-				maxHeuristicVal = temp;
-				lmax = tie;
-			}
-		}
-		return lmax;
-	}
+        inline int leastOccurTieBreak(const std::vector<int>& ties, const int currentLit)
+        {
+                int lmax = 0;
+                /* How much currentLit.lit is connected to ties[i] */
+                unsigned int maxHeuristicVal = UINT32_MAX;
+                for (int tie : ties) {
+                        unsigned int temp = REAL_LIT_COUNT(tie);
+                        if (temp < maxHeuristicVal) {
+                                maxHeuristicVal = temp;
+                                lmax = tie;
+                        }
+                }
+                return lmax;
+        }
 
-	inline int randomTieBreak(const std::vector<int>& ties, const int currentLit)
-	{
-		std::srand(currentLit);
-		return ties[std::rand() % ties.size()];
-	}
+        inline int randomTieBreak(const std::vector<int>& ties, const int currentLit)
+        {
+                std::srand(currentLit);
+                return ties[std::rand() % ties.size()];
+        }
 
-	std::vector<int> getModel() override
-	{
-		LOGWARN("BVA cannot solve a formula");
-		return {};
-	}
-
-  private:
-	void printParameters();
+        std::vector<int> getModel() override
+        {
+                LOGWARN("BVA cannot solve a formula");
+                return {};
+        }
 
   private:
-	std::atomic<bool> stopPreprocessing;
+        void printParameters();
 
-	/// @brief Vector of clauses
-	std::vector<simpleClause> clauses;
+  private:
+        std::atomic<bool> stopPreprocessing;
 
-	/// @brief Instead of using another struct for clauses
-	std::vector<bool> isClauseDeleted;
+        /// @brief Vector of clauses
+        std::vector<Painless::ClauseUtils::simpleClause> clauses;
 
-	/// @brief Occurence list using the literal as an index for a list of clause indexes in this->clauses
-	std::vector<std::vector<unsigned int>> litToClause;
+        /// @brief Instead of using another struct for clauses
+        std::vector<bool> isClauseDeleted;
 
-	/// @brief To keep track of the real number of occurences during the algorithm
-	std::vector<int> litCountAdjustement;
+        /// @brief Occurence list using the literal as an index for a list of clause indexes in this->clauses
+        std::vector<std::vector<unsigned int>> litToClause;
 
-	/// @brief For the eigenVector size
-	unsigned int adjacencyMatrixWidth;
+        /// @brief To keep track of the real number of occurences during the algorithm
+        std::vector<int> litCountAdjustement;
 
-	/// @brief Adjacency matrix used to compute 3HOP tie breaking heuristic
-	std::vector<Eigen::SparseVector<int>> adjacencyMatrix;
+        /// @brief For the eigenVector size
+        unsigned int adjacencyMatrixWidth;
 
-	/// @brief Cache used for not recomputing the heuristic each time
-	std::map<int, int> tempTieHeuristicCache;
+        /// @brief Adjacency matrix used to compute 3HOP tie breaking heuristic
+        std::vector<Eigen::SparseVector<int>> adjacencyMatrix;
 
-	/// @brief Stores the DRAT proof if enabled
-	std::vector<ProofClause> proof;
+        /// @brief Cache used for not recomputing the heuristic each time
+        std::map<int, int> tempTieHeuristicCache;
 
-	// Options
-	//-------
-	bool generateProof;
+        /// @brief Stores the DRAT proof if enabled
+        std::vector<ProofClause> proof;
 
-	bool preserveModelCount;
+        // Options
+        //-------
+        bool generateProof;
 
-	bool shuffleTies;
+        bool preserveModelCount;
 
-	PairCompare pairCompare;
+        bool shuffleTies;
 
-	SBVATieBreak tieBreakHeuristic;
+        PairCompare pairCompare;
 
-	unsigned int maxReplacements;
+        SBVATieBreak tieBreakHeuristic;
 
-	std::function<int(const std::vector<int>&, const int)> breakTie;
+        unsigned int maxReplacements;
 
-	// Stats
-	//------
-	unsigned int varCount;
+        std::function<int(const std::vector<int>&, const int)> breakTie;
 
-	unsigned int adjacencyDeleted;
+        // Stats
+        //------
+        unsigned int varCount;
 
-	unsigned int replacementsCount;
+        unsigned int adjacencyDeleted;
 
-	unsigned int originalClauseCount;
+        unsigned int replacementsCount;
 
-	// Helpers
-	//--------
+        unsigned int originalClauseCount;
+
+        // Helpers
+        //--------
 };
 
+} // namespace Painless
+namespace Painless {
 namespace Parsers {
+
 
 /**
  * @brief A filter for Structured BVA (Binary Variable Addition)
  *
  * This class implements a clause filter for Structured BVA operations.
- * It inherits from Parsers::ClauseProcessor.
+ * It inherits from Painless::Parsers::ClauseProcessor.
  */
-class SBVAInit : public ClauseProcessor
+class SBVAInit : public Painless::Parsers::ClauseProcessor
 {
   public:
-	SBVAInit(std::vector<std::vector<unsigned int>>& litToClause, std::vector<bool>& isClauseDeleted)
-		: m_litToClause(litToClause)
-		, m_isClauseDeleted(isClauseDeleted)
-	{
-	}
+        SBVAInit(std::vector<std::vector<unsigned int>>& litToClause, std::vector<bool>& isClauseDeleted)
+                : m_litToClause(litToClause)
+                , m_isClauseDeleted(isClauseDeleted)
+        {
+        }
 
-	bool initMembers(unsigned int varCount, unsigned int clauseCount);
-	bool operator()(simpleClause& clause) override;
+        bool initMembers(unsigned int varCount, unsigned int clauseCount);
+        bool operator()(Painless::ClauseUtils::simpleClause& clause) override;
 
   private:
-	std::vector<std::vector<unsigned int>>& m_litToClause;
-	std::vector<bool>& m_isClauseDeleted;
+        std::vector<std::vector<unsigned int>>& m_litToClause;
+        std::vector<bool>& m_isClauseDeleted;
 };
-
-}
+} // namespace Parsers
+} // namespace Painless

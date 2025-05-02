@@ -1,11 +1,14 @@
 #pragma once
 
 #include "solvers/SolverInterface.hpp"
+#include "working/WorkingStrategy.hpp"
 
 #include <atomic>
 #include <condition_variable>
 #include <mutex>
 #include <vector>
+
+namespace Painless {
 
 /// Is it the end of the search
 extern std::atomic<bool> globalEnding;
@@ -16,11 +19,16 @@ extern std::mutex mutexGlobalEnd;
 /// @brief Cond to wait on timeout or wakeup on globalEnding
 extern std::condition_variable condGlobalEnd;
 
+/// Working strategy
+extern WorkingStrategy* working;
+
 /// Final result
-extern std::atomic<SatResult> finalResult;
+extern std::atomic<Painless::SatResult> finalResult;
 
 /// Model for SAT instances
 extern std::vector<int> finalModel;
 
 /// To check if painless is using distributed mode
 extern std::atomic<bool> dist;
+
+} // namespace Painless

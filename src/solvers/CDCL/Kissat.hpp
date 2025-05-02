@@ -18,116 +18,118 @@ extern "C"
 {
 #include "kissat/src/kissat.h"
 }
+namespace Painless {
 
 /// Instance of a Kissat solver
 /// @ingroup solving_cdcl
-class Kissat : public SolverCdclInterface
+class Kissat : public Painless::SolverCdclInterface
 {
   public:
-	/// Constructor.
-	Kissat(int id, const std::shared_ptr<ClauseDatabase>& clauseDB);
+        /// Constructor.
+        Kissat(int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB);
 
-	/// Destructor.
-	virtual ~Kissat();
+        /// Destructor.
+        virtual ~Kissat();
 
-	/* Execution */
+        /* Execution */
 
-	/// Solve the formula with a given cube.
-	SatResult solve(const std::vector<int>& cube) override;
+        /// Solve the formula with a given cube.
+        SatResult solve(const std::vector<int>& cube) override;
 
-	/// Interrupt resolution, solving cannot continue until interrupt is unset.
-	void setSolverInterrupt() override;
+        /// Interrupt resolution, solving cannot continue until interrupt is unset.
+        void setSolverInterrupt() override;
 
-	/// Remove the SAT solving interrupt request.
-	void unsetSolverInterrupt() override;
+        /// Remove the SAT solving interrupt request.
+        void unsetSolverInterrupt() override;
 
-	/// @brief Initializes the map @ref KissatOptions with the default configuration.
-	void initKissatOptions();
+        /// @brief Initializes the map @ref KissatOptions with the default configuration.
+        void initKissatOptions();
 
-	/// Native diversification.
-	void diversify(const SeedGenerator& getSeed) override;
+        /// Native diversification.
+        void diversify(const SeedGenerator& getSeed) override;
 
-	/* Clause Management */
+        /* Clause Management */
 
-	/// Load formula from a given dimacs file, return false if failed.
-	void loadFormula(const char* filename) override;
+        /// Load formula from a given dimacs file, return false if failed.
+        void loadFormula(const char* filename) override;
 
-	/// Add a list of initial clauses to the formula.
-	void addInitialClauses(const std::vector<simpleClause>& clauses, unsigned int nbVars) override;
+        /// Add a list of initial clauses to the formula.
+        void addInitialClauses(const std::vector<Painless::ClauseUtils::simpleClause>& clauses, unsigned int nbVars) override;
 
-	/// Add a permanent clause to the formula.
-	void addClause(ClauseExchangePtr clause) override;
+        /// Add a permanent clause to the formula.
+        void addClause(Painless::ClauseExchangePtr clause) override;
 
-	/// Add a list of permanent clauses to the formula.
-	void addClauses(const std::vector<ClauseExchangePtr>& clauses) override;
+        /// Add a list of permanent clauses to the formula.
+        void addClauses(const std::vector<Painless::ClauseExchangePtr>& clauses) override;
 
-	/* Sharing */
+        /* Sharing */
 
-	/// Add a learned clause to the formula.
-	bool importClause(const ClauseExchangePtr& clause) override;
+        /// Add a learned clause to the formula.
+        bool importClause(const Painless::ClauseExchangePtr& clause) override;
 
-	/// Add a list of learned clauses to the formula.
-	void importClauses(const std::vector<ClauseExchangePtr>& clauses) override;
+        /// Add a list of learned clauses to the formula.
+        void importClauses(const std::vector<Painless::ClauseExchangePtr>& clauses) override;
 
-	/* Variable Management */
+        /* Variable Management */
 
-	/// Get the number of variables of the current resolution.
-	unsigned int getVariablesCount() override;
+        /// Get the number of variables of the current resolution.
+        unsigned int getVariablesCount() override;
 
-	/// Get a variable suitable for search splitting.
-	int getDivisionVariable() override;
+        /// Get a variable suitable for search splitting.
+        int getDivisionVariable() override;
 
-	/// Set initial phase for a given variable.
-	void setPhase(const unsigned int var, const bool phase) override;
+        /// Set initial phase for a given variable.
+        void setPhase(const unsigned int var, const bool phase) override;
 
-	/// Bump activity of a given variable.
-	void bumpVariableActivity(const int var, const int times) override;
+        /// Bump activity of a given variable.
+        void bumpVariableActivity(const int var, const int times) override;
 
-	/* Statistics And More */
+        /* Statistics And More */
 
-	/// Get solver statistics.
-	void printStatistics() override;
+        /// Get solver statistics.
+        void printStatistics() override;
 
-	void printWinningLog() override;
+        void printWinningLog() override;
 
-	std::vector<int> getFinalAnalysis() override;
+        std::vector<int> getFinalAnalysis() override;
 
-	std::vector<int> getSatAssumptions() override;
+        std::vector<int> getSatAssumptions() override;
 
-	/// Return the model in case of SAT result.
-	std::vector<int> getModel() override;
+        /// Return the model in case of SAT result.
+        std::vector<int> getModel() override;
 
-	/// @brief A map mapping a kissat option name to its value.
-	std::unordered_map<std::string, int> kissatOptions;
+        /// @brief A map mapping a kissat option name to its value.
+        std::unordered_map<std::string, int> kissatOptions;
 
-	/// Set family from working strategy
-	void setFamily(KissatFamily family) { this->family = family; };
+        /// Set family from working strategy
+        void setFamily(Painless::KissatFamily family) { this->family = family; };
 
 
   protected:
-	/// Compute kissat family for diversification
-	void computeFamily();
-	
+        /// Compute kissat family for diversification
+        void computeFamily(); // Uses Painless::KissatFamily internally
+        
   protected:
-	/// Pointer to a Kissat solver.
-	kissat* solver;
+        /// Pointer to a Kissat solver.
+        kissat* solver;
 
-	/// Buffer used to add permanent clauses.
-	ClauseBuffer clausesToAdd;
+        /// Buffer used to add permanent clauses.
+        Painless::ClauseBuffer clausesToAdd;
 
-	/// Used to stop or continue the resolution.
-	std::atomic<bool> stopSolver;
+        /// Used to stop or continue the resolution.
+        std::atomic<bool> stopSolver;
 
-	KissatFamily family;
+        Painless::KissatFamily family;
 
-	unsigned int originalVars;
+        unsigned int originalVars;
 
-	/// Termination callback.
-	friend int kissatTerminate(void* solverPtr);
+        /// Termination callback.
+        friend int kissatTerminate(void* solverPtr);
 
-	/// Callback to export/import clauses used by real kissat.
-	/* Decided to not use pointers to move because of c++ stl (cannot move an array into a vector, sharedPtr
-	 * destruction) */
-	friend char kissatImportClause(void*, kissat*);
-	friend char kissatExportClause(void*, kissat*);
+        /// Callback to export/import clauses used by real kissat.
+        /* Decided to not use pointers to move because of c++ stl (cannot move an array into a vector, sharedPtr
+         * destruction) */
+        friend char kissatImportClause(void*, kissat*);
+        friend char kissatExportClause(void*, kissat*);
 };
+} // namespace Painless

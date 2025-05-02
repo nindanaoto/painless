@@ -12,13 +12,14 @@
 #include <mutex>
 #include <unordered_map>
 
+namespace Painless {
 enum class PRSGroups
 {
-	SAT = 0,
-	UNSAT = 1,
-	MAPLE = 2,
-	LGL = 3,
-	DEFAULT = 4
+        SAT = 0,
+        UNSAT = 1,
+        MAPLE = 2,
+        LGL = 3,
+        DEFAULT = 4
 };
 
 /**
@@ -34,46 +35,47 @@ enum class PRSGroups
 class PortfolioPRS : public WorkingStrategy
 {
   public:
-	PortfolioPRS();
+        PortfolioPRS();
 
-	~PortfolioPRS();
+        ~PortfolioPRS();
 
-	void solve(const std::vector<int>& cube) override;
+        void solve(const std::vector<int>& cube) override;
 
-	void join(WorkingStrategy* strat, SatResult res, const std::vector<int>& model) override;
+        void join(WorkingStrategy* strat, SatResult res, const std::vector<int>& model) override;
 
-	void setSolverInterrupt() override;
+        void setSolverInterrupt() override;
 
-	void unsetSolverInterrupt() override;
+        void unsetSolverInterrupt() override;
 
-	void waitInterrupt() override;
+        void waitInterrupt() override;
 
   protected:
-	void restoreModelDist(std::vector<int>& model);
+        void restoreModelDist(std::vector<int>& model);
 
-	void computeNodeGroup(int worldSize, int myRank);
+        void computeNodeGroup(int worldSize, int myRank);
 
-	std::atomic<bool> strategyEnding;
+        std::atomic<bool> strategyEnding;
 
-	// PRS Portfolio
-	// -------------
-	PRSGroups nodeGroup; /* each group share clauses only between themselves */
-	std::string solversPortfolio;
-	std::unordered_map<PRSGroups, uint> sizePerGroup;
-	unsigned rankInMyGroup;
-	int right_neighbor;
-	int left_neighbor;
+        // PRS Portfolio
+        // -------------
+        PRSGroups nodeGroup; /* each group share clauses only between themselves */
+        std::string solversPortfolio;
+        std::unordered_map<PRSGroups, uint> sizePerGroup;
+        unsigned rankInMyGroup;
+        int right_neighbor;
+        int left_neighbor;
 
-	// Workers
-	//--------
-	std::vector<std::shared_ptr<PreprocessorInterface>> preprocessors; /* kept for model restoration*/
-	std::mutex preprocLock;
-	std::condition_variable preprocSignal;
+        // Workers
+        //--------
+        std::vector<std::shared_ptr<PreprocessorInterface>> preprocessors; /* kept for model restoration*/
+        std::mutex preprocLock;
+        std::condition_variable preprocSignal;
 
-	// Sharing
-	//--------
+        // Sharing
+        //--------
 
-	/* Use weak_ptr instead of shared_ptr ? */
-	std::vector<std::shared_ptr<SharingStrategy>> strategies;
-	std::vector<std::unique_ptr<Sharer>> sharers;
+        /* Use weak_ptr instead of shared_ptr ? */
+        std::vector<std::shared_ptr<SharingStrategy>> strategies;
+        std::vector<std::unique_ptr<Sharer>> sharers;
 };
+} // namespace Painless

@@ -9,6 +9,7 @@
  * @brief Different Utilities
  * @{
 */
+namespace Painless {
 
 // Define the macro for parameters
 // name, type, parsed_name, default, description
@@ -25,8 +26,8 @@
     \
     CATEGORY("Portfolio options") \
     PARAM(solver, std::string, "solver", "kkkcl", "Portfolio of solvers") \
-	PARAM(simple, bool, "simple", false, "Use PortfolioSimple") \
-	PARAM(enableMallob, bool, "mallob", false, "Emulate Mallob's Sharing Strategy In PortfolioSimple") \
+        PARAM(simple, bool, "simple", false, "Use PortfolioSimple") \
+        PARAM(enableMallob, bool, "mallob", false, "Emulate Mallob's Sharing Strategy In PortfolioSimple") \
     \
     CATEGORY("Solving options") \
     PARAM(maxDivNoise, int, "max-div-noise", 1000, "Maximum noise for random engine in diversification") \
@@ -35,7 +36,7 @@
     PARAM(localSearchFlips, int, "ls-flips", -1, "Number of local search flips") \
     \
     CATEGORY("Sharing options") \
-    PARAM(maxClauseSize, int, "max-cls-size", 60, "Maximum size of clauses to be added in ClauseDatabase") \
+    PARAM(maxClauseSize, int, "max-cls-size", 60, "Maximum size of clauses to be added in Painless::ClauseDatabase") \
     PARAM(initSleep, int, "init-sleep", 10'000, "Initial sleep time in microseconds for a Sharer") \
     PARAM(sharingStrategy, int, "shr-strat", 1, "Strategy selection for local sharing (ongoing re-organization)") \
     PARAM(globalSharingStrategy, int, "gshr-strat", 1, "Global sharing strategy") \
@@ -93,6 +94,7 @@ struct Parameters {
 };
 
 extern Parameters __globalParameters__;
+} // namespace Painless
 /**
  * @} // end of utils group
  */

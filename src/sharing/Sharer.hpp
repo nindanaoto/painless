@@ -76,7 +76,7 @@ class Sharer
 
   protected:
     /// Pointer to the thread in charge of sharing.
-    Thread* sharer;
+    Painless::Thread* sharer;
 
     /// @brief Heuristic for strategy implementation comparison (TODO: ifndef NSTAT for such probes)
     double totalSharingTime = 0;

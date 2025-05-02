@@ -20,7 +20,7 @@ class GenericGlobalSharing : public GlobalSharingStrategy
 	 * @param subscribers Vector of MPI ranks to send clauses to.
 	 * @param bufferSize Size of the buffer to send to subscribers
 	 */
-	GenericGlobalSharing(const std::shared_ptr<ClauseDatabase>& clauseDB,
+	GenericGlobalSharing(const std::shared_ptr<Painless::ClauseDatabase>& clauseDB,
 						 const std::vector<int>& subscriptions,
 						 const std::vector<int>& subscribers,
 						 unsigned long bufferSize);
@@ -49,7 +49,7 @@ class GenericGlobalSharing : public GlobalSharingStrategy
 	 * @param res The result of the SAT solving process.
 	 * @param model The satisfying assignment, if any.
 	 */
-	void joinProcess(int winnerRank, SatResult res, const std::vector<int>& model) override;
+	void joinProcess(int winnerRank, Painless::SatResult res, const std::vector<int>& model) override;
 
   protected:
 	/**
