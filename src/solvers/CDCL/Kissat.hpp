@@ -102,12 +102,12 @@ class Kissat : public SolverCdclInterface
         std::unordered_map<std::string, int> kissatOptions;
 
         /// Set family from working strategy
-        void setFamily(KissatFamily family) { this->family = family; };
+        void setFamily(Painless::KissatFamily family) { this->family = family; };
 
 
   protected:
         /// Compute kissat family for diversification
-        void computeFamily();
+        void computeFamily(); // Uses Painless::KissatFamily internally
         
   protected:
         /// Pointer to a Kissat solver.
@@ -119,7 +119,7 @@ class Kissat : public SolverCdclInterface
         /// Used to stop or continue the resolution.
         std::atomic<bool> stopSolver;
 
-        KissatFamily family;
+        Painless::KissatFamily family;
 
         unsigned int originalVars;
 

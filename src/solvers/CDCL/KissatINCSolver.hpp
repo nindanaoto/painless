@@ -1,4 +1,5 @@
 #pragma once
+#include "KissatFamily.hpp"
 
 #include "containers/ClauseBuffer.hpp"
 #include "containers/ClauseDatabase.hpp"
@@ -73,7 +74,7 @@ class KissatINCSolver : public SolverCdclInterface
 
         void printWinningLog() override;
 
-        void setFamily(KissatFamily family) { this->family = family; };
+        void setFamily(Painless::KissatFamily family) { this->family = family; };
 
         /// Return the model in case of SAT result.
         std::vector<int> getModel();
@@ -97,7 +98,7 @@ class KissatINCSolver : public SolverCdclInterface
         /// Pointer to a KissatINCSolver solver.
         kissat_mab* solver;
         
-        KissatFamily family;
+        Painless::KissatFamily family;
 
         /// Buffer used to add permanent clauses.
         Painless::ClauseBuffer clausesToAdd;

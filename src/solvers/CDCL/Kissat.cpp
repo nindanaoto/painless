@@ -75,7 +75,7 @@ Kissat::Kissat(int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB
 {
         solver = kissat_init();
 
-        family = KissatFamily::MIXED_SWITCH;
+        family = Painless::KissatFamily::MIXED_SWITCH;
 
         // kissat_set_terminate(solver, this, kissatTerminate);
         kissat_set_export_call(solver, kissatExportClause);
@@ -447,7 +447,7 @@ Kissat::diversify(const SeedGenerator& getSeed)
 
         switch (this->family) {
                 // 1/3 Focus on UNSAT
-                case KissatFamily::UNSAT_FOCUSED:
+                case Painless::KissatFamily::UNSAT_FOCUSED:
                         kissat_set_configuration(solver, "unsat");
                         kissatOptions.at("restartint") = 1;
                         kissatOptions.at("chrono") = 0;
@@ -461,7 +461,7 @@ Kissat::diversify(const SeedGenerator& getSeed)
                         break;
 
                 // Focus on SAT ; target at 2 to enable target phase
-                case KissatFamily::SAT_STABLE:
+                case Painless::KissatFamily::SAT_STABLE:
                         kissat_set_configuration(solver, "sat");
 
                         // Some solvers (~50%) do initial walk and walk further in rephasing ( benifical for SAT formulae)
@@ -541,5 +541,5 @@ Kissat::printWinningLog()
 void
 Kissat::computeFamily()
 {
-        this->family = static_cast<KissatFamily>((this->getSolverTypeId()) % 3);
+        this->family = static_cast<Painless::KissatFamily>((this->getSolverTypeId()) % 3);
 }} // namespace Painless

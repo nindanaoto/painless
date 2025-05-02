@@ -148,11 +148,11 @@ prs_sync:
                         SolverFactory::createSolvers(threadsPerProc, 'd', this->solversPortfolio, cdclSolvers, localSolvers);
                         for (auto& kissat : cdclSolvers) {
                                 if (kissat->getSolverType() == SolverCdclType::KISSATINC) {
-                                        static_cast<KissatINCSolver*>(kissat.get())->setFamily(KissatFamily::SAT_STABLE);
+                                        static_cast<KissatINCSolver*>(kissat.get())->setFamily(Painless::KissatFamily::SAT_STABLE);
                                 } else if (kissat->getSolverType() == SolverCdclType::KISSAT) {
-                                        static_cast<Kissat*>(kissat.get())->setFamily(KissatFamily::SAT_STABLE);
+                                        static_cast<Kissat*>(kissat.get())->setFamily(Painless::KissatFamily::SAT_STABLE);
                                 } else if (kissat->getSolverType() == SolverCdclType::KISSATMAB) {
-                                        static_cast<KissatMABSolver*>(kissat.get())->setFamily(KissatFamily::SAT_STABLE);
+                                        static_cast<KissatMABSolver*>(kissat.get())->setFamily(Painless::KissatFamily::SAT_STABLE);
                                 }
                         }
                         break;
@@ -161,11 +161,11 @@ prs_sync:
                         SolverFactory::createSolvers(threadsPerProc, 'd', this->solversPortfolio, cdclSolvers, localSolvers);
                         for (auto& kissat : cdclSolvers) {
                                 if (kissat->getSolverType() == SolverCdclType::KISSATINC) {
-                                        static_cast<KissatINCSolver*>(kissat.get())->setFamily(KissatFamily::UNSAT_FOCUSED);
+                                        static_cast<KissatINCSolver*>(kissat.get())->setFamily(Painless::KissatFamily::UNSAT_FOCUSED);
                                 } else if (kissat->getSolverType() == SolverCdclType::KISSAT) {
-                                        static_cast<Kissat*>(kissat.get())->setFamily(KissatFamily::UNSAT_FOCUSED);
+                                        static_cast<Kissat*>(kissat.get())->setFamily(Painless::KissatFamily::UNSAT_FOCUSED);
                                 } else if (kissat->getSolverType() == SolverCdclType::KISSATMAB) {
-                                        static_cast<KissatMABSolver*>(kissat.get())->setFamily(KissatFamily::UNSAT_FOCUSED);
+                                        static_cast<KissatMABSolver*>(kissat.get())->setFamily(Painless::KissatFamily::UNSAT_FOCUSED);
                                 }
                         }
                         break;
@@ -174,11 +174,11 @@ prs_sync:
                         SolverFactory::createSolvers(threadsPerProc, 'd', this->solversPortfolio, cdclSolvers, localSolvers);
                         for (auto& kissat : cdclSolvers) {
                                 if (kissat->getSolverType() == SolverCdclType::KISSATINC) {
-                                        static_cast<KissatINCSolver*>(kissat.get())->setFamily(KissatFamily::MIXED_SWITCH);
+                                        static_cast<KissatINCSolver*>(kissat.get())->setFamily(Painless::KissatFamily::MIXED_SWITCH);
                                 } else if (kissat->getSolverType() == SolverCdclType::KISSAT) {
-                                        static_cast<Kissat*>(kissat.get())->setFamily(KissatFamily::MIXED_SWITCH);
+                                        static_cast<Kissat*>(kissat.get())->setFamily(Painless::KissatFamily::MIXED_SWITCH);
                                 } else if (kissat->getSolverType() == SolverCdclType::KISSATMAB) {
-                                        static_cast<KissatMABSolver*>(kissat.get())->setFamily(KissatFamily::MIXED_SWITCH);
+                                        static_cast<KissatMABSolver*>(kissat.get())->setFamily(Painless::KissatFamily::MIXED_SWITCH);
                                 }
                         }
                         break;

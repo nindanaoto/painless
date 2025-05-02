@@ -1,4 +1,5 @@
 #pragma once
+#include "KissatFamily.hpp"
 
 #include "containers/ClauseBuffer.hpp"
 #include "containers/ClauseDatabase.hpp"
@@ -74,7 +75,7 @@ class KissatMABSolver : public SolverCdclInterface
         void printWinningLog() override;
 
         /// Set family from working strategy
-        void setFamily(KissatFamily family) { this->family = family; };
+        void setFamily(Painless::KissatFamily family) { this->family = family; };
 
         void computeFamily();
 
@@ -114,7 +115,7 @@ class KissatMABSolver : public SolverCdclInterface
         /// Used to stop or continue the resolution.
         std::atomic<bool> stopSolver;
 
-        KissatFamily family;
+        Painless::KissatFamily family;
 
         /// Callback to export/import clauses used by real kissat.
         /* Decided to not use pointers to move because of c++ stl (cannot move an array into a vector,
