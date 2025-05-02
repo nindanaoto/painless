@@ -141,7 +141,7 @@ SolverFactory::createSolver(char type, char importDBType, std::shared_ptr<Solver
 
 #ifdef CADICAL_
                 case 'c':
-                        createdSolver = std::make_shared<Cadical>(id, importDB);
+                        createdSolver = std::make_shared<Painless::Cadical>(id, importDB);
                         return SolverAlgorithmType::CDCL;
                         // break;
 #endif

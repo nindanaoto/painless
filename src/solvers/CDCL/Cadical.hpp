@@ -15,6 +15,7 @@
 
 // Cadical includes
 #include "cadical/src/cadical.hpp"
+namespace Painless {
 
 /*---------------------Main Class----------------------*/
 
@@ -163,4 +164,4 @@ class Cadical
          * @return true if the base solver should terminate, false otherwise
          */
         bool terminate() { return this->stopSolver; }
-};
+};} // namespace Painless
