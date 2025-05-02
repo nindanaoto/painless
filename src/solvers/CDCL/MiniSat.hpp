@@ -15,6 +15,9 @@ template<class T, class _Size>
 class vec;
 }
 
+namespace Painless {
+
+
 /// Instance of a Minisat solver
 /// @ingroup solving_cdcl
 class MiniSat : public SolverCdclInterface
@@ -98,3 +101,4 @@ class MiniSat : public SolverCdclInterface
         friend Minisat::Lit minisatImportUnit(void*);
         friend bool minisatImportClause(void*, Minisat::vec<Minisat::Lit, int>&);
 };
+} // namespace Painless

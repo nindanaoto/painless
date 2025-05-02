@@ -113,7 +113,7 @@ SolverFactory::createSolver(char type, char importDBType, std::shared_ptr<Solver
 
 #ifdef MINISAT_
                 case 'm':
-                        createdSolver = std::make_shared<MiniSat>(id, importDB);
+                        createdSolver = std::make_shared<Painless::MiniSat>(id, importDB);
                         return SolverAlgorithmType::CDCL;
                         // break;
 #endif
