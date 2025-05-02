@@ -15,6 +15,9 @@ extern "C"
 #include "kissat_mab/src/parse.h"
 }
 
+namespace Painless {
+
+
 char
 KissatMabImportClause(void* painless_interface, kissat* internal_solver)
 {
@@ -528,3 +531,4 @@ KissatMABSolver::computeFamily()
         /* + Painless::mpi_rank enable better distributed fairness */
         this->family = static_cast<Painless::KissatFamily>((this->getSolverTypeId() + Painless::mpi_rank) % 3);
 }
+} // namespace Painless
