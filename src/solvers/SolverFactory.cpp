@@ -92,7 +92,7 @@ SolverFactory::createSolver(char type, char importDBType, std::shared_ptr<Solver
         switch (type) {
 #ifdef GLUCOSE_
                 case 'g':
-                        createdSolver = std::make_shared<GlucoseSyrup>(id, importDB);
+                        createdSolver = std::make_shared<Painless::GlucoseSyrup>(id, importDB);
                         return SolverAlgorithmType::CDCL;
                         // break;
 #endif

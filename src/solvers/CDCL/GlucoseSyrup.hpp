@@ -5,17 +5,15 @@
 #include "containers/ClauseDatabase.hpp"
 #include "containers/ClauseUtils.hpp"
 #include "utils/Threading.hpp"
+#include "parallel/ParallelSolver.h"
+#include "core/SolverTypes.h"
 
+using namespace Glucose;
+namespace Painless {
 #define GLUCOSE_
 
 // Some forward declatarations for Glucose
-namespace Glucose {
-class ParallelSolver;
-class Lit;
-template<class T>
-class vec;
-class Clause;
-}
+
 
 /// Instance of a Glucose solver
 /// @ingroup solving_cdcl
@@ -120,4 +118,4 @@ class GlucoseSyrup : public SolverCdclInterface
 
   public:
         ;
-};
+};} // namespace Painless
