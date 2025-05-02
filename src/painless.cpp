@@ -58,19 +58,7 @@ setupExitHandlers()
 // Declaration of global variables
 // -------------------------------------------
 
-std::atomic<bool> globalEnding(false);
-std::mutex mutexGlobalEnd;
-std::condition_variable condGlobalEnd;
 
-// int nSharers = 0;
-
-Painless::WorkingStrategy* working = nullptr;
-
-std::atomic<bool> dist = false;
-
-std::atomic<Painless::SatResult> finalResult = Painless::SatResult::UNKNOWN;
-
-std::vector<int> finalModel;
 
 // -------------------------------------------
 // Main of the framework
@@ -89,11 +77,11 @@ main(int argc, char** argv)
                 Painless::Parameters::printHelp();
         }
 
-        dist = Painless::__globalParameters__.enableDistributed;
+        Painless::dist = Painless::__globalParameters__.enableDistributed;
 
         // Ram Monitoring
 
-        if (dist) {
+        if (Painless::dist) {
                 // MPI Initialization
                 int provided;
                 TESTRUNMPI(MPI_Init_thread(NULL, NULL, MPI_THREAD_SERIALIZED, &provided));
@@ -103,7 +91,7 @@ main(int argc, char** argv)
 
                 if (provided < MPI_THREAD_SERIALIZED) {
                         LOGERROR("Wanted MPI initialization is not possible !");
-                        dist = false;
+                        Painless::dist = false;
                 } else {
                         TESTRUNMPI(MPI_Comm_rank(MPI_COMM_WORLD, &Painless::mpi_rank));
 
@@ -119,19 +107,19 @@ main(int argc, char** argv)
                 Painless::Parameters::printParams();
 
         // Init timeout detection before starting the solvers and sharers
-        std::unique_lock<std::mutex> lock(mutexGlobalEnd);
+        std::unique_lock<std::mutex> lock(Painless::mutexGlobalEnd);
         // to make sure that the broadcast is done when main has done its wait
 
         // TODO: better choice options, think about description file using yaml or json with semantic checking
         if (Painless::__globalParameters__.simple)
-                working = new Painless::PortfolioSimple();
+                Painless::working = new Painless::PortfolioSimple();
         else
-                working = new Painless::PortfolioPRS();
+                Painless::working = new Painless::PortfolioPRS();
 
         // Launch working
         std::vector<int> cube;
 
-        std::thread mainWorker(&Painless::WorkingStrategy::solve, working, std::ref(cube));
+        std::thread mainWorker(&Painless::WorkingStrategy::solve, Painless::working, std::ref(cube));
 
         int wakeupRet = 0;
 
@@ -140,66 +128,66 @@ main(int argc, char** argv)
 
                 // Wait until end or Painless::__globalParameters__.timeout
                 while ((unsigned int)Painless::SystemResourceMonitor::getRelativeTimeSeconds() < Painless::__globalParameters__.timeout &&
-                           globalEnding == false) // to manage the spurious wake ups
+                           Painless::globalEnding == false) // to manage the spurious wake ups
                 {
                         auto remainingTime = std::chrono::duration<double>(
                                 Painless::__globalParameters__.timeout - (Painless::SystemResourceMonitor::getRelativeTimeSeconds() - startTime));
-                        auto wakeupStatus = condGlobalEnd.wait_for(lock, remainingTime);
+                        auto wakeupStatus = Painless::condGlobalEnd.wait_for(lock, remainingTime);
 
                         LOGDEBUG2("main wakeupRet = %s , globalEnding = %d ",
                                           (wakeupStatus == std::cv_status::timeout ? "timeout" : "notimeout"),
-                                          globalEnding.load());
+                                          Painless::globalEnding.load());
                 }
 
-                condGlobalEnd.notify_all();
+                Painless::condGlobalEnd.notify_all();
                 lock.unlock();
 
                 if ((unsigned int)Painless::SystemResourceMonitor::getRelativeTimeSeconds() >= Painless::__globalParameters__.timeout &&
-                        finalResult ==
+                        Painless::finalResult ==
                                 Painless::SatResult::UNKNOWN) // if Painless::__globalParameters__.timeout set globalEnding otherwise a solver woke me up
                 {
-                        globalEnding = true;
-                        finalResult = Painless::SatResult::TIMEOUT;
+                        Painless::globalEnding = true;
+                        Painless::finalResult = Painless::SatResult::TIMEOUT;
                 }
         } else {
                 // no Painless::__globalParameters__.timeout waiting
-                while (globalEnding == false) // to manage the spurious wake ups
+                while (Painless::globalEnding == false) // to manage the spurious wake ups
                 {
-                        condGlobalEnd.wait(lock);
+                        Painless::condGlobalEnd.wait(lock);
                 }
 
-                condGlobalEnd.notify_all();
+                Painless::condGlobalEnd.notify_all();
                 lock.unlock();
         }
 
         mainWorker.join();
 
-        delete working;
+        delete Painless::working;
 
-        if (dist) {
+        if (Painless::dist) {
                 TESTRUNMPI(MPI_Finalize());
         }
 
         if (Painless::mpi_rank == Painless::mpi_winner) {
-                if (finalResult.load() == Painless::SatResult::SAT) {
+                if (Painless::finalResult.load() == Painless::SatResult::SAT) {
                         Painless::logSolution("SATISFIABLE");
 
                         if (Painless::__globalParameters__.noModel == false) {
-                                Painless::logModel(finalModel);
+                                Painless::logModel(Painless::finalModel);
                         }
-                } else if (finalResult.load() == Painless::SatResult::UNSAT) {
+                } else if (Painless::finalResult.load() == Painless::SatResult::UNSAT) {
                         Painless::logSolution("UNSATISFIABLE");
                 } else // if Painless::__globalParameters__.timeout or unknown
                 {
                         Painless::logSolution("UNKNOWN");
-                        finalResult = Painless::SatResult::UNKNOWN;
+                        Painless::finalResult = Painless::SatResult::UNKNOWN;
                 }
 
                 LOGSTAT("Resolution time: %f s", Painless::SystemResourceMonitor::getRelativeTimeSeconds());
         } else
-                finalResult = Painless::SatResult::UNKNOWN; /* mpi will be forced to suspend job only by the winner */
+                Painless::finalResult = Painless::SatResult::UNKNOWN; /* mpi will be forced to suspend job only by the winner */
 
-        LOGDEBUG1("Mpi process %d returns %d", Painless::mpi_rank, static_cast<int>(finalResult.load()));
+        LOGDEBUG1("Mpi process %d returns %d", Painless::mpi_rank, static_cast<int>(Painless::finalResult.load()));
 
-        return static_cast<int>(finalResult.load());
+        return static_cast<int>(Painless::finalResult.load());
 }

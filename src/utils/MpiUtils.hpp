@@ -17,7 +17,7 @@ namespace Painless {
 #define TESTRUNMPI(func)                                                                                               \
         do {                                                                                                               \
                 int result = (func);                                                                                           \
-                if (dist && result != MPI_SUCCESS) {                                                                           \
+                if (Painless::dist && result != MPI_SUCCESS) {                                                                           \
                         LOGERROR("MPI ERROR: %d in function %s", result, #func);                                                   \
                         exit(PERR_MPI);                                                                                            \
                 }                                                                                                              \

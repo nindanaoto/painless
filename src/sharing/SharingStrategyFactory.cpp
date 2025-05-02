@@ -170,11 +170,11 @@ SharingStrategyFactory::instantiateGlobalStrategies(
         }
 
         /*Since bootstraping, loop is not optimzed*/
-        for (unsigned int i = 0; i < globalStrategies.size() && dist; i++) {
+        for (unsigned int i = 0; i < globalStrategies.size() && Painless::dist; i++) {
                 if (!globalStrategies.at(i)->initMpiVariables()) {
                         LOGERROR("The global sharing strategy %d wasn't able to initalize its MPI variables", i);
                         TESTRUNMPI(MPI_Finalize());
-                        dist = false;
+                        Painless::dist = false;
                         globalStrategies.erase(globalStrategies.begin() + i);
                 }
         }

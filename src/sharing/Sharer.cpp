@@ -49,13 +49,13 @@ mainThrSharing(void* arg)
                          sleepTime.count());
 
                 // Sleep phase, woken up if need to end
-                if (!globalEnding) {
-                        std::unique_lock<std::mutex> lock(mutexGlobalEnd);
-                        auto wakeupStatus = condGlobalEnd.wait_for(lock, sleepTime);
-                        LOGDEBUG2("Sharer %d wakeupStatus = %s, globalEnding = %d",
+                if (!Painless::globalEnding) {
+                        std::unique_lock<std::mutex> lock(Painless::mutexGlobalEnd);
+                        auto wakeupStatus = Painless::condGlobalEnd.wait_for(lock, sleepTime);
+                        LOGDEBUG2("Sharer %d wakeupStatus = %s, Painless::globalEnding = %d",
                                           shr->getId(),
                                           (wakeupStatus == std::cv_status::timeout ? "timeout" : "no_timeout"),
-                                          globalEnding.load());
+                                          Painless::globalEnding.load());
                 }
 
                 shr->round++; // New round

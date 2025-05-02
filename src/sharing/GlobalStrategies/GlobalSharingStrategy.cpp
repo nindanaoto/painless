@@ -78,22 +78,22 @@ GlobalSharingStrategy::joinProcess(int winnerRank, Painless::SatResult res, cons
                 }
         }
         //=================================================================
-        globalEnding = true;
+        Painless::globalEnding = true;
 
-        finalResult = res;
+        Painless::finalResult = res;
 
         Painless::mpi_winner = winnerRank;
 
         if (res == Painless::SatResult::SAT && model.size() > 0) {
-                finalModel = model;
+                Painless::finalModel = model;
         }
 
         if (res != Painless::SatResult::UNKNOWN && res != Painless::SatResult::TIMEOUT)
                 LOGSTAT("The winner is mpi process %d", winnerRank);
         /* TODO becomes a slave to working */
-        mutexGlobalEnd.lock();
-        condGlobalEnd.notify_all();
-        mutexGlobalEnd.unlock();
+        Painless::mutexGlobalEnd.lock();
+        Painless::condGlobalEnd.notify_all();
+        Painless::mutexGlobalEnd.unlock();
         LOGDEBUG1("Broadcasted the end locally");
 }
 
@@ -108,17 +108,17 @@ GlobalSharingStrategy::doSharing()
 
         int receivedFinalResultBcast = 0;
 
-        if (globalEnding && !requests_sent && Painless::mpi_rank != MY_MPI_ROOT) {
-                LOGDEBUG1("[GStrat] It is the end, now I will send end to the root %d",(int)finalResult.load());
+        if (Painless::globalEnding && !requests_sent && Painless::mpi_rank != MY_MPI_ROOT) {
+                LOGDEBUG1("[GStrat] It is the end, now I will send end to the root %d",(int)Painless::finalResult.load());
                 TESTRUNMPI(
-                        MPI_Isend(&finalResult, 1, MPI_INT, MY_MPI_ROOT, MY_MPI_END, MPI_COMM_WORLD, &this->send_end_request));
+                        MPI_Isend(&Painless::finalResult, 1, MPI_INT, MY_MPI_ROOT, MY_MPI_END, MPI_COMM_WORLD, &this->send_end_request));
                 requests_sent = true;
         }
 
         if (Painless::mpi_rank == MY_MPI_ROOT) {
-                if (globalEnding) // to check if the root found the solution
+                if (Painless::globalEnding) // to check if the root found the solution
                 {
-                        receivedFinalResultBcast = static_cast<int>(finalResult.load());
+                        receivedFinalResultBcast = static_cast<int>(Painless::finalResult.load());
                         LOGDEBUG1("[GStrat] It is the end, now I will send end to all descendants (%d)", receivedFinalResultBcast);
                         if (receivedFinalResultBcast != (int)Painless::SatResult::TIMEOUT)
                                 rank_winner = MY_MPI_ROOT;
@@ -149,9 +149,9 @@ GlobalSharingStrategy::doSharing()
         TESTRUNMPI(MPI_Bcast(&receivedFinalResultBcast, 1, MPI_INT, MY_MPI_ROOT, MPI_COMM_WORLD));
 
         if (receivedFinalResultBcast != 0) {
-                finalResult = static_cast<Painless::SatResult>(receivedFinalResultBcast & 0x0000FFFF);
+                Painless::finalResult = static_cast<Painless::SatResult>(receivedFinalResultBcast & 0x0000FFFF);
                 Painless::mpi_winner = (receivedFinalResultBcast & 0xFFFF0000) >> 16;
-                receivedFinalResultBcast = static_cast<int>(finalResult.load());
+                receivedFinalResultBcast = static_cast<int>(Painless::finalResult.load());
                 LOGDEBUG1("[GStrat] It is the mpi end: %d", receivedFinalResultBcast);
 
                 if (!requests_sent && MY_MPI_ROOT != Painless::mpi_rank) {

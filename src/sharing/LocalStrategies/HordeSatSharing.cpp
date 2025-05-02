@@ -73,7 +73,7 @@ HordeSatSharing::doSharing()
 {
 
 	// Check for global termination condition
-	if (globalEnding)
+	if (Painless::globalEnding)
 		return true;
 
 	// Step 1: Get new clause selection
@@ -123,7 +123,7 @@ HordeSatSharing::doSharing()
 	LOG2("[HordeSat] received cls %ld, shared cls %ld", stats.receivedClauses.load(), stats.sharedClauses);
 
 	// Check for global termination condition again
-	if (globalEnding)
+	if (Painless::globalEnding)
 		return true;
 
 	return false;

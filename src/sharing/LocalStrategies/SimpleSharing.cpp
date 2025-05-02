@@ -40,7 +40,7 @@ SimpleSharing::importClause(const Painless::ClauseExchangePtr& clause)
 bool
 SimpleSharing::doSharing()
 {
-	if (globalEnding)
+	if (Painless::globalEnding)
 		return true;
 
 	// 1- Get selection
@@ -64,7 +64,7 @@ SimpleSharing::doSharing()
 
 	LOG1("[SimpleShr] received cls %ld, shared cls %ld", stats.receivedClauses.load(), stats.sharedClauses);
 
-	if (globalEnding)
+	if (Painless::globalEnding)
 		return true;
 	return false;
 }

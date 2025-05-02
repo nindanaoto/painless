@@ -46,7 +46,7 @@ AllGatherSharing::doSharing()
 
         /* Ending Detection */
         if (GlobalSharingStrategy::doSharing()) {
-                this->joinProcess(Painless::mpi_winner, finalResult.load(), {});
+                this->joinProcess(Painless::mpi_winner, Painless::finalResult.load(), {});
                 return true;
         }
 
