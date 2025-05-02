@@ -13,6 +13,9 @@
 
 #include <iomanip>
 
+namespace Painless {
+
+
 using namespace MapleCOMSPS;
 
 // Macros for minisat literal representation conversion
@@ -23,98 +26,98 @@ using namespace MapleCOMSPS;
 static void
 makeMiniVec(Painless::ClauseExchangePtr cls, vec<Lit>& mcls)
 {
-	for (size_t i = 0; i < cls->size; i++) {
-		mcls.push(MINI_LIT(cls->lits[i]));
-	}
+        for (size_t i = 0; i < cls->size; i++) {
+                mcls.push(MINI_LIT(cls->lits[i]));
+        }
 }
 
 void
 cbkMapleCOMSPSExportClause(void* issuer, unsigned int lbd, vec<Lit>& cls)
 {
-	MapleCOMSPSSolver* mp = (MapleCOMSPSSolver*)issuer;
+        MapleCOMSPSSolver* mp = (MapleCOMSPSSolver*)issuer;
 
-	Painless::ClauseExchangePtr ncls = Painless::ClauseExchange::create(cls.size(), lbd, mp->getSharingId());
+        Painless::ClauseExchangePtr ncls = Painless::ClauseExchange::create(cls.size(), lbd, mp->getSharingId());
 
-	for (int i = 0; i < cls.size(); i++) {
-		ncls->lits[i] = INT_LIT(cls[i]);
-	}
-	/* filtering defined by a sharing strategy */
-	mp->exportClause(ncls);
+        for (int i = 0; i < cls.size(); i++) {
+                ncls->lits[i] = INT_LIT(cls[i]);
+        }
+        /* filtering defined by a sharing strategy */
+        mp->exportClause(ncls);
 }
 
 Lit
 cbkMapleCOMSPSImportUnit(void* issuer)
 {
-	MapleCOMSPSSolver* mp = (MapleCOMSPSSolver*)issuer;
+        MapleCOMSPSSolver* mp = (MapleCOMSPSSolver*)issuer;
 
-	Lit l = lit_Undef;
+        Lit l = lit_Undef;
 
-	Painless::ClauseExchangePtr cls;
+        Painless::ClauseExchangePtr cls;
 
-	if (mp->unitsToImport->getOneClause(cls) == false)
-		return l;
+        if (mp->unitsToImport->getOneClause(cls) == false)
+                return l;
 
-	l = MINI_LIT(cls->lits[0]);
+        l = MINI_LIT(cls->lits[0]);
 
-	return l;
+        return l;
 }
 
 bool
 cbkMapleCOMSPSImportClause(void* issuer, unsigned int* lbd, vec<Lit>& mcls)
 {
-	MapleCOMSPSSolver* mp = (MapleCOMSPSSolver*)issuer;
+        MapleCOMSPSSolver* mp = (MapleCOMSPSSolver*)issuer;
 
-	Painless::ClauseExchangePtr cls;
+        Painless::ClauseExchangePtr cls;
 
-	if (mp->m_clausesToImport->getOneClause(cls) == false)
-	{
-		mp->m_clausesToImport->shrinkDatabase();
-		return false;
-	}
-	makeMiniVec(cls, mcls);
+        if (mp->m_clausesToImport->getOneClause(cls) == false)
+        {
+                mp->m_clausesToImport->shrinkDatabase();
+                return false;
+        }
+        makeMiniVec(cls, mcls);
 
-	*lbd = cls->lbd;
+        *lbd = cls->lbd;
 
-	return true;
+        return true;
 }
 
 MapleCOMSPSSolver::MapleCOMSPSSolver(int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB)
-	: SolverCdclInterface(id, clauseDB, SolverCdclType::MAPLECOMSPS)
-	, clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
+        : SolverCdclInterface(id, clauseDB, SolverCdclType::MAPLECOMSPS)
+        , clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 {
-	solver = new SimpSolver();
+        solver = new SimpSolver();
 
-	this->unitsToImport = std::make_unique<Painless::ClauseDatabaseSingleBuffer>(Painless::__globalParameters__.defaultClauseBufferSize);
+        this->unitsToImport = std::make_unique<Painless::ClauseDatabaseSingleBuffer>(Painless::__globalParameters__.defaultClauseBufferSize);
 
-	solver->cbkExportClause = cbkMapleCOMSPSExportClause;
-	solver->cbkImportClause = cbkMapleCOMSPSImportClause;
-	solver->cbkImportUnit = cbkMapleCOMSPSImportUnit;
-	solver->issuer = this;
+        solver->cbkExportClause = cbkMapleCOMSPSExportClause;
+        solver->cbkImportClause = cbkMapleCOMSPSImportClause;
+        solver->cbkImportUnit = cbkMapleCOMSPSImportUnit;
+        solver->issuer = this;
 
-	initializeTypeId<MapleCOMSPSSolver>();
+        initializeTypeId<MapleCOMSPSSolver>();
 }
 
 MapleCOMSPSSolver::MapleCOMSPSSolver(const MapleCOMSPSSolver& other,
-									 int id,
-									 const std::shared_ptr<Painless::ClauseDatabase>& clauseDB)
-	: SolverCdclInterface(id, clauseDB, SolverCdclType::MAPLECOMSPS)
-	, clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
+                                                                         int id,
+                                                                         const std::shared_ptr<Painless::ClauseDatabase>& clauseDB)
+        : SolverCdclInterface(id, clauseDB, SolverCdclType::MAPLECOMSPS)
+        , clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 {
-	solver = new SimpSolver(*(other.solver));
+        solver = new SimpSolver(*(other.solver));
 
-	this->unitsToImport = std::make_unique<Painless::ClauseDatabaseSingleBuffer>(Painless::__globalParameters__.defaultClauseBufferSize);
+        this->unitsToImport = std::make_unique<Painless::ClauseDatabaseSingleBuffer>(Painless::__globalParameters__.defaultClauseBufferSize);
 
-	solver->cbkExportClause = cbkMapleCOMSPSExportClause;
-	solver->cbkImportClause = cbkMapleCOMSPSImportClause;
-	solver->cbkImportUnit = cbkMapleCOMSPSImportUnit;
-	solver->issuer = this;
+        solver->cbkExportClause = cbkMapleCOMSPSExportClause;
+        solver->cbkImportClause = cbkMapleCOMSPSImportClause;
+        solver->cbkImportUnit = cbkMapleCOMSPSImportUnit;
+        solver->issuer = this;
 
-	initializeTypeId<MapleCOMSPSSolver>();
+        initializeTypeId<MapleCOMSPSSolver>();
 }
 
 MapleCOMSPSSolver::~MapleCOMSPSSolver()
 {
-	delete solver;
+        delete solver;
 }
 
 // void MapleCOMSPSSolver::loadFormula(const char *filename)
@@ -132,21 +135,21 @@ MapleCOMSPSSolver::~MapleCOMSPSSolver()
 unsigned int
 MapleCOMSPSSolver::getVariablesCount()
 {
-	return solver->nVars();
+        return solver->nVars();
 }
 
 // Get a variable suitable for search splitting
 int
 MapleCOMSPSSolver::getDivisionVariable()
 {
-	return (rand() % getVariablesCount()) + 1;
+        return (rand() % getVariablesCount()) + 1;
 }
 
 // Set initial phase for a given variable
 void
 MapleCOMSPSSolver::setPhase(const unsigned int var, const bool phase)
 {
-	solver->setPolarity(var - 1, phase ? true : false);
+        solver->setPolarity(var - 1, phase ? true : false);
 }
 
 // Bump activity for a given variable
@@ -159,45 +162,45 @@ MapleCOMSPSSolver::bumpVariableActivity(const int var, const int times)
 void
 MapleCOMSPSSolver::setSolverInterrupt()
 {
-	stopSolver = true;
+        stopSolver = true;
 
-	solver->interrupt();
+        solver->interrupt();
 
-	LOGDEBUG1("Asking MapleCOMSPS (%d, %u) to end", this->getSolverId(), this->getSolverTypeId());
+        LOGDEBUG1("Asking MapleCOMSPS (%d, %u) to end", this->getSolverId(), this->getSolverTypeId());
 }
 
 void
 MapleCOMSPSSolver::unsetSolverInterrupt()
 {
-	stopSolver = false;
+        stopSolver = false;
 
-	solver->clearInterrupt();
+        solver->clearInterrupt();
 }
 
 // Diversify the solver
 void
 MapleCOMSPSSolver::diversify(const SeedGenerator& getSeed)
 {
-	/* TODO enhance this diversification */
+        /* TODO enhance this diversification */
 
-	int seed = this->getSolverTypeId();
-	if (seed == ID_XOR) {
-		solver->GE = true;
-	} else {
-		solver->GE = false;
-	}
+        int seed = this->getSolverTypeId();
+        if (seed == ID_XOR) {
+                solver->GE = true;
+        } else {
+                solver->GE = false;
+        }
 
-	if (seed % 2) {
-		solver->VSIDS = false;
-	} else {
-		solver->VSIDS = true;
-	}
+        if (seed % 2) {
+                solver->VSIDS = false;
+        } else {
+                solver->VSIDS = true;
+        }
 
-	if (seed % 4 >= 2) {
-		solver->verso = false;
-	} else {
-		solver->verso = true;
-	}
+        if (seed % 4 >= 2) {
+                solver->verso = false;
+        } else {
+                solver->verso = true;
+        }
 }
 
 // Solve the formula with a given set of assumptions
@@ -205,175 +208,176 @@ MapleCOMSPSSolver::diversify(const SeedGenerator& getSeed)
 SatResult
 MapleCOMSPSSolver::solve(const std::vector<int>& cube)
 {
-	unsetSolverInterrupt();
+        unsetSolverInterrupt();
 
-	std::vector<Painless::ClauseExchangePtr> tmp;
+        std::vector<Painless::ClauseExchangePtr> tmp;
 
-	tmp.clear();
-	clausesToAdd.getClauses(tmp);
+        tmp.clear();
+        clausesToAdd.getClauses(tmp);
 
-	for (size_t ind = 0; ind < tmp.size(); ind++) {
-		vec<Lit> mcls;
-		makeMiniVec(tmp[ind], mcls);
+        for (size_t ind = 0; ind < tmp.size(); ind++) {
+                vec<Lit> mcls;
+                makeMiniVec(tmp[ind], mcls);
 
-		if (solver->addClause(mcls) == false) {
-			LOG0(" unsat when adding cls");
-			return SatResult::UNSAT;
-		}
-	}
+                if (solver->addClause(mcls) == false) {
+                        LOG0(" unsat when adding cls");
+                        return SatResult::UNSAT;
+                }
+        }
 
-	vec<Lit> miniAssumptions;
-	for (size_t ind = 0; ind < cube.size(); ind++) {
-		miniAssumptions.push(MINI_LIT(cube[ind]));
-	}
+        vec<Lit> miniAssumptions;
+        for (size_t ind = 0; ind < cube.size(); ind++) {
+                miniAssumptions.push(MINI_LIT(cube[ind]));
+        }
 
-	lbool res = solver->solveLimited(miniAssumptions);
+        lbool res = solver->solveLimited(miniAssumptions);
 
-	if (res == l_True)
-		return SatResult::SAT;
+        if (res == l_True)
+                return SatResult::SAT;
 
-	if (res == l_False)
-		return SatResult::UNSAT;
+        if (res == l_False)
+                return SatResult::UNSAT;
 
-	return SatResult::UNKNOWN;
+        return SatResult::UNKNOWN;
 }
 
 void
 MapleCOMSPSSolver::loadFormula(const char* filename)
 {
-	gzFile in = gzopen(filename, "rb");
-	parse_DIMACS(in, *solver);
-	gzclose(in);
+        gzFile in = gzopen(filename, "rb");
+        parse_DIMACS(in, *solver);
+        gzclose(in);
 }
 
 void
 MapleCOMSPSSolver::addClause(Painless::ClauseExchangePtr clause)
 {
-	clausesToAdd.addClause(clause);
+        clausesToAdd.addClause(clause);
 
-	setSolverInterrupt();
+        setSolverInterrupt();
 }
 
 bool
 MapleCOMSPSSolver::importClause(const Painless::ClauseExchangePtr& clause)
 {
-	assert(clause->size > 0);
+        assert(clause->size > 0);
 
-	if (clause->size == 1) {
-		unitsToImport->addClause(clause);
-	} else {
-		m_clausesToImport->addClause(clause);
-	}
-	return true;
+        if (clause->size == 1) {
+                unitsToImport->addClause(clause);
+        } else {
+                m_clausesToImport->addClause(clause);
+        }
+        return true;
 }
 
 void
 MapleCOMSPSSolver::addClauses(const std::vector<Painless::ClauseExchangePtr>& clauses)
 {
-	clausesToAdd.addClauses(clauses);
+        clausesToAdd.addClauses(clauses);
 
-	setSolverInterrupt();
+        setSolverInterrupt();
 }
 
 void
 MapleCOMSPSSolver::addInitialClauses(const std::vector<Painless::ClauseUtils::simpleClause>& clauses, unsigned int nbVars)
 {
-	for (size_t ind = 0; ind < clauses.size(); ind++) {
-		vec<Lit> mcls;
+        for (size_t ind = 0; ind < clauses.size(); ind++) {
+                vec<Lit> mcls;
 
-		for (size_t i = 0; i < clauses[ind].size(); i++) {
-			int lit = clauses[ind][i];
-			int var = abs(lit);
+                for (size_t i = 0; i < clauses[ind].size(); i++) {
+                        int lit = clauses[ind][i];
+                        int var = abs(lit);
 
-			while (solver->nVars() < var) {
-				solver->newVar();
-			}
+                        while (solver->nVars() < var) {
+                                solver->newVar();
+                        }
 
-			mcls.push(MINI_LIT(lit));
-		}
+                        mcls.push(MINI_LIT(lit));
+                }
 
-		if (solver->addClause(mcls) == false) {
-			LOG0(" unsat when adding initial cls");
-			return;
-		}
-	}
+                if (solver->addClause(mcls) == false) {
+                        LOG0(" unsat when adding initial cls");
+                        return;
+                }
+        }
 
-	LOG2("The Maple Solver %d loaded all the clauses", this->getSolverId());
+        LOG2("The Maple Solver %d loaded all the clauses", this->getSolverId());
 }
 
 void
 MapleCOMSPSSolver::importClauses(const std::vector<Painless::ClauseExchangePtr>& clauses)
 {
-	for (auto cls : clauses) {
-		importClause(cls);
-	}
+        for (auto cls : clauses) {
+                importClause(cls);
+        }
 }
 
 void
 MapleCOMSPSSolver::printStatistics()
 {
-	SolvingCdclStatistics stats;
+        SolvingCdclStatistics stats;
 
-	stats.conflicts = solver->conflicts;
-	stats.propagations = solver->propagations;
-	stats.restarts = solver->starts;
-	stats.decisions = solver->decisions;
+        stats.conflicts = solver->conflicts;
+        stats.propagations = solver->propagations;
+        stats.restarts = solver->starts;
+        stats.decisions = solver->decisions;
 
-	std::cout << std::left << std::setw(15) << ("| MC" + std::to_string(this->getSolverTypeId())) << std::setw(20)
-			  << ("| " + std::to_string(stats.conflicts)) << std::setw(20)
-			  << ("| " + std::to_string(stats.propagations)) << std::setw(17) << ("| " + std::to_string(stats.restarts))
-			  << std::setw(20) << ("| " + std::to_string(stats.decisions)) << std::setw(20) << "|"
-			  << "\n";
+        std::cout << std::left << std::setw(15) << ("| MC" + std::to_string(this->getSolverTypeId())) << std::setw(20)
+                          << ("| " + std::to_string(stats.conflicts)) << std::setw(20)
+                          << ("| " + std::to_string(stats.propagations)) << std::setw(17) << ("| " + std::to_string(stats.restarts))
+                          << std::setw(20) << ("| " + std::to_string(stats.decisions)) << std::setw(20) << "|"
+                          << "\n";
 }
 
 void
 MapleCOMSPSSolver::printWinningLog()
 {
-	this->SolverCdclInterface::printWinningLog();
-	LOGSTAT("The winner is MapleCOMSPS(%d, %u) ", this->getSolverId(), this->getSolverTypeId());
+        this->SolverCdclInterface::printWinningLog();
+        LOGSTAT("The winner is MapleCOMSPS(%d, %u) ", this->getSolverId(), this->getSolverTypeId());
 }
 
 std::vector<int>
 MapleCOMSPSSolver::getModel()
 {
-	std::vector<int> model;
+        std::vector<int> model;
 
-	for (int i = 0; i < solver->nVars(); i++) {
-		if (solver->model[i] != l_Undef) {
-			int lit = solver->model[i] == l_True ? i + 1 : -(i + 1);
-			model.push_back(lit);
-		}
-	}
+        for (int i = 0; i < solver->nVars(); i++) {
+                if (solver->model[i] != l_Undef) {
+                        int lit = solver->model[i] == l_True ? i + 1 : -(i + 1);
+                        model.push_back(lit);
+                }
+        }
 
-	return model;
+        return model;
 }
 
 std::vector<int>
 MapleCOMSPSSolver::getFinalAnalysis()
 {
-	std::vector<int> outCls;
+        std::vector<int> outCls;
 
-	for (int i = 0; i < solver->conflict.size(); i++) {
-		outCls.push_back(INT_LIT(solver->conflict[i]));
-	}
+        for (int i = 0; i < solver->conflict.size(); i++) {
+                outCls.push_back(INT_LIT(solver->conflict[i]));
+        }
 
-	return outCls;
+        return outCls;
 }
 
 std::vector<int>
 MapleCOMSPSSolver::getSatAssumptions()
 {
-	std::vector<int> outCls;
-	vec<Lit> lits;
-	solver->getAssumptions(lits);
-	for (int i = 0; i < lits.size(); i++) {
-		outCls.push_back(-(INT_LIT(lits[i])));
-	}
-	return outCls;
+        std::vector<int> outCls;
+        vec<Lit> lits;
+        solver->getAssumptions(lits);
+        for (int i = 0; i < lits.size(); i++) {
+                outCls.push_back(-(INT_LIT(lits[i])));
+        }
+        return outCls;
 };
 
 void
 MapleCOMSPSSolver::setStrengthening(bool b)
 {
-	solver->setStrengthening(b);
+        solver->setStrengthening(b);
 }
+} // namespace Painless

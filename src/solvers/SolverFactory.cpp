@@ -106,7 +106,7 @@ SolverFactory::createSolver(char type, char importDBType, std::shared_ptr<Solver
 
 #ifdef MAPLECOMSPS_
                 case 'M':
-                        createdSolver = std::make_shared<MapleCOMSPSSolver>(id, importDB);
+                        createdSolver = std::make_shared<Painless::MapleCOMSPSSolver>(id, importDB);
                         return SolverAlgorithmType::CDCL;
                         // break;
 #endif

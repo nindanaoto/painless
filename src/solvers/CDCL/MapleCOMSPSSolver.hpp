@@ -8,6 +8,17 @@
 
 #define MAPLECOMSPS_
 
+
+// Some forward declatarations for MapleCOMSPS
+namespace MapleCOMSPS {
+class SimpSolver;
+class Lit;
+template<class T>
+class vec;
+}
+
+namespace Painless {
+
 #define ID_SYM 0
 #define ID_XOR 1
 
@@ -24,14 +35,6 @@ struct parameter
         int ccanr;
         int targetinc;
 };
-
-// Some forward declatarations for MapleCOMSPS
-namespace MapleCOMSPS {
-class SimpSolver;
-class Lit;
-template<class T>
-class vec;
-}
 
 /// @ingroup solving_cdcl
 /// Instance of a MapleCOMSPS solver
@@ -130,3 +133,4 @@ class MapleCOMSPSSolver : public SolverCdclInterface
   public:
         ;
 };
+} // namespace Painless
