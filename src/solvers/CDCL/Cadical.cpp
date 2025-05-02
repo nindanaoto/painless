@@ -83,7 +83,7 @@ Cadical::getClauseToImport(std::vector<int>& clause, int& glue)
 /*----------------------Main Class------------------------*/
 
 Cadical::Cadical(int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB)
-        : SolverCdclInterface(id, clauseDB, SolverCdclType::CADICAL)
+        : Painless::SolverCdclInterface(id, clauseDB, SolverCdclType::CADICAL)
         , clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 {
         solver = std::make_unique<CaDiCaL::Solver>();
@@ -401,7 +401,7 @@ Cadical::printStatistics()
 void
 Cadical::printWinningLog()
 {
-        SolverCdclInterface::printWinningLog();
+        Painless::SolverCdclInterface::printWinningLog();
         LOGSTAT("The winner is Cadical(%d, %d), type: %s",
                         this->getSolverId(),
                         this->getSolverTypeId(),

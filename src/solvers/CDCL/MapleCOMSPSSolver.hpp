@@ -38,7 +38,7 @@ struct parameter
 
 /// @ingroup solving_cdcl
 /// Instance of a MapleCOMSPS solver
-class MapleCOMSPSSolver : public SolverCdclInterface
+class MapleCOMSPSSolver : public Painless::SolverCdclInterface
 {
   public:
         /// Get the number of variables of the current resolution.

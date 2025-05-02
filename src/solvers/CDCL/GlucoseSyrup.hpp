@@ -17,7 +17,7 @@ namespace Painless {
 
 /// Instance of a Glucose solver
 /// @ingroup solving_cdcl
-class GlucoseSyrup : public SolverCdclInterface
+class GlucoseSyrup : public Painless::SolverCdclInterface
 {
   public:
         /// Load formula from a given dimacs file, return false if failed.

@@ -70,7 +70,7 @@ kissatExportClause(void* painless_interface, kissat* internal_solver)
 }
 
 Kissat::Kissat(int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB)
-        : SolverCdclInterface(id, clauseDB, SolverCdclType::KISSAT)
+        : Painless::SolverCdclInterface(id, clauseDB, SolverCdclType::KISSAT)
         , clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 {
         solver = kissat_init();
@@ -530,7 +530,7 @@ set_options:
 void
 Kissat::printWinningLog()
 {
-        this->SolverCdclInterface::printWinningLog();
+        this->Painless::SolverCdclInterface::printWinningLog();
         int family = static_cast<int>(this->family);
         LOGSTAT("The winner is kissat(%d, %u) of family %s",
                         this->getSolverId(),

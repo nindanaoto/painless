@@ -53,7 +53,7 @@ PortfolioPRS::solve(const std::vector<int>& cube)
         std::vector<Painless::ClauseUtils::simpleClause> initClauses;
         std::vector<std::thread> clausesLoad;
 
-        std::vector<std::shared_ptr<SolverCdclInterface>> cdclSolvers;
+        std::vector<std::shared_ptr<Painless::SolverCdclInterface>> cdclSolvers;
         std::vector<std::shared_ptr<LocalSearchInterface>> localSolvers;
         std::vector<std::shared_ptr<SharingStrategy>> sharingStrategies;
 

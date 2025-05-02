@@ -82,7 +82,7 @@ minisatImportClause(void* issuer, vec<Lit>& mcls)
 }
 
 MiniSat::MiniSat(int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB)
-        : SolverCdclInterface(id, clauseDB, SolverCdclType::MINISAT)
+        : Painless::SolverCdclInterface(id, clauseDB, SolverCdclType::MINISAT)
         , clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 {
         this->unitsToImport = std::make_unique<Painless::ClauseDatabaseSingleBuffer>(Painless::__globalParameters__.defaultClauseBufferSize);
@@ -284,7 +284,7 @@ MiniSat::printStatistics()
 void
 MiniSat::printWinningLog()
 {
-        this->SolverCdclInterface::printWinningLog();
+        this->Painless::SolverCdclInterface::printWinningLog();
         LOGSTAT("The winner is MiniSat(%d, %u) ", this->getSolverId(), this->getSolverTypeId());
 }
 

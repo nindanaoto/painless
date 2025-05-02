@@ -35,7 +35,7 @@ struct SharingStrategyFactory
      */
     static void instantiateLocalStrategies(int strategyNumber,
                                            std::vector<std::shared_ptr<SharingStrategy>>& localStrategies,
-                                           std::vector<std::shared_ptr<SolverCdclInterface>>& cdclSolvers);
+                                           std::vector<std::shared_ptr<Painless::SolverCdclInterface>>& cdclSolvers);
 
     /**
      * @brief Instantiate global sharing strategies.
@@ -59,5 +59,5 @@ struct SharingStrategyFactory
      * @param newSolvers Vector of new CDCL solvers to be added.
      */
     static void addEntitiesToLocal(std::vector<std::shared_ptr<SharingStrategy>>& localStrategies,
-                                   std::vector<std::shared_ptr<SolverCdclInterface>>& newSolvers);
+                                   std::vector<std::shared_ptr<Painless::SolverCdclInterface>>& newSolvers);
 };

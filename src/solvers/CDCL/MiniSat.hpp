@@ -20,7 +20,7 @@ namespace Painless {
 
 /// Instance of a Minisat solver
 /// @ingroup solving_cdcl
-class MiniSat : public SolverCdclInterface
+class MiniSat : public Painless::SolverCdclInterface
 {
   public:
         /// Load formula from a given dimacs file, return false if failed.

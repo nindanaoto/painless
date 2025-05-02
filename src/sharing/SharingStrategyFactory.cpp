@@ -19,7 +19,7 @@ int SharingStrategyFactory::selectedGlobal = 0;
 void
 SharingStrategyFactory::instantiateLocalStrategies(int strategyNumber,
                                                                                                    std::vector<std::shared_ptr<SharingStrategy>>& localStrategies,
-                                                                                                   std::vector<std::shared_ptr<SolverCdclInterface>>& cdclSolvers)
+                                                                                                   std::vector<std::shared_ptr<Painless::SolverCdclInterface>>& cdclSolvers)
 {
         std::vector<std::shared_ptr<SharingEntity>> allEntities;
         allEntities.insert(allEntities.end(), cdclSolvers.begin(), cdclSolvers.end());
@@ -197,7 +197,7 @@ SharingStrategyFactory::launchSharers(std::vector<std::shared_ptr<SharingStrateg
 
 void
 SharingStrategyFactory::addEntitiesToLocal(std::vector<std::shared_ptr<SharingStrategy>>& localStrategies,
-                                                                                   std::vector<std::shared_ptr<SolverCdclInterface>>& newSolvers)
+                                                                                   std::vector<std::shared_ptr<Painless::SolverCdclInterface>>& newSolvers)
 {
         switch (SharingStrategyFactory::selectedLocal) {
                 case 1:

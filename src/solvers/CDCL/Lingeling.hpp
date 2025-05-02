@@ -17,7 +17,7 @@ namespace Painless {
 
 /// Instance of a Lingeling solver
 /// @ingroup solving_cdcl
-class Lingeling : public SolverCdclInterface
+class Lingeling : public Painless::SolverCdclInterface
 {
   public:
         /// Load formula from a given dimacs file, return false if failed.

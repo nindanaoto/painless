@@ -28,7 +28,7 @@
 std::atomic<int> SolverFactory::currentIdSolver(0);
 
 void
-SolverFactory::diversification(const std::vector<std::shared_ptr<SolverCdclInterface>>& cdclSolvers,
+SolverFactory::diversification(const std::vector<std::shared_ptr<Painless::SolverCdclInterface>>& cdclSolvers,
                                                            const std::vector<std::shared_ptr<LocalSearchInterface>>& localSolvers,
                                                            const IDScaler& gIDScaler,
                                                            const IDScaler& typeIDScaler)
@@ -162,13 +162,13 @@ SolverFactory::createSolver(char type, char importDBType, std::shared_ptr<Solver
 SolverAlgorithmType
 SolverFactory::createSolver(char type,
                                                         char importDBType,
-                                                        std::vector<std::shared_ptr<SolverCdclInterface>>& cdclSolvers,
+                                                        std::vector<std::shared_ptr<Painless::SolverCdclInterface>>& cdclSolvers,
                                                         std::vector<std::shared_ptr<LocalSearchInterface>>& localSolvers)
 {
         std::shared_ptr<SolverInterface> createdSolver;
         switch (createSolver(type, importDBType, createdSolver)) {
                 case SolverAlgorithmType::CDCL:
-                        cdclSolvers.push_back(std::static_pointer_cast<SolverCdclInterface>(createdSolver));
+                        cdclSolvers.push_back(std::static_pointer_cast<Painless::SolverCdclInterface>(createdSolver));
                         return SolverAlgorithmType::CDCL;
 
                 case SolverAlgorithmType::LOCAL_SEARCH:
@@ -184,7 +184,7 @@ void
 SolverFactory::createSolvers(int maxSolvers,
                                                          char importDBType,
                                                          std::string portfolio,
-                                                         std::vector<std::shared_ptr<SolverCdclInterface>>& cdclSolvers,
+                                                         std::vector<std::shared_ptr<Painless::SolverCdclInterface>>& cdclSolvers,
                                                          std::vector<std::shared_ptr<LocalSearchInterface>>& localSolvers)
 {
         unsigned int typeCount = portfolio.size();
@@ -195,7 +195,7 @@ SolverFactory::createSolvers(int maxSolvers,
 }
 
 void
-SolverFactory::printStats(const std::vector<std::shared_ptr<SolverCdclInterface>>& cdclSolvers,
+SolverFactory::printStats(const std::vector<std::shared_ptr<Painless::SolverCdclInterface>>& cdclSolvers,
                                                   const std::vector<std::shared_ptr<LocalSearchInterface>>& localSolvers)
 {
         Painless::lockLogger();

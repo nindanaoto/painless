@@ -150,7 +150,7 @@ Lingeling::initialize()
 Lingeling::Lingeling(int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB)
         : unitsToImport(256)
         , clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
-        , SolverCdclInterface(id, clauseDB, SolverCdclType::LINGELING)
+        , Painless::SolverCdclInterface(id, clauseDB, SolverCdclType::LINGELING)
 {
         solver = lglinit();
         initialize();
@@ -159,7 +159,7 @@ Lingeling::Lingeling(int id, const std::shared_ptr<Painless::ClauseDatabase>& cl
 Lingeling::Lingeling(const Lingeling& other, int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB)
         : unitsToImport(256)
         , clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
-        , SolverCdclInterface(id, clauseDB, SolverCdclType::LINGELING)
+        , Painless::SolverCdclInterface(id, clauseDB, SolverCdclType::LINGELING)
 {
         solver = lglclone(other.solver);
         initialize();
@@ -349,7 +349,7 @@ Lingeling::importClauses(const std::vector<Painless::ClauseExchangePtr>& clauses
 void
 Lingeling::printWinningLog()
 {
-        this->SolverCdclInterface::printWinningLog();
+        this->Painless::SolverCdclInterface::printWinningLog();
         LOGSTAT("The winner is Lingeling(%d, %u) ", this->getSolverId(), this->getSolverTypeId());
 }
 

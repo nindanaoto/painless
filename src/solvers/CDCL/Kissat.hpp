@@ -22,7 +22,7 @@ namespace Painless {
 
 /// Instance of a Kissat solver
 /// @ingroup solving_cdcl
-class Kissat : public SolverCdclInterface
+class Kissat : public Painless::SolverCdclInterface
 {
   public:
         /// Constructor.

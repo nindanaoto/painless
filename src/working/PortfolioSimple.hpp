@@ -43,7 +43,7 @@ class PortfolioSimple : public WorkingStrategy
 
         // Solvers
         //--------
-        std::vector<std::shared_ptr<SolverCdclInterface>> cdclSolvers;
+        std::vector<std::shared_ptr<Painless::SolverCdclInterface>> cdclSolvers;
         std::vector<std::shared_ptr<LocalSearchInterface>> localSolvers;
 
         // Sharing

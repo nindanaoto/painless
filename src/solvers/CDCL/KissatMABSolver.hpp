@@ -28,7 +28,7 @@ typedef struct kissat kissat_mab;
 
 /// Instance of a KissatMABSolver solver
 /// @ingroup solving_cdcl
-class KissatMABSolver : public SolverCdclInterface
+class KissatMABSolver : public Painless::SolverCdclInterface
 {
   public:
         void setBumpVar(int v);

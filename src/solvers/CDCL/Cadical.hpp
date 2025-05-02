@@ -24,7 +24,7 @@ namespace Painless {
  * @ingroup solving_cdcl
  */
 class Cadical
-        : public SolverCdclInterface
+        : public Painless::SolverCdclInterface
         , public CaDiCaL::Learner
         , public CaDiCaL::Terminator
 {

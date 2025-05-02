@@ -95,7 +95,7 @@ glucoseImportClause(void* issuer, int* from, vec<Lit>& gcls)
 }
 
 GlucoseSyrup::GlucoseSyrup(int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB)
-        : SolverCdclInterface(id, clauseDB, SolverCdclType::GLUCOSE)
+        : Painless::SolverCdclInterface(id, clauseDB, SolverCdclType::GLUCOSE)
         , clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 {
         /* use sharing id to not have the assert(importedFromThread != thn) fail */
@@ -123,7 +123,7 @@ GlucoseSyrup::GlucoseSyrup(int id, const std::shared_ptr<Painless::ClauseDatabas
 }
 
 GlucoseSyrup::GlucoseSyrup(const GlucoseSyrup& other, int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB)
-        : SolverCdclInterface(id, clauseDB, SolverCdclType::GLUCOSE)
+        : Painless::SolverCdclInterface(id, clauseDB, SolverCdclType::GLUCOSE)
         , clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 {
         solver = new ParallelSolver(*(other.solver), this->getSharingId());
@@ -436,7 +436,7 @@ GlucoseSyrup::printStatistics()
 void
 GlucoseSyrup::printWinningLog()
 {
-        this->SolverCdclInterface::printWinningLog();
+        this->Painless::SolverCdclInterface::printWinningLog();
         LOGSTAT("The winner is GlucoseSyrup(%d, %u) ", this->getSolverId(), this->getSolverTypeId());
 }
 

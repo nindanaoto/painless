@@ -82,7 +82,7 @@ cbkMapleCOMSPSImportClause(void* issuer, unsigned int* lbd, vec<Lit>& mcls)
 }
 
 MapleCOMSPSSolver::MapleCOMSPSSolver(int id, const std::shared_ptr<Painless::ClauseDatabase>& clauseDB)
-        : SolverCdclInterface(id, clauseDB, SolverCdclType::MAPLECOMSPS)
+        : Painless::SolverCdclInterface(id, clauseDB, SolverCdclType::MAPLECOMSPS)
         , clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 {
         solver = new SimpSolver();
@@ -100,7 +100,7 @@ MapleCOMSPSSolver::MapleCOMSPSSolver(int id, const std::shared_ptr<Painless::Cla
 MapleCOMSPSSolver::MapleCOMSPSSolver(const MapleCOMSPSSolver& other,
                                                                          int id,
                                                                          const std::shared_ptr<Painless::ClauseDatabase>& clauseDB)
-        : SolverCdclInterface(id, clauseDB, SolverCdclType::MAPLECOMSPS)
+        : Painless::SolverCdclInterface(id, clauseDB, SolverCdclType::MAPLECOMSPS)
         , clausesToAdd(Painless::__globalParameters__.defaultClauseBufferSize)
 {
         solver = new SimpSolver(*(other.solver));
@@ -332,7 +332,7 @@ MapleCOMSPSSolver::printStatistics()
 void
 MapleCOMSPSSolver::printWinningLog()
 {
-        this->SolverCdclInterface::printWinningLog();
+        this->Painless::SolverCdclInterface::printWinningLog();
         LOGSTAT("The winner is MapleCOMSPS(%d, %u) ", this->getSolverId(), this->getSolverTypeId());
 }
 

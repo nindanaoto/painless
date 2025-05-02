@@ -37,7 +37,7 @@ class SolverFactory
 	 */
 	static SolverAlgorithmType createSolver(char type,
 											char importDBType,
-											std::vector<std::shared_ptr<SolverCdclInterface>>& cdclSolvers,
+											std::vector<std::shared_ptr<Painless::SolverCdclInterface>>& cdclSolvers,
 											std::vector<std::shared_ptr<LocalSearchInterface>>& localSolvers);
 
 	/**
@@ -51,7 +51,7 @@ class SolverFactory
 	static void createSolvers(int count,
 							  char importDBType,
 							  std::string portfolio,
-							  std::vector<std::shared_ptr<SolverCdclInterface>>& cdclSolvers,
+							  std::vector<std::shared_ptr<Painless::SolverCdclInterface>>& cdclSolvers,
 							  std::vector<std::shared_ptr<LocalSearchInterface>>& localSolvers);
 
 	/**
@@ -59,7 +59,7 @@ class SolverFactory
 	 * @param cdclSolvers Vector of CDCL solvers.
 	 * @param localSolvers Vector of local search solvers.
 	 */
-	static void printStats(const std::vector<std::shared_ptr<SolverCdclInterface>>& cdclSolvers,
+	static void printStats(const std::vector<std::shared_ptr<Painless::SolverCdclInterface>>& cdclSolvers,
 						   const std::vector<std::shared_ptr<LocalSearchInterface>>& localSolvers);
 
 	/**
@@ -70,7 +70,7 @@ class SolverFactory
 	 * @param typeIdScaler Function to scale the solver type ID (default uses solver's type ID).
 	 */
 	static void diversification(
-		const std::vector<std::shared_ptr<SolverCdclInterface>>& cdclSolvers,
+		const std::vector<std::shared_ptr<Painless::SolverCdclInterface>>& cdclSolvers,
 		const std::vector<std::shared_ptr<LocalSearchInterface>>& localSolvers,
 		const IDScaler& generalIdScaler =
 			[](const std::shared_ptr<SolverInterface>& solver) { return solver->getSolverId(); },
