@@ -1,3 +1,4 @@
+#include <climits>
 /**
  * @file SystemResourceMonitor.h
  * @brief Provides utilities for monitoring system resources such as memory and time (Memory monitoring is still in early development).
