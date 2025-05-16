@@ -1,6 +1,7 @@
 #pragma once
 
 #include "solvers/SolverInterface.hpp"
+#include "working/WorkingStrategy.hpp"
 
 #include <atomic>
 #include <condition_variable>
@@ -15,6 +16,9 @@ extern std::mutex mutexGlobalEnd;
 
 /// @brief Cond to wait on timeout or wakeup on globalEnding
 extern std::condition_variable condGlobalEnd;
+
+/// Working strategy
+extern WorkingStrategy* working;
 
 /// Final result
 extern std::atomic<SatResult> finalResult;
