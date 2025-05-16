@@ -29,6 +29,7 @@ class PortfolioSimple : public WorkingStrategy
 	~PortfolioSimple();
 
 	void solve(const std::vector<int>& cube) override;
+	void solve(const std::vector<int>& cube, std::vector<simpleClause>& initClause, unsigned int varCount);
 
 	void join(WorkingStrategy* strat, SatResult res, const std::vector<int>& model) override;
 

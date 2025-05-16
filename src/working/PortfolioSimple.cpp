@@ -56,11 +56,7 @@ PortfolioSimple::solve(const std::vector<int>& cube)
 
 	std::vector<simpleClause> initClauses;
 	unsigned int varCount;
-	unsigned int clausesCount;
 	int receivedFinalResultBcast = 0;
-
-	// TODO: merge these threads with sequential workers in next version, for less OS intensive calls
-	std::vector<std::thread> solverInitializers;
 
 	// TODO Reimplement (and separate) PRS techniques compatible with zero ended clauses, in order to not loose time in
 	// serialization for mpi, and have better locality
@@ -102,6 +98,18 @@ PortfolioSimple::solve(const std::vector<int>& cube)
 			PABORT(PERR_PARSING, "Error at parsing!");
 		}
 	}
+	solve(cube, initClauses, varCount);
+	initClauses.clear();
+}
+
+void
+PortfolioSimple::solve(const std::vector<int>& cube, std::vector<simpleClause>& initClauses, unsigned int varCount)
+{
+	unsigned int clausesCount;
+	int receivedFinalResultBcast = 0;
+
+	// TODO: merge these threads with sequential workers in next version, for less OS intensive calls
+	std::vector<std::thread> solverInitializers;
 
 	// Send instance via MPI from leader 0 to workers.
 	if (dist) {
@@ -281,7 +289,6 @@ PortfolioSimple::solve(const std::vector<int>& cube)
 		}
 	}
 
-	initClauses.clear();
 }
 
 void
