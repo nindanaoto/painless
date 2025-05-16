@@ -3,10 +3,24 @@
 #include "solvers/SolverInterface.hpp"
 #include "working/WorkingStrategy.hpp"
 
+#include "utils/ErrorCodes.hpp"
+#include "utils/Logger.hpp"
+#include "utils/MpiUtils.hpp"
+#include "utils/Parameters.hpp"
+#include "utils/Parsers.hpp"
+#include "utils/System.hpp"
+
+#include "solvers/SolverFactory.hpp"
+
+#include "working/PortfolioPRS.hpp"
+#include "working/PortfolioSimple.hpp"
+
+
 #include <atomic>
 #include <condition_variable>
 #include <mutex>
 #include <vector>
+#include <thread>
 
 /// Is it the end of the search
 extern std::atomic<bool> globalEnding;

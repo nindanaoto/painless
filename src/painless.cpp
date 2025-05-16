@@ -1,19 +1,6 @@
 #include "painless.hpp"
 
-#include "utils/ErrorCodes.hpp"
-#include "utils/Logger.hpp"
-#include "utils/MpiUtils.hpp"
-#include "utils/Parameters.hpp"
-#include "utils/Parsers.hpp"
-#include "utils/System.hpp"
-
-#include "solvers/SolverFactory.hpp"
-
-#include "working/PortfolioPRS.hpp"
-#include "working/PortfolioSimple.hpp"
-
 #include <random>
-#include <thread>
 #include <unistd.h>
 
 // -------------------------------------------
