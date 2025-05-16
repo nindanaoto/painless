@@ -346,11 +346,29 @@ cadical_solver_dep = declare_dependency(
 
 all_solver_deps = [yalsat_dep, lingeling_dep, glucose_dep, minisat_dep, kissat_inc_solver_dep, kissat_mab_solver_dep, maplecomsps_solver_dep, tassat_solver_dep, kissat_solver_dep, cadical_solver_dep] # Add other solver deps here
 
+# Source files for the library (excluding painless.cpp)
+painless_lib_sources = []
+foreach src_file : painless_sources
+  if src_file != painless_src_dir / 'painless.cpp'
+    painless_lib_sources += src_file
+  endif
+endforeach
+
+# Painless library
+painless_lib = library('painless_lib',
+  painless_lib_sources,
+  include_directories : [eigen_inc, m4ri_inc_src, 'src', include_directories('src/containers'), include_directories('src/preprocessors'), include_directories('src/sharing'), include_directories('src/solvers'), include_directories('src/utils'), include_directories('src/working'), include_directories('solvers'), include_directories('solvers/glucose'), include_directories('solvers/minisat')],
+  dependencies : [mpi_dep, openmp_dep, thread_dep, zlib_dep, boost_dep, m4ri_dep] + all_solver_deps,
+  install : true
+)
+
 # Main executable
+painless_exe_sources = [painless_src_dir / 'painless.cpp']
 executable('painless',
-  painless_sources,
+  painless_exe_sources,
   include_directories : [eigen_inc, m4ri_inc_src, 'src', include_directories('src/containers'), include_directories('src/preprocessors'), include_directories('src/sharing'), include_directories('src/solvers'), include_directories('src/utils'), include_directories('src/working'), include_directories('solvers'), include_directories('solvers/glucose'), include_directories('solvers/minisat')], # Add all necessary src subdirectories and specific solver paths.
   dependencies : [mpi_dep, openmp_dep, thread_dep, zlib_dep, boost_dep, m4ri_dep] + all_solver_deps,
+  link_with : painless_lib,
   # Add MPI compile and link arguments
   # cpp_args : mpi_dep.get_compile_args(), # Already handled by dependency object in newer Meson
   # link_args : mpi_dep.get_link_args(), # Already handled by dependency object
