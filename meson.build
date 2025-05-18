@@ -66,7 +66,7 @@ m4ri_compile_target = custom_target('m4ri_compile',
     )
   ],
   build_by_default : true,
-  # install : false # Not installing system-wide, just making it available for this project
+  install : true, install_dir : get_option('libdir'), # Not installing system-wide, just making it available for this project
 )
 m4ri_dep = declare_dependency(
   link_with : m4ri_compile_target,
@@ -95,6 +95,7 @@ yalsat_compile_target = custom_target('yalsat_compile',
     )
   ],
   build_by_default : true,
+  install : true, install_dir : get_option('libdir'),
 )
 yalsat_dep = declare_dependency(
   link_with : yalsat_compile_target,
@@ -120,6 +121,7 @@ lingeling_compile_target = custom_target('lingeling_compile',
     )
   ],
   build_by_default : true,
+  install : true, install_dir : get_option('libdir'),
   depends : yalsat_compile_target, # Added dependency
 )
 lingeling_dep = declare_dependency(
@@ -140,6 +142,7 @@ glucose_compile_target = custom_target('glucose_compile',
     )
   ],
   build_by_default : true,
+  install : true, install_dir : get_option('libdir'),
 )
 glucose_inc = include_directories('solvers/glucose/mtl', 'solvers/glucose/utils', 'solvers/glucose/core', 'solvers/glucose/simp')
 glucose_dep = declare_dependency(
@@ -166,6 +169,7 @@ minisat_compile_target = custom_target('minisat_compile',
     )
   ],
   build_by_default : true,
+  install : true, install_dir : get_option('libdir'),
 )
 
 minisat_inc = include_directories(
@@ -198,6 +202,7 @@ kissat_inc_solver_compile_target = custom_target('kissat_inc_solver_compile',
     )
   ],
   build_by_default : true,
+  install : true, install_dir : get_option('libdir'),
 )
 
 kissat_inc_solver_inc = include_directories('solvers/kissat-inc')
@@ -225,6 +230,7 @@ kissat_mab_solver_compile_target = custom_target('kissat_mab_solver_compile',
     )
   ],
   build_by_default : true,
+  install : true, install_dir : get_option('libdir'),
 )
 
 kissat_mab_solver_inc = include_directories('solvers/kissat_mab') 
@@ -252,6 +258,7 @@ maplecomsps_solver_compile_target = custom_target('maplecomsps_solver_compile',
     )
   ],
   build_by_default : true,
+  install : true, install_dir : get_option('libdir'),
 )
 
 maplecomsps_solver_inc = include_directories('solvers/mapleCOMSPS')
@@ -278,6 +285,7 @@ tassat_solver_compile_target = custom_target('tassat_solver_compile',
     )
   ],
   build_by_default : true,
+  install : true, install_dir : get_option('libdir'),
 )
 
 tassat_solver_inc = include_directories('solvers/tassat')
@@ -305,6 +313,7 @@ kissat_solver_compile_target = custom_target('kissat_solver_compile',
     )
   ],
   build_by_default : true,
+  install : true, install_dir : get_option('libdir'),
 )
 
 kissat_solver_inc = include_directories('solvers/kissat')
@@ -332,6 +341,7 @@ cadical_solver_compile_target = custom_target('cadical_solver_compile',
     )
   ],
   build_by_default : true,
+  install : true, install_dir : get_option('libdir'),
 )
 
 cadical_solver_inc = include_directories('solvers/cadical')
@@ -374,6 +384,15 @@ executable('painless',
   # link_args : mpi_dep.get_link_args(), # Already handled by dependency object
   install : true
 )
+
+# Dependency object for users of the painless_lib
+painless_lib_public_includes = [eigen_inc, m4ri_inc_src, 'src', include_directories('src/containers'), include_directories('src/preprocessors'), include_directories('src/sharing'), include_directories('src/solvers'), include_directories('src/utils'), include_directories('src/working'), include_directories('solvers'), include_directories('solvers/glucose'), include_directories('solvers/minisat')]
+painless_dep_for_users = declare_dependency(
+  link_with : painless_lib,
+  include_directories : painless_lib_public_includes,
+  dependencies : [mpi_dep, openmp_dep, thread_dep, zlib_dep, boost_dep, m4ri_dep] + all_solver_deps
+)
+
 
 # TODO:
 # 1. Add custom_targets for all other solvers based on the Makefile.
