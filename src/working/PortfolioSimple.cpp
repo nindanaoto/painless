@@ -98,12 +98,12 @@ PortfolioSimple::solve(const std::vector<int>& cube)
 			PABORT(PERR_PARSING, "Error at parsing!");
 		}
 	}
-	solve(cube, initClauses, varCount);
+	solve_internal(cube, initClauses, varCount);
 	initClauses.clear();
 }
 
 void
-PortfolioSimple::solve(const std::vector<int>& cube, std::vector<simpleClause>& initClauses, unsigned int varCount)
+PortfolioSimple::solve_internal(const std::vector<int>& cube, std::vector<simpleClause>& initClauses, unsigned int varCount)
 {
 	unsigned int clausesCount;
 	int receivedFinalResultBcast = 0;
